@@ -1,0 +1,74 @@
+@charset 'utf-8';
+
+/* switching to border-box model for all elements */
+html {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+html {
+  /* set base font-size to equiv "10px", which is adapted to rem unit */
+  font-size: 62.5%;
+  /* IE9-IE11 math fixing. See http://bit.ly/1g4X0bX */
+  /* thanks to @guardian, @victorbritopro and @eQRoeil */
+  font-size: calc(1em * 0.625);
+}
+
+body {
+  font-size: $global-font-size;
+  line-height: $global-lineheight;
+  background-color: $whitesmoke;
+  color: $text-color;
+  font-family: $font-stack;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  //margin-top: 0;
+  //margin-bottom: 1rem;
+  margin: 0 0 1rem;
+  // font-weight: 300;
+}
+
+h1 { font-size: $h1-size; }
+h2 { font-size: $h2-size; }
+h3 { font-size: $h3-size; }
+h4 { font-size: $h4-size; }
+h5 { font-size: $h5-size; }
+h6 { font-size: $h6-size; }
+
+/* Larger than phablet */
+@include respond-to("small-up") {
+// @media (min-width: 568px) {
+  h1 { font-size: $h1-size-l; }
+  h2 { font-size: $h2-size-l; }
+  h3 { font-size: $h3-size-l; }
+  h4 { font-size: $h4-size-l; }
+  h5 { font-size: $h5-size-l; }
+  h6 { font-size: $h6-size-l; }
+  body {
+    font-size: $global-font-size-l;
+    line-height: $global-lineheight-l;
+  }
+}
+
+a {
+  color: $dark-grey;
+  text-decoration: none;
+  &:active, &:focus, &:hover {
+    outline: 0;
+    color: $primary-color;
+  }
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+.hidden, [hidden] {
+  display: none !important;
+}

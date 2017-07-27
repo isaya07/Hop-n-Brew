@@ -1,0 +1,19 @@
+@charset 'utf-8';
+
+$black: rgb(0, 0, 0);
+$white: rgb(255, 255, 255);
+$whitesmoke: rgb(245,245,245);
+$light-grey: rgb(211,211,211);
+$medium-grey: rgb(128,128,128);
+$dark-grey: rgb(105,105,105);
+
+$primary-color: rgb(66, 184, 221);
+$success-color: rgb(28, 184, 65);
+$alert-color: rgb(202, 60, 60);
+$warning-color: rgb(223, 117, 20);
+
+$small-font-size: 80%;
+$medium-font-size: 90%;
+
+$global-radius: 5px;
+$small-radius: $global-radius*3/4;

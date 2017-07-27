@@ -1,0 +1,166 @@
+@charset 'utf-8';
+
+@import 'settings';
+@import 'mixins';
+@import 'normalize';
+@import 'base';
+@import 'grid';
+@import 'menu';
+@import 'form';
+@import 'button';
+
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome';
+
+.center {
+  // margin-left: auto;
+  // margin-right: auto;
+  display: inline-flex;
+  margin:0 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.txtcenter {
+  text-align: center;
+}
+
+.is-flex-grow-1 {
+  flex: 2 1.1 auto;
+}
+
+.is-flex-grow-2 {
+  flex: 1 1 auto;
+}
+
+.is-flex-grow-3 {
+  flex: 3 0.5 auto;
+}
+
+.is-flex-grow-4 {
+  flex: 3 0 auto;
+}
+
+.flex-expend {
+  flex-grow: 2;
+  flex-shrink: 2;
+}
+
+.right-arrow {
+  @include arrow($primary-color, -90deg);
+  transition: 0.4s;
+
+  &.close {
+    transform: rotate(0deg);
+  }
+}
+
+.fa {
+  color: $text-color;
+  /* font-size: 21px;
+  // line-height: 2rem;
+  &.small {
+    font-size: 14px;
+  } */
+}
+
+/* .text-center {
+  text-align: center;
+} */
+
+/* .is-right {
+  float: right;
+}
+
+.is-left {
+  float: left;
+} */
+
+/* .marginless {
+  margin: 0;
+} */
+
+/* section {
+  padding: 0.5rem;
+} */
+
+.card {
+  border: 1px solid $light-grey;
+  border-radius:$global-radius;
+  box-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
+  // display: inline-block;
+  background-color: $white;
+  height: 100%;
+  padding: 0.5rem;
+  background-image: linear-gradient($white, $whitesmoke);
+  // margin-bottom: 1rem;
+}
+
+section {
+  padding: 1rem;
+}
+/*
+.center {
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  margin: 0.5rem;
+}
+
+.app-main {
+  padding: 1rem;
+}
+
+.is-alert {
+  color: $alert-color;
+}
+
+.down-triangle {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 6px solid $medium-grey;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transition: 0.4s;
+}
+
+
+.right-triangle {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid $medium-grey;
+  transition: 0.4s;
+}
+
+.right-triangle.close {
+  transform: rotate(90deg);
+}
+
+.down-triangle.close {
+  transform: rotate(180deg);
+} */
+
+  //medium+ screen sizes
+@include respond-to("small-up") {
+    .desktop-only {
+        display:inline-block !important;
+    }
+    .mobile-only {
+        display:none !important;
+    }
+}
+
+//small screen sizes
+@include respond-to("small") {
+    .mobile-only {
+        display:inline-block !important;
+    }
+
+    .desktop-only {
+        display:none !important;
+    }
+}

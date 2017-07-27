@@ -1,0 +1,74 @@
+@charset 'utf-8';
+
+.item {
+  display: flex;
+  flex-direction: column;
+  // border-radius: $global-radius;
+  // border: 1px solid #ccc;
+  // margin: 0.5rem;
+  // width: 80%;
+}
+
+.item-inline {
+  display: flex;
+  justify-content: flex-start;
+  z-index: 2;
+  flex-shrink: 1;
+  width: 100%;
+
+  button, input[type="text"], input[type="number"], select {
+    //margin-right: -1px;
+    border-radius: 0;
+    // height: auto;
+  }
+
+  button.first, input.first, select.first {
+    border-bottom-left-radius: $global-radius;
+    border-top-left-radius: $global-radius;
+  }
+
+  button.last, input.last, select.last {
+    border-bottom-right-radius: $global-radius;
+    border-top-right-radius: $global-radius;
+  }
+
+  /* button:last-of-type, input:last-child, select:last-child {
+    border-bottom-right-radius: $global-radius;
+    border-top-right-radius: $global-radius;
+  } */
+
+  .item-inline-error {
+    display: inline-flex;
+  }
+}
+
+.item-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // justify-content: space-around;
+  margin: 0rem;
+  letter-spacing: normal;
+  margin-top: -$global-radius;
+  padding-top: $global-radius * 2;
+  border-bottom-right-radius: $global-radius;
+  border-bottom-left-radius: $global-radius;
+  border: 1px solid #ccc;
+  border-top: 0px;
+  z-index: 1;
+  
+
+  .item-data {
+    display: inline-flex;
+  }
+
+  .item-data.item-last {
+    // flex-grow: 0.9;
+    order: 1;
+  }
+
+  .item-data textarea {
+    width:90%;
+    height:100%;
+  }
+}

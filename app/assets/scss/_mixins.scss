@@ -1,0 +1,49 @@
+@import "settings";
+
+@mixin arrow($color, $angle : 0) {
+  /* border: 2px solid $color;
+  border-right: 0;
+  border-top: 0;
+  content: " ";
+  display: block;
+  height: 0.8rem;
+  pointer-events: none;
+  position: absolute;
+  transform: rotate($angle);
+  width: 0.8rem; */
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 6px solid $color;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  transform: rotate($angle);
+}
+
+$bp-aliases: (
+  'xsmall': (max-width: #{$xsmall}),
+  'small': (max-width: #{$small}),
+  'medium' : (max-width: #{$medium}),
+  'large' : (max-width: #{$large}),
+  'xsmall-up'   : (min-width: #{$xsmall + 1}),
+  'small-up'  : (min-width: #{$small + 1}),
+  'medium-up' : (min-width: #{$medium + 1}),
+  'large-up' : (min-width: #{$large + 1})
+);
+
+// Source : https://www.sitepoint.com/managing-responsive-breakpoints-sass/
+@mixin respond-to($name) {
+  // If the key exists in the map
+  @if map-has-key($bp-aliases, $name) {
+    // Prints a media query based on the value
+    @media #{inspect(map-get($bp-aliases, $name))} {
+      @content;
+    }
+  }
+
+  // If the key doesn't exist in the map
+  @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+  }
+}

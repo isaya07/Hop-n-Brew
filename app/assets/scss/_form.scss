@@ -1,0 +1,186 @@
+@import 'mixins';
+@import 'settings';
+
+%control {
+  background-color: $white;
+  border: 1px solid $light-grey;
+  box-shadow: inset 1px 1px 1px rgba($dark-grey, 0.2);
+  border-radius: $global-radius;
+  display: inline-flex;
+  justify-content: flex-start;
+  position:relative;
+  align-items: center;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+%max-width {
+  max-width: 100%;
+  width: 100%;
+}
+
+%focus {
+  border-color: $primary-color;
+  outline: none;
+}
+
+%fontsize {
+  font-size: $global-font-size;
+  @include respond-to("xsmall-up") {
+  // @media (min-width: 544px) {
+    font-size: $global-font-size-l;
+  }
+}
+
+%lineheight {
+  line-height: $global-lineheight;
+  @include respond-to("xsmall-up") {
+    line-height: $global-lineheight-l;
+  }
+  /* @media (min-width: 544px) {
+    line-height: $global-lineheight-l;
+  } */
+}
+
+form {
+  width: 100%;
+}
+
+input {
+  &[type="text"], &[type="password"], &[type="email"], &[type="url"], &[type="date"], &[type="month"], &[type="time"], &[type="datetime"], &[type="datetime-local"], &[type="week"], &[type="number"], &[type="search"], &[type="tel"], &[type="color"] {
+    @extend %control;
+    @extend %max-width;
+    justify-content: flex-start;
+    &:hover, &:focus, &:active {
+      @extend %focus;
+    }
+  }
+  @extend %lineheight;
+}
+
+select, textarea {
+  @extend %control;
+  @extend %max-width;
+  justify-content: flex-start;
+  &:hover, &:focus, &:active {
+    @extend %focus;
+  }
+  @extend %lineheight;
+}
+
+label {
+  vertical-align: middle;
+  // cursor: pointer;
+}
+
+input {
+  &[type="file"], &[type="radio"], &[type="checkbox"] {
+    padding: 0.5rem 0.6rem;
+    margin-left: 1rem;
+    display: inline-flex;
+    border: 1px solid $light-grey; // #ccc;
+    box-shadow: inset 0 1px 3px $light-grey; // #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    vertical-align: middle;
+  }
+}
+
+input {
+  &[type="file"]:focus, &[type="radio"]:focus, &[type="checkbox"]:focus {
+    outline: thin solid $primary-color; //#129FEA;
+    outline: 1px auto $primary-color; //#129FEA;
+  }
+}
+
+input[disabled], select[disabled], textarea[disabled] {
+  cursor: not-allowed;
+  background-color: $lighter-grey; // #eaeded;
+  color: $text-color; // #cad2d3;
+}
+
+.checkbox,
+.radio {
+  cursor: pointer;
+  display: inline-block;
+  // line-height: 1.25;
+  position: relative;
+  margin: auto;
+  // height: 100%;
+  width: 100%;
+  input {
+    cursor: pointer;
+  }
+  &:hover {
+    color: $primary-color;
+  }
+  &[disabled] {
+    // color: $input-disabled;
+    cursor: not-allowed;
+  }
+}
+
+.select {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  &::after {
+    @include arrow($primary-color, 0);
+    content: " ";
+    position: absolute;
+    margin-top: -($global-font-size / 2 - 0.4);
+    right: 0.8rem;
+    top: 50%;
+    z-index: 4;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 100%;
+  }
+
+  select, input {
+    position: relative;
+    min-width: 100%;
+    padding-right: 2.2rem;
+  }
+
+}
+
+i.input {
+  float: right;
+  position: relative;
+  margin-right: $global-font-size / 2;
+  margin-top: -($global-font-size + $global-lineheight);
+  @include respond-to("xsmall-up") {
+    margin-right: $global-font-size-l / 2;
+    margin-top: -($global-font-size-l + $global-lineheight-l - 0.4);
+  }
+}
+
+.form-message {
+  font-size: 90%;
+
+  &.is-alert {
+    color: $alert-color;
+  }
+}
+
+/*.pure-form .pure-g {
+  margin: 1rem;
+}*/
+/* nth-child selector for modern browsers */
+/* .pure-table-striped tr:nth-child(2n-1) td {
+    background-color: #f2f2f2;
+} */
+/*.pure-g*/ // .card:nth-child(2n+1) {
+/* .card.pure-form label:nth-child(2n+3) {
+  padding-left: 0.5rem;
+} */
+
+
+
+/* .pure-form input.is-alert {
+  border-color: $alert-color;
+}*/

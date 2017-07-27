@@ -1,0 +1,50 @@
+@import "settings";
+
+.has-tooltip {
+  display: inline-flex;
+  position: relative;
+  &:after, &:before {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s;
+    z-index: 10;
+    box-sizing: inherit;
+  }
+
+  &:after {
+    flex: 1 1 auto;
+    background: rgba($darker-grey,.8);
+    border-radius: $global-radius;
+    bottom: 120%;
+    color: #fff;
+    content: attr(data-tooltip);
+    left: -30%;
+    padding: 0.5rem 1rem;
+    position: absolute;
+    display: block;
+    // width: 100%;
+    white-space: normal;
+    // min-width: 100px;
+    // max-width: 200px;
+  }
+
+  &:before{
+    border: solid;
+    border-color: rgba($darker-grey,.8) transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 100%;
+    content: "";
+    left: 40%;
+    position: absolute;
+  }
+
+  &:hover:after, &:hover:before {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* &.small {
+    white-space: normal;
+    width: 100px;
+  } */
+}

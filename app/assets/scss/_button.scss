@@ -1,0 +1,117 @@
+@charset 'utf-8';
+
+/* %control {
+  background-color: $white;
+  border: 1px solid $light-grey;
+  box-shadow: inset 1px 1px 1px rgba($dark-grey, 0.2);
+  border-radius: $global-radius;
+  display: inline-flex;
+  justify-content: center;
+  padding-left: 1rem;
+  position: relative;
+} */
+
+/* .btn, button {
+  @extend %control;
+  justify-content: center;
+  text-align: center;
+  color: $text-color;
+  padding: 0.5rem;
+  background-image: linear-gradient(transparent, rgba($medium-grey, 0.05) 40%, rgba($medium-grey, 0.1));
+  transition: background-color 0.5s;
+  @extend %lineheight;
+  &.success {
+    // background: $success-color;
+    background-image: linear-gradient($success-color, rgba($success-color, 1) 40%, rgba($success-color, 0.8));
+  }
+  &.alert {
+    background-image: linear-gradient($alert-color, rgba($alert-color, 1) 40%, rgba($alert-color, 0.8));
+    // background: $alert-color;
+  }
+  &.warning {
+    // background: $warning-color;
+    background-image: linear-gradient($warning-color, rgba($warning-color, 1) 40%, rgba($warning-color, 0.8));
+  }
+  &.primary {
+    // background: $primary-color;
+    background-image: linear-gradient($primary-color, rgba($primary-color, 1) 40%, rgba($primary-color, 0.8));
+  }
+  &:hover, &:focus, &:active {
+    border-color: $primary-color;
+    // background-image: -webkit-linear-gradient(transparent, rgba($medium-grey, 0.05) 40%, rgba($medium-grey, 0.1));
+    // background-image: linear-gradient(transparent, rgba($medium-grey, 0.05) 40%, rgba($medium-grey, 0.1));
+    // box-shadow: 0 0 0.5em rgba($medium-grey, 0.25);
+  }
+  &.small {
+    font-size: 1.25rem;
+    border-radius: $small-radius;
+    padding: 0.3rem 0.3rem;
+  }
+
+  i {
+    padding-right: 5px;
+  }
+} */
+
+
+.btn, button {
+  display: inline-flex;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  color: $text-color;
+  padding: 0.5rem;
+  text-decoration: none;
+  border-radius: $global-radius;
+  border: 1px solid $light-grey;
+  background-color: $lighter-grey;// #ddd; 
+  background-image: linear-gradient(to bottom, rgba($white,1), rgba($white,0));
+  background-clip: padding-box;
+  user-select: none;
+  transition: background-color 0.5s;
+  @extend %lineheight;
+  &.success {
+    background-color: $success-color;
+    background-image: linear-gradient(to bottom, rgba($black,0), rgba($black,0.3));
+    &:hover, &:focus {
+      background-color: rgba($success-color, 0.8);
+    }
+  }
+  &.alert {
+    background-color: $alert-color;
+    background-image: linear-gradient(to bottom, rgba($black,0), rgba($black,0.3));
+    &:hover, &:focus {
+      background-color: rgba($alert-color, 0.8);
+    }
+  }
+  &.warning {
+    background-color: $warning-color;
+    background-image: linear-gradient(to bottom, rgba($black,0), rgba($black,0.3));
+    &:hover, &:focus {
+      background-color: rgba($warning-color, 0.8);
+    }
+  }
+  &.primary {
+    background-color: $primary-color;
+    background-image: linear-gradient(to bottom, rgba($black,0), rgba($black,0.3));
+    &:hover, &:focus {
+      background-color: rgba($primary-color, 0.8);
+    }
+  }
+  &:hover, &:focus {
+    background-color: rgba($lighter-grey, 0.4);
+  }
+  &:active {
+    position: relative;
+    top: 1px;
+  }
+  &.small {
+    font-size: 1.25rem;
+    border-radius: $small-radius;
+    padding: 0.3rem 0.3rem;
+  }
+
+  i:not(:last-child) {
+    padding-right: 5px;
+  }
+}
