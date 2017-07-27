@@ -304,9 +304,27 @@ export default {
       this.recepice.mash.remove(id)
     },
     importPress (xml) {
-      this.selectedMash = ''
-      this.recepice.mash = Mash.fromBeerXml(xml, this.recepice, this.$config)
-      console.log(this.recepice.mash)
+      // this.selectedMash = ''
+      let item
+      let number = 0
+      let error = false
+      let imports = Mash.fromBeerXml(xml)
+      for (item in imports) {
+        let data = imports[item]
+        data['_id'] = data.name
+        this.$pouch.put('mashs', data, {force: false}).then(() => {
+          this.$notification.success(data.name + ' successfully imported')
+        }).catch(err => {
+          error = true
+          this.$notification.error('Import of ' + data.name + ' failed: ' + err)
+          console.error('Import of ' + data.name + ' failed: ' + err)
+        })
+        number++
+      }
+      if (!error) this.$notification.success(number + ' mash profile successfully imported')
+
+      // this.recepice.mash = Mash.fromBeerXml(xml, this.recepice, this.$config)
+      // console.log(this.recepice.mash)
     },
     exportPress () {
       let xml = this.recepice.mash.toBeerXml()

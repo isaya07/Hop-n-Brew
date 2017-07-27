@@ -32,7 +32,7 @@
       <div class="col is-1-3">
         <select name="type" v-model="formData.type" v-validate:type.initial="'required'" :class="{'input': true, 'is-alert': errors.has('type') }">
           <option disabled value="">Please select one</option>
-          <option v-for="option in formData.typeList" selected="selected">
+          <option v-for="option in typeList" selected="selected" :key="option">
             {{ option }}
           </option>
         </select>
@@ -47,7 +47,7 @@
       <div class="col is-1-3">
         <select name="form" v-model="formData.form" v-validate:form.initial="'required'" :class="{'input': true, 'is-alert': errors.has('form') }">
           <option disabled value="">Please select one</option>
-          <option v-for="option in formData.formList" selected="selected">
+          <option v-for="option in formList" selected="selected" :key="option">
             {{ option }}
           </option>
         </select>
@@ -114,6 +114,18 @@ import Hop from 'api/recettes/Hop'
 export default {
   props: {
     formData: Hop
+  },
+
+  computed: {
+    useList () {
+      return Hop.getUseList()
+    },
+    typeList () {
+      return Hop.getTypeList()
+    },
+    formList () {
+      return Hop.getFormList()
+    }
   },
 
   methods: {

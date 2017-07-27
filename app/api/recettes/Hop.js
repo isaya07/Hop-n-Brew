@@ -1,4 +1,5 @@
 import Utils from './Utils'
+import {importXML, exportXML} from './Import'
 
 const tanh = number => (Math.exp(number) - Math.exp(-number)) / (Math.exp(number) + Math.exp(-number))
 const useList = ['Boil', 'Dry Hop', 'Mash', 'First Worst', 'Aroma']
@@ -83,4 +84,12 @@ export default class Hop {
 
   /* toJSON () {
   } */
+
+  static fromBeerXml (xml) {
+    return importXML(xml, 'hop')
+  }
+
+  toBeerXml = (inRecipe = false) => {
+    return exportXML(this.toJSON(), 'yeast', inRecipe)
+  }
 }

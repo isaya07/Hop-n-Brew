@@ -14,7 +14,7 @@
         <div class="col is-1-3">
           <select class="pure-input-1" v-model="formData.type" v-validate:type.initial="'required|myNumeric'" :class="{'is-alert': errors.has('type') }">
             <option disabled value="">Please select one</option>
-            <option v-for="option in formData.typeList" selected="selected">
+            <option v-for="option in typeList" selected="selected" :key="option">
               {{ option }}
             </option>
           </select>
@@ -167,8 +167,9 @@ export default {
     formData: Fermentable
   },
 
-  data () {
-    return {
+  computed: {
+    typeList () {
+      return Fermentable.getTypeList()
     }
   },
 

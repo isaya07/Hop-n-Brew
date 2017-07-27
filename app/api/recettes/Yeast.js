@@ -1,10 +1,14 @@
+import {importXML, exportXML} from './Import'
+
+const typeList = ['Ale', 'Lager', 'Wheat', 'Wine', 'Champagne']
+const formList = ['Liquid', 'Dry', 'Slant', 'Culture']
+const flocculationList = ['Low', 'Medium', 'High', 'Very High']
+
 export default class Yeast {
   constructor (options) {
     this.name = null
     this.type = ''
-    this.typeList = ['Ale', 'Lager', 'Wheat', 'Wine', 'Champagne']
     this.form = ''
-    this.formList = ['Liquid', 'Dry', 'Slant', 'Culture']
     this.amount = null
     this.amountIsWeight = false
     this.laboratory = null
@@ -12,7 +16,6 @@ export default class Yeast {
     this.minTemperature = null
     this.maxTemperature = null
     this.flocculation = ''
-    this.flocculationList = ['Low', 'Medium', 'High', 'Very High']
     this.attenuation = null
     this.notes = null
     this.bestFor = ''
@@ -21,7 +24,7 @@ export default class Yeast {
     this.addToSecondary = false
     this.displayAmount = null
     this.dispMinTemp = null
-    this.DispMaxTemp = null
+    this.dispMaxTemp = null
     this.inventory = null
     this.cultureDate = null
     if (options) {
@@ -29,9 +32,28 @@ export default class Yeast {
     }
   }
 
+  static getFlocculationList () {
+    return flocculationList
+  }
+
+  static getTypeList () {
+    return typeList
+  }
+
+  static getFormList () {
+    return formList
+  }
+
   getAttenuation () {
     return this.attenuation // * 0.9 // TODO viabilité...
   }
   /* toJSON () {
   } */
+  static fromBeerXml (xml) {
+    return importXML(xml, 'yeast')
+  }
+
+  toBeerXml = (inRecipe = false) => {
+    return exportXML(this.toJSON(), 'yeast', inRecipe)
+  }
 }

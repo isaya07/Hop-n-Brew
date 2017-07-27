@@ -1,11 +1,12 @@
 import Utils from './Utils'
-import {importXML} from './Import' // ,htmlEncode, underscorize, camelize
+import {importXML, exportXML} from './Import' // ,htmlEncode, underscorize, camelize
+
+const typeList = ['Grain', 'Sugar', 'Extract', 'Dry Extract', 'Adjunct']
 
 export default class Fermentable {
   constructor (options) {
     this.name = null
     this.type = ''
-    this.typeList = ['Grain', 'Sugar', 'Extract', 'Dry Extract', 'Adjunct']
     this.amount = null
     this.yield = null
     this.color = null
@@ -28,6 +29,10 @@ export default class Fermentable {
     if (options) {
       Object.assign(this, options)
     }
+  }
+
+  static getTypeList () {
+    return typeList
   }
 
   getSugar (efficiency) {
@@ -71,8 +76,7 @@ export default class Fermentable {
     return importXML(xml, 'fermentable')
   }
 
-  toBeerXml = () => {
-    let xml = '<?xml version="1.0" encoding="ISO-8859-1"?>\n'
-    return xml
+  toBeerXml = (inRecipe = false) => {
+    return exportXML(this.toJSON(), 'yeast', inRecipe)
   }
 }

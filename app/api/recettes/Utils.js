@@ -299,11 +299,6 @@ export default class Utils {
     }
     return value
   }
-}
 
-// export calcInfuseTemp
-export function roundDecimal (nombre, precision) {
-  let preci = precision || 2
-  var tmp = Math.pow(10, preci)
-  return Math.round(nombre * tmp) / tmp
+  static isType = (type, val) => val.constructor.name.toLowerCase() === type
 }

@@ -1,6 +1,4 @@
-import {camelize} from './Import'
-import * as utils from './Utils'
-import Utils from 'api/recettes/Utils'
+import Utils from './Utils'
 
 const typeList = ['Infusion', 'Temperature', 'Decoction']
 let inCalc = false
@@ -9,7 +7,6 @@ export default class MashStep {
   constructor (config, options) {
     this.name = ''
     this._type = ''
-    // this.typeList = ['Infusion', 'Temperature', 'Decoction']
     this._infuseAmount = 0
     this._stepTemp = 0
     this._stepTime = 0
@@ -25,7 +22,6 @@ export default class MashStep {
     if (options) {
       Object.assign(this, options)
     }
-    // console.log('construc', this)
   }
 
   set type (type) {
@@ -91,9 +87,9 @@ export default class MashStep {
           let recipe = this.mash.recipe
           let totalGrain = recipe.getFementablesTotal()
           if (param !== 'ratio' && this._infuseAmount !== 0) {
-            this._waterGrainRatio = utils.roundDecimal(this._infuseAmount / totalGrain, 3)
+            this._waterGrainRatio = Utils.roundDecimal(this._infuseAmount / totalGrain, 3)
           } else {
-            this._infuseAmount = utils.roundDecimal(totalGrain * this._waterGrainRatio, 1)
+            this._infuseAmount = Utils.roundDecimal(totalGrain * this._waterGrainRatio, 1)
             this.mash.updateStepWaterRatio(this.name, this._waterGrainRatio)
           }
           let infamout = this._infuseAmount
@@ -105,7 +101,6 @@ export default class MashStep {
       } else if (this.type === 'Temperature') {
         this.description = 'Up to ' + this.stepTemp + ' in ' + this.rampTime + ' min'
       }
-      // console.log(this)
       if (this.mash) this.mash.calcSpargeVol()
       inCalc = false
     }
@@ -131,30 +126,5 @@ export default class MashStep {
       displayStepTemp: this.displayStepTemp,
       displayInfuseAmt: this.displayInfuseAmt
     }
-  }
-
-  static fromNodes = (nodes, parent, config) => {
-    let steps = []
-
-    let ref = nodes.childNodes || []
-    ref.forEach(function (step) {
-      if (step.nodeName.toLowerCase() === 'mash_step') {
-        let options = {mash: parent}
-        let props = step.childNodes || []
-        props.forEach(function (item) {
-          if (item.nodeName !== '#text') {
-            let itemName = camelize(item.nodeName)
-            if (!isNaN(item.textContent)) {
-              options[itemName] = +item.textContent
-            } else {
-              options[itemName] = item.textContent
-            }
-          }
-        })
-        steps.push(new MashStep(config, options))
-      }
-    })
-
-    return steps
   }
 }

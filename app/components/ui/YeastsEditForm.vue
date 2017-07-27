@@ -31,7 +31,7 @@
       <div class="col is-1-3">
         <select class="pure-input-1" name="type" data-vv-name="type" v-model="formData.type" v-validate:type.initial="'required'" :class="{'input': true, 'is-alert': errors.has('type') }">
           <option disabled value="">Please select one</option>
-          <option v-for="option in formData.typeList" selected="selected">
+          <option v-for="option in typeList" selected="selected" :key="option">
             {{ option }}
           </option>
         </select>
@@ -46,7 +46,7 @@
       <div class="col is-1-3">
         <select class="pure-input-1" name="form" v-model="formData.form" v-validate:form.initial="'required'" :class="{'input': true, 'is-alert': errors.has('form') }">
           <option disabled value="">Please select one</option>
-          <option v-for="option in formData.formList" selected="selected">
+          <option v-for="option in formList" selected="selected" :key="option">
             {{ option }}
           </option>
         </select>
@@ -68,7 +68,7 @@
       <div class="col is-1-3">
         <select class="pure-input-1" name="flocculation" v-model="formData.flocculation" v-validate:flocculation.initial="'required'" :class="{'input': true, 'is-alert': errors.has('flocculation') }">
           <option disabled value="">Please select one</option>
-          <option v-for="option in formData.flocculationList" selected="selected">
+          <option v-for="option in flocculationList" selected="selected" :key="option">
             {{ option }}
           </option>
         </select>
@@ -135,6 +135,18 @@ export default {
 
   props: {
     formData: Yeast
+  },
+
+  computed: {
+    flocculationList () {
+      return Yeast.getFlocculationList()
+    },
+    typeList () {
+      return Yeast.getTypeList()
+    },
+    formList () {
+      return Yeast.getFormList()
+    }
   },
 
   methods: {

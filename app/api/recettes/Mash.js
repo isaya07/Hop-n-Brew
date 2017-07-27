@@ -1,8 +1,6 @@
 import MashStep from './MashStep'
-import {importXml, htmlEncode, camelize, underscorize} from './Import'
+import {importXML, exportXML} from './Import' // importXml, camelize, htmlEncode, underscorize
 import Utils from 'api/recettes/Utils'
-
-const isType = (type, val) => val.constructor.name.toLowerCase() === type
 
 export default class Mash {
   constructor (config, options) {
@@ -12,11 +10,10 @@ export default class Mash {
     this.notes = ''
     this._tunTemp = 20
     this._spargeTemp = 77
-    // this.spargeVol = 0
     this.empatSize = 0
     this.ph = 5.4
-    this._tunWeight = null
-    this.tunSpecificHeat = null
+    this._tunWeight = 0
+    this.tunSpecificHeat = 0.12
     this.equipAdjust = false
     this.displayGrainTemp = ''
     this.displayTunTemp = ''
@@ -26,12 +23,12 @@ export default class Mash {
     if (options) {
       if (options.mashSteps && options.mashSteps.length !== 0) {
         let steps = []
-        if (isType('array', options.mashSteps)) {
+        if (Utils.isType('array', options.mashSteps)) {
           for (let i = 0; i < options.mashSteps.length; i++) {
             let step = options.mashSteps[i]
             steps.push(new MashStep(config, Object.assign(step, {mash: this})))
           }
-        } else if (isType('object', options.mashSteps)) {
+        } else if (Utils.isType('object', options.mashSteps)) {
           for (let step in this.mashSteps) {
             steps.push(new MashStep(config, Object.assign(step, {mash: this})))
           }
@@ -178,7 +175,6 @@ export default class Mash {
       notes: this.notes,
       tunTemp: this._tunTemp,
       spargeTemp: this._spargeTemp,
-      spargeSize: this.spargeSize,
       ph: this.ph,
       tunWeight: this._tunWeight,
       tunSpecificHeat: this.tunSpecificHeat,
@@ -190,58 +186,11 @@ export default class Mash {
     }
   }
 
-  static fromBeerXml = (xml, recepice, config) => {
-    let mash = new Mash(config)
-    // let options = {}
-    mash['recipe'] = recepice
-    importXml(xml, 'mash', (props) => {
-      if (props.nodeName !== '#text') {
-        let propsName = camelize(props.nodeName)
-        if (propsName === 'mashSteps') {
-          mash[propsName] = MashStep.fromNodes(props, mash, config)
-        } else {
-          if (!isNaN(props.textContent)) {
-            mash[propsName] = +props.textContent
-          } else {
-            mash[propsName] = props.textContent
-          }
-        }
-      }
-    })
-    // console.log(this, options)
-    // Object.assign(this, options)
-    // console.log(this)
-    return mash
+  static fromBeerXml = (xml) => {
+    return importXML(xml, 'mash', 'mashSteps')
   }
 
   toBeerXml = (inRecipe = false) => {
-    let mash = this.toJSON()
-    let xml = '<?xml version="1.0" encoding="ISO-8859-1"?>\n'
-    if (!inRecipe) xml += '<MASHS>\n'
-    xml += '<MASH>\n<VERSION>1</VERSION>\n'
-    for (let key in mash) {
-      if (mash.hasOwnProperty(key)) {
-        let ref1 = underscorize(key).toUpperCase()
-        if (key === 'mashSteps') {
-          xml += '<' + ref1 + '>\n'
-          for (let step in mash[key]) {
-            xml += '<MASH_STEP>\n'
-            for (let prop in mash[key][step].toJSON()) {
-              let ref2 = underscorize(prop).toUpperCase()
-              xml += '<' + ref2 + '>' + htmlEncode(mash[key][step][prop]) + '</' + ref2 + '>\n'
-            }
-            xml += '</MASH_STEP>\n'
-          }
-          xml += '</' + ref1 + '>\n'
-        } else if (key !== 'spargeSize') {
-          xml += '<' + ref1 + '>' + htmlEncode(mash[key]) + '</' + ref1 + '>\n'
-        }
-      }
-    }
-    xml += '\n</MASH>\n'
-    if (!inRecipe) xml += '</MASHS>'
-    // let objUrl = window.URL.createObjectURL(blob)
-    // window.open(uriContent, 'test.xml')
-    return xml
+    return exportXML(this.toJSON(), 'mash', inRecipe)
   }
 }
