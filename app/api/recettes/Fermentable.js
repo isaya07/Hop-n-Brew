@@ -77,6 +77,6 @@ export default class Fermentable {
   }
 
   toBeerXml = (inRecipe = false) => {
-    return exportXML(this.toJSON(), 'yeast', inRecipe)
+    return exportXML(this.toJSON(), 'fermentable', inRecipe)
   }
 }

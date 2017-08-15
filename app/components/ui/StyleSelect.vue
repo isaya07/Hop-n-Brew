@@ -1,11 +1,9 @@
 <template>
-<div>
   <search-select :options="options"
                 :selectedOption="item"
                 placeholder="Select a style"
                 @select="onSelect">
   </search-select>
-</div>
 </template>
 
 <script>
@@ -18,8 +16,12 @@ export default {
     SearchSelect
   },
 
-  pouch: {
-    styles: {}
+  mounted () {
+    this.$db.gets('styles').then(rows => {
+      this.styles = rows
+    }).catch(err => {
+      console.log(err)
+    })
   },
 
   props: {
@@ -29,6 +31,7 @@ export default {
   data () {
     return {
       selected: this.selectStyle || '',
+      styles: [],
       item: {
         value: '',
         text: ''

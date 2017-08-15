@@ -9,6 +9,7 @@ import Carbonation from './Carbonation'
 import Equipment from './Equipment'
 import Style from './Style'
 import Utils from './Utils'
+import {importXML, exportXML} from './Import'
 
 export default class Recipe {
   constructor (config, options) {
@@ -170,29 +171,29 @@ export default class Recipe {
     let updateFunc
     switch (type) {
       case 'fermentable':
-        ret = this.fermentables.push(new Fermentable(options))
+        ret = this.fermentables.push(new Fermentable(this._config, options))
         updateFunc = this.updateOg.bind(this)
         break
       case 'hop':
-        ret = this.hops.push(new Hop(options))
+        ret = this.hops.push(new Hop(this._config, options))
         updateFunc = this.updateIbu.bind(this)
         break
       case 'yeast':
-        ret = this.yeasts.push(new Yeast(options))
+        ret = this.yeasts.push(new Yeast(this._config, options))
         updateFunc = this.updateFg.bind(this)
         break
       case 'misc':
-        ret = this.miscs.push(new Misc(options))
+        ret = this.miscs.push(new Misc(this._config, options))
         break
       case 'water':
-        ret = this.waters.push(new Water(options))
+        ret = this.waters.push(new Water(this._config, options))
         break
     }
     if (updateFunc) updateFunc()
     return ret
   }
 
-  remove (type, name) {
+  remove (type, ingredient) {
     let lists
     let updateFunc
     switch (type) {
@@ -216,11 +217,20 @@ export default class Recipe {
         break
     }
     for (let i = 0; i < lists.length; i++) {
-      if (lists[i].name === name) {
+      if (JSON.stringify(lists[i]) === JSON.stringify(ingredient)) {
+      // if (lists[i].name === name) {
         lists.splice(i, 1)
       }
     }
     if (updateFunc) updateFunc()
+  }
+
+  static fromBeerXml (xml) {
+    return importXML(xml, 'recipe')
+  }
+
+  toBeerXml = (inRecipe = false) => {
+    return exportXML(this.toJSON(), 'recipe', inRecipe)
   }
 
   toJSON () {

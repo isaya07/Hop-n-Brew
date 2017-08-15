@@ -16,6 +16,10 @@
   flex-shrink: 1;
   width: 100%;
 
+  .select {
+    width: auto;
+  }
+
   button, input[type="text"], input[type="number"], select {
     //margin-right: -1px;
     border-radius: 0;

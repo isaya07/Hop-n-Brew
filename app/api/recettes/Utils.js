@@ -3,6 +3,7 @@
 // const BURNER_ENERGY = 9000
 
 // const MASH_HEAT_LOSS = 5.0
+import { Converter } from './../UnitConverter'
 
 const COLOR_NAMES = [
   [ 2, 'pale straw' ],
@@ -139,6 +140,40 @@ export default class Utils {
     return value
   }
 
+  static convertTempTo = (displayTemp, unit, dec = 1) => {
+    let ref = displayTemp.split(' ')
+    return Converter(Utils.roundDecimal(ref[0], dec), ref[1]).as(unit).val()
+  }
+
+  static convertWeightTo = (displayWeight, unit, dec = 1) => {
+    let ref = displayWeight.split(' ')
+    return Converter(Utils.roundDecimal(ref[0], dec), ref[1]).as(unit).val()
+  }
+
+  static convertVolTo = (displayVol, unit, dec = 1) => {
+    let ref = displayVol.split(' ')
+    if (ref[1] === 'oz') ref[1] = 'fl-oz'
+    if (unit === 'oz') unit = 'fl-oz'
+    return Converter(Utils.roundDecimal(ref[0], dec), ref[1]).as(unit).val()
+  }
+
+  static convertVol = displayVol => {
+    let value = {}
+    let ref = displayVol.split(' ')
+    switch (ref[1]) {
+      case 'l':
+        value.value = ref[0]
+        break
+      case 'gal':
+        value.value = Utils.gallonsToLiters(ref[0])
+        break
+      default:
+        value.value = 0
+    }
+    value.unitie = 'l'
+    return value
+  }
+
   static convertTime = displayTime => {
     let ref = displayTime.split(' ')
     switch (ref[1]) {
@@ -180,6 +215,8 @@ export default class Utils {
   }
 
   static kgToLb = kg => kg * 2.20462
+
+  static kgToOz = kg => kg * 35.27396
 
   static lbToKg = lb => lb / 2.20462
 

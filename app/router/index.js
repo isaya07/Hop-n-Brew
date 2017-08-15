@@ -26,11 +26,23 @@ export default new Router({
     meta: { requiresAuth: true }
   },
   {
+    path: '/miscs',
+    name: 'miscs',
+    component: require('components/modules/ingredients/Miscs'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/waters',
+    name: 'waters',
+    component: require('components/modules/ingredients/Waters'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/recetteslist',
     name: 'recetteslist',
     component: require('components/modules/recettes/RecettesList'),
     meta: { requiresAuth: true }
-  },
+  }, /*
   {
     path: '/recette',
     name: 'recette',
@@ -42,7 +54,7 @@ export default new Router({
     name: 'editrecette',
     component: require('components/modules/recettes/EditRecette'),
     meta: { requiresAuth: true }
-  },
+  }, */
   {
     path: '/test',
     name: 'test',
@@ -52,13 +64,38 @@ export default new Router({
   {
     path: '/style',
     name: 'style',
-    component: require('components/modules/test/Style'),
+    component: require('components/modules/profils/Style'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/fermentation',
+    name: 'fermentation',
+    component: require('components/modules/profils/Fermentation'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/carbonation',
+    name: 'carbonation',
+    component: require('components/modules/profils/Carbonation'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/equipment',
+    name: 'equipment',
+    component: require('components/modules/profils/Equipment'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/mash',
+    name: 'mash',
+    component: require('components/modules/profils/MashList'),
     meta: { requiresAuth: true }
   },
   {
     path: '/editrecettes',
     name: 'editrecettes',
-    component: require('components/modules/test/EditRecette'),
+    component: require('components/modules/recettes/EditRecette'),
+    props: true,
     meta: { requiresAuth: false }
   },
   {

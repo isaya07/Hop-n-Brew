@@ -5,7 +5,7 @@ const formList = ['Liquid', 'Dry', 'Slant', 'Culture']
 const flocculationList = ['Low', 'Medium', 'High', 'Very High']
 
 export default class Yeast {
-  constructor (options) {
+  constructor (config, options) {
     this.name = null
     this.type = ''
     this.form = ''
@@ -27,6 +27,7 @@ export default class Yeast {
     this.dispMaxTemp = null
     this.inventory = null
     this.cultureDate = null
+    this._config = config
     if (options) {
       Object.assign(this, options)
     }

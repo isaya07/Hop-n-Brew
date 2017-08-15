@@ -7,7 +7,9 @@
 @import 'grid';
 @import 'menu';
 @import 'form';
+@import 'card';
 @import 'button';
+@import 'item';
 
 $fa-font-path: "~font-awesome/fonts";
 @import '~font-awesome/scss/font-awesome';
@@ -83,18 +85,6 @@ $fa-font-path: "~font-awesome/fonts";
 /* section {
   padding: 0.5rem;
 } */
-
-.card {
-  border: 1px solid $light-grey;
-  border-radius:$global-radius;
-  box-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
-  // display: inline-block;
-  background-color: $white;
-  height: 100%;
-  padding: 0.5rem;
-  background-image: linear-gradient($white, $whitesmoke);
-  // margin-bottom: 1rem;
-}
 
 section {
   padding: 1rem;

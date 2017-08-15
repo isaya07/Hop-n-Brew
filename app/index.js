@@ -1,16 +1,16 @@
 // import isElectron from 'is-electron-renderer'
 import Vue from 'vue'
 import VeeValidate from 'vee-validate'
-
 import App from './App'
 import router from './router'
 
 import Config from 'api/recettes/Config'
+import DB from 'api/pouchDB'
 
 import MyNotification from 'components/plugins/notification'
 // import MyProgress from 'components/plugins/MyProgress'
 
-import PouchDB from 'pouchdb-browser'
+/* import PouchDB from 'pouchdb-browser'
 PouchDB.plugin(require('pouchdb-find'))
 PouchDB.plugin(require('pouchdb-live-find'))
 // PouchDB.plugin(require('pouchdb-authentication'))
@@ -22,8 +22,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 Vue.use(require('vue-pouch'), {
   pouch: PouchDB/* ,    // optional if `PouchDB` is available on the global object
-  defaultDB:         // the database to use if none is specified in the pouch setting of the vue component */
-})
+  defaultDB:         // the database to use if none is specified in the pouch setting of the vue component
+}) */
 
 Vue.use(VeeValidate)
 Vue.use(MyNotification, {timeout: 5000})
@@ -34,7 +34,11 @@ VeeValidate.Validator.extend('myAlpha', {
   getMessage: field => 'The ' + field + ' value is not alpha.',
   // validate: value => /^[\w\d\s\-\(\)\,\:\.\%]+$/.test(value)
   // eslint-disable-next-line
-  validate: value => /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ:()_'.",%/\-\s]*$/i.test(value)
+  validate: value => {
+    let test = /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ:()_'.",%/\-\s]*$/i.test(value)
+    console.log(test)
+    return test
+  }
 })
 
 VeeValidate.Validator.extend('myNumeric', {
@@ -57,6 +61,15 @@ Vue.config.errorHandler = (err, vm, info) => {
 }
 
 Vue.config.debug = true
+
+const db = new DB()
+Object.defineProperties(Vue.prototype, {
+  $db: {
+    get: function () {
+      return db
+    }
+  }
+})
 
 const config = new Config()
 Object.defineProperties(Vue.prototype, {

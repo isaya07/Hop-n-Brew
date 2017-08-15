@@ -6,7 +6,7 @@
       placeholder="Add new todo"
     >
     <ul>
-      <li v-for="todo in todos">
+      <li v-for="todo in todos" :key="todo">
         <input
           :value="todo.text"
           @input="updateTodoText(todo, $event.target.value)"
@@ -15,17 +15,31 @@
       </li>
     </ul>
     <button @click="notif">test notification</button>
+    <input v-model="poids">
+    <input v-model="unit">
+    <input v-model="to">
+    {{ result }}
   </div>
 </template>
 
 <script>
 // mport { db } from 'api/firebase'
+import { Converter } from 'api/UnitConverter'
 let todosRef// = db.ref('todos')
 
 export default {
   data () {
     return {
-      newTodoText: ''
+      newTodoText: '',
+      poids: 1,
+      unit: 'bar',
+      to: 'psi',
+      todos: null
+    }
+  },
+  computed: {
+    result () {
+      return Converter(this.poids, this.unit).as(this.to).debug()
     }
   },
   firebase: {

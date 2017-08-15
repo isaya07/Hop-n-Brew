@@ -7,19 +7,7 @@ const Menu =
         // icon: 'home',
         expanded: false,
         link: 'modules/recettes/RecettesList.vue'
-      },
-      // component: lazyLoading('charts', true),
-
-      children: [
-        {
-          name: 'Recette',
-          path: 'recetteslist',
-          // component: lazyLoading('charts/Chartist'),
-          meta: {
-            link: 'modules/recettes/RecettesList.vue'
-          }
-        }
-      ]
+      }
     },
     {
       name: 'Ingrédients',
@@ -55,6 +43,73 @@ const Menu =
           meta: {
             link: 'modules/ingredients/Hops.vue'
           }
+        },
+        {
+          name: 'Miscs',
+          path: 'miscs',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/ingredients/Miscs.vue'
+          }
+        },
+        {
+          name: 'Waters',
+          path: 'waters',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/ingredients/Waters.vue'
+          }
+        }
+      ]
+    },
+    {
+      name: 'Profils',
+      path: '',
+      meta: {
+        icon: 'home',
+        expanded: false// ,
+        // link: 'modules/test/Test.vue'
+      },
+      children: [
+        {
+          name: 'Style',
+          path: 'style',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/profils/Style.vue'
+          }
+        },
+        {
+          name: 'Fermentation',
+          path: 'fermentation',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/profils/Fermentation.vue'
+          }
+        },
+        {
+          name: 'Carbonation',
+          path: 'carbonation',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/profils/Carbonation.vue'
+          }
+        },
+        {
+          name: 'Equipment',
+          path: 'equipment',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/profils/Equipment.vue'
+          }
+        },
+        {
+          name: 'Mash',
+          path: 'mash',
+          // component: lazyLoading('charts/Chartist'),
+          meta: {
+            link: 'modules/profils/MashList.vue'
+          }
         }
       ]
     },
@@ -75,22 +130,6 @@ const Menu =
           // component: lazyLoading('charts/Chartist'),
           meta: {
             link: 'modules/test/Test.vue'
-          }
-        },
-        {
-          name: 'Style',
-          path: 'style',
-          // component: lazyLoading('charts/Chartist'),
-          meta: {
-            link: 'modules/test/Style.vue'
-          }
-        },
-        {
-          name: 'EditRecettes',
-          path: 'editrecettes',
-          // component: lazyLoading('charts/Chartist'),
-          meta: {
-            link: 'modules/test/EditRecette.vue'
           }
         }
       ]

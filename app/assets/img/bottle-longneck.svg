@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   sodipodi:docname="bottle-longneck.svg"
+   viewBox="0 0 744.09 1052.4"
+   version="1.1"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
+  <defs
+     id="defs8">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient910">
+      <stop
+         id="stop908"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:0;" />
+      <stop
+         id="stop906"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:1;" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient910"
+       id="radialGradient912"
+       cx="356.45175"
+       cy="527.172"
+       fx="356.45175"
+       fy="527.172"
+       r="105.79035"
+       gradientTransform="matrix(5.2970347,0.01199839,-0.02324915,10.264142,-1519.4293,-4888.0728)"
+       gradientUnits="userSpaceOnUse"
+       spreadMethod="reflect" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     inkscape:pageshadow="2"
+     inkscape:window-y="28"
+     pagecolor="#ffffff"
+     inkscape:window-height="1024"
+     inkscape:window-maximized="1"
+     inkscape:zoom="0.49497475"
+     inkscape:window-x="0"
+     showgrid="false"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="-110.28361"
+     inkscape:cy="463.2941"
+     inkscape:window-width="1920"
+     inkscape:pageopacity="0.0"
+     inkscape:document-units="px" />
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <path
+       id="path3009"
+       sodipodi:nodetypes="ccccccccccccccc"
+       style="fill:#d45500"
+       inkscape:connector-curvature="0"
+       d="m258.83 930.97c23.451 24.692 182.24 21.078 191.62 1.4253 11.465-9.0706 8.8441-39.909 8.8441-39.909l2.948-399.09c-1.56-50.4-46.46-79.43-48.03-111.18l-15.35-209.52c18.24-8.0628 4.2586-35.445 1.1317-44.516 10.944-16.126-0.96821-17.608-3.5739-20.127-32.832-3.0235-48.197-2.5196-84.156 0.50393 0 0-13.702 11.179-0.15264 19.242 3.1269 5.5432-23.451 35.175 0.52115 45.254l-16.24 211.51c-4.6903 35.779-42.083 55.192-45.731 101.55l3.0112 419.19s-0.0524 19.609 5.159 25.656z" />
+    <path
+       id="path3009-3"
+       sodipodi:nodetypes="ccccccccccccccc"
+       style="fill:url(#radialGradient912);fill-opacity:1"
+       inkscape:connector-curvature="0"
+       d="m 258.83,930.96996 c 23.451,24.692 182.24,21.078 191.62,1.4253 11.465,-9.0706 8.8441,-39.90896 8.8441,-39.90896 l 2.948,-399.09 c -1.56,-50.4 -46.46,-79.43 -48.03,-111.18 l -15.35,-209.52 c 18.24,-8.0628 4.2586,-35.445 1.1317,-44.516 10.944,-16.126 -0.96821,-17.608 -3.5739,-20.127 -32.832,-3.0235 -48.197,-2.5196 -84.156,0.50393 0,0 -13.702,11.179 -0.15264,19.242 3.1269,5.5432 -23.451,35.175 0.52115,45.254 l -16.24,211.51 c -4.6903,35.779 -42.083,55.192 -45.731,101.55 l 3.0112,419.19 c 0,0 -0.0524,19.60903 5.159,25.65603 z" />
+  </g>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>long neck bottle (silhouette)</dc:title>
+        <dc:date>2012-01-31T20:50:10</dc:date>
+        <dc:description>silhouette of a long neck beer bottle</dc:description>
+        <dc:source>https://openclipart.org/detail/167584/long-neck-bottle-silhouette-by-ysae</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>ysae</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>beer bottle</rdf:li>
+            <rdf:li>bottle</rdf:li>
+            <rdf:li>long neck</rdf:li>
+            <rdf:li>outline</rdf:li>
+            <rdf:li>shape</rdf:li>
+            <rdf:li>silhouette</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

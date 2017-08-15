@@ -7,18 +7,15 @@ const typeList = ['Bittering', 'Aroma', 'Both']
 const formList = ['Pellet', 'Plug', 'Leaf']
 
 export default class Hop {
-  constructor (options) {
+  constructor (config, options) {
     this.name = null
     this.alpha = null
     this.amount = null
     this.use = ''
-    // this.useList = useList
     this.time = null
     this.notes = null
     this.type = ''
-    // this.typeList = typeList
     this.form = ''
-    // this.formList = formList
     this.beta = null
     this.hsi = null
     this.origin = null
@@ -30,6 +27,7 @@ export default class Hop {
     this.displayAmount = null
     this.inventory = null
     this.displayTime = null
+    this._config = config
     if (options) {
       Object.assign(this, options)
     }
@@ -90,6 +88,6 @@ export default class Hop {
   }
 
   toBeerXml = (inRecipe = false) => {
-    return exportXML(this.toJSON(), 'yeast', inRecipe)
+    return exportXML(this.toJSON(), 'hop', inRecipe)
   }
 }

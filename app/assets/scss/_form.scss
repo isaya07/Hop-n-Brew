@@ -122,8 +122,9 @@ input[disabled], select[disabled], textarea[disabled] {
 
 .select {
   position: relative;
-  display: inline-block;
-  vertical-align: top;
+  display: inline-flex;
+  width: 100%;
+  // vertical-align: top;
   &::after {
     @include arrow($primary-color, 0);
     content: " ";

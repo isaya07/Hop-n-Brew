@@ -1,6 +1,58 @@
 import Utils from 'api/recettes/Utils'
 
-export function importXML (xml, type, children) {
+const child = ['hops', 'yeasts', 'fermentables', 'miscs', 'waters', 'mash', 'equipment', 'style', 'mashSteps']
+
+function testChild (props) {
+  let l = child.length
+  for (let x = 0; x < l; x++) {
+    if (props === child[x]) return true
+  }
+  return false
+}
+
+function importChildren (ref, propName) {
+  if (ref[1].children.length !== 0) {
+    let arr = []
+    ref.forEach(child => {
+      if (child.nodeName.toLowerCase() === underscorize(singularize(propName))) {
+        let options = {}
+        let childProps = child.childNodes || []
+        childProps.forEach(childItem => {
+          if (childItem.nodeName !== '#text') {
+            let itemName = camelize(childItem.nodeName)
+            if (!isNaN(childItem.textContent)) {
+              options[itemName] = +childItem.textContent
+            } else {
+              options[itemName] = childItem.textContent
+            }
+          }
+        })
+        arr.push(options)
+      }
+    })
+    return arr
+  } else {
+    let obj = {}
+    ref.forEach(function (child) {
+      if (child.nodeName !== '#text') {
+        let propNames = camelize(child.nodeName)
+        if (testChild(propNames)) {
+          let newRef = child.childNodes || []
+          obj[propNames] = importChildren(newRef, propNames)
+        } else {
+          if (!isNaN(child.textContent)) {
+            obj[propNames] = +child.textContent
+          } else {
+            obj[propNames] = child.textContent
+          }
+        }
+      }
+    })
+    return obj
+  }
+}
+
+export function importXML (xml, type) {
   let imports = {}
   let obj = {}
   let parser = new DOMParser()
@@ -13,27 +65,9 @@ export function importXML (xml, type, children) {
       props.forEach(prop => {
         if (prop.nodeName !== '#text') {
           let propName = camelize(prop.nodeName)
-          if (children && propName === children) {
-            let arr = []
+          if (testChild(propName)) {
             let ref = prop.childNodes || []
-            ref.forEach(function (child) {
-              if (child.nodeName.toLowerCase() === 'mash_step') {
-                let options = {}
-                let childProps = child.childNodes || []
-                childProps.forEach(function (childItem) {
-                  if (childItem.nodeName !== '#text') {
-                    let itemName = camelize(childItem.nodeName)
-                    if (!isNaN(childItem.textContent)) {
-                      options[itemName] = +childItem.textContent
-                    } else {
-                      options[itemName] = childItem.textContent
-                    }
-                  }
-                })
-                arr.push(options)
-              }
-            })
-            obj[propName] = arr
+            obj[propName] = importChildren(ref, propName)
           } else {
             if (!isNaN(prop.textContent)) {
               obj[propName] = +prop.textContent
@@ -118,4 +152,12 @@ export function htmlEncode (str) {
     'û': '&#251;'
   }
   return String(str).replace(/[<&>'"#èéôâçàû]/g, function (s) { return c[s] || s })
+}
+
+export function singularize (str) {
+  if (str.toLowerCase().slice(-1) === 's') {
+    return str.slice(0, -1)
+  } else {
+    return str
+  }
 }

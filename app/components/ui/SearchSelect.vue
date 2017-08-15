@@ -15,18 +15,20 @@
            @keydown.27="showMenu = false"/>
 
     <div class="menu"
-         :class="{ 'active':showMenu, 'hidden':!showMenu }"
-         ref="menu"
-         @mousedown.prevent
-         @keydown.prevent
-         tabindex="-1">
-        <div v-for="(option, idx) in filteredOptions" class="item"
-             :class="{ 'selected': option.selected, 'current': pointer === idx }"
-             @click.stop="selectItem(option)"
-             @mousedown="mousedownItem"
-             @mouseenter="pointerSet(idx)">
-          {{option.text}}
-        </div>
+      :class="{ 'active':showMenu, 'hidden':!showMenu }"
+      ref="menu"
+      @mousedown.prevent
+      @keydown.prevent
+      tabindex="-1">
+      <div v-for="(option, idx) in filteredOptions"
+        :key="idx"
+        class="item"
+        :class="{ 'selected': option.selected, 'current': pointer === idx }"
+        @click.stop="selectItem(option)"
+        @mousedown="mousedownItem"
+        @mouseenter="pointerSet(idx)">
+        {{option.text}}
+      </div>
     </div>
   </div>
 </template>

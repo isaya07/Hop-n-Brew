@@ -187,7 +187,7 @@ export default class Mash {
   }
 
   static fromBeerXml = (xml) => {
-    return importXML(xml, 'mash', 'mashSteps')
+    return importXML(xml, 'mash')
   }
 
   toBeerXml = (inRecipe = false) => {
