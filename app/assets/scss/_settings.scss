@@ -34,12 +34,16 @@ $primary-color: rgb(51, 204, 204) !default;
 $success-color: rgb(51, 204, 51) !default;
 $alert-color: rgb(255, 51, 51) !default;
 $warning-color: rgb(255, 153, 51) !default;
+$border: $light-grey !default;
 
 $small-font-size: 80% !default;
 $medium-font-size: 90% !default;
 
 $global-radius: 5px !default;
 $small-radius: $global-radius*3/4 !default;
+
+$padding: 0.5rem !default;
+$margin: 0.5rem !default;
 
 /* $breakpoints: (
   'xsmall' : ( min-width:  567px ),

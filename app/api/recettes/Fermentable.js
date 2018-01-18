@@ -37,16 +37,15 @@ export default class Fermentable {
 
   getSugar (efficiency) {
     let weight
-    this.displayAmount ? weight = Utils.convertWeight(this.displayAmount) : weight = this.amount
-
+    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'kg') : weight = this.amount
     return weight * (this.yield / 100) * (efficiency / 100)
   }
 
   getColor (batchSize) {
     let weight
     let color
-    this.displayAmount ? weight = Utils.convertWeight(this.displayAmount) : weight = this.amount
-    this.displayColor ? color = Utils.convertColor(this.displayColor) : color = this.color
+    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'kg') : weight = this.amount
+    this.displayColor ? color = Utils.convertTo(this.displayColor, 'ebc') : color = this.color
 
     return 2.9396 * (4.23 * color * weight / batchSize) ** 0.6859
   }
@@ -77,6 +76,6 @@ export default class Fermentable {
   }
 
   toBeerXml = (inRecipe = false) => {
-    return exportXML(this.toJSON(), 'yeast', inRecipe)
+    return exportXML(this.toJSON(), 'fermentable', inRecipe)
   }
 }

@@ -73,7 +73,7 @@ export default class MashStep {
   }
   get stepTemp () {
     if (this.displayStepTemp) {
-      return Utils.convertTemp(this.displayStepTemp).temp
+      return Utils.convertTo(this.displayStepTemp, 'c')
     } else {
       return this._stepTemp
     }

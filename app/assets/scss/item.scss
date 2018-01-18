@@ -3,10 +3,11 @@
 .item {
   display: flex;
   flex-direction: column;
-  // border-radius: $global-radius;
-  // border: 1px solid #ccc;
-  // margin: 0.5rem;
-  // width: 80%;
+  &.col {
+    &:not(:last-child) {
+      padding-bottom: 0;
+    }
+  }
 }
 
 .item-inline {
@@ -15,6 +16,10 @@
   z-index: 2;
   flex-shrink: 1;
   width: 100%;
+
+  .select {
+    width: auto;
+  }
 
   button, input[type="text"], input[type="number"], select {
     //margin-right: -1px;

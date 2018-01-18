@@ -1,11 +1,9 @@
 <template>
-<div>
-  <search-select :options="options"
-                :selectedOption="item"
+  <search-select :options="styles"
+                :selectedOption="selected"
                 placeholder="Select a style"
                 @select="onSelect">
   </search-select>
-</div>
 </template>
 
 <script>
@@ -18,8 +16,16 @@ export default {
     SearchSelect
   },
 
-  pouch: {
-    styles: {}
+  mounted () {
+    this.$db.gets('styles').then(rows => {
+      this.styles = rows
+      this.selected = this.search(this.selectStyle, 'name', this.styles)
+      /* if (!this.selected && this.sele) {
+        //
+      } */
+    }).catch(err => {
+      console.log(err)
+    })
   },
 
   props: {
@@ -28,33 +34,12 @@ export default {
 
   data () {
     return {
-      selected: this.selectStyle || '',
-      item: {
-        value: '',
-        text: ''
-      }
-    }
-  },
-
-  computed: {
-    options () {
-      let options = []
-      if (this.styles !== undefined && this.styles !== null) {
-        for (let i = 0; i < this.styles.length; i++) {
-          let temp = {}
-          temp.value = this.styles[i].id
-          temp.text = this.styles[i].name
-          options.push(temp)
-        }
-      }
-      return options
+      selected: {name: this.selectStyle} || '',
+      styles: []
     }
   },
 
   methods: {
-    setValue (data) {
-      this.selected = data.selected
-    },
     search (nameKey, prop, myArray) {
       for (let i = 0; i < myArray.length; i++) {
         if (myArray[i][prop] === nameKey) {
@@ -68,15 +53,14 @@ export default {
         this.$emit('style-change', test)
       }
     },
-    onSelect (item) {
-      this.item = item
-      let test = this.search(this.item.text, 'name', this.styles)
+    onSelect (selected) {
+      this.selected = selected
+      let test = this.search(this.selected.name, 'name', this.styles)
       this.$emit('style-change', test)
-      console.log(this.item)
     },
     selectOption () {
       // select option from parent component
-      this.item = this.options[0]
+      this.selected = this.options[0]
     }
   }
 }

@@ -17,6 +17,10 @@ html {
   font-size: calc(1em * 0.625);
 }
 
+p {
+  margin: 0;
+}
+
 body {
   font-size: $global-font-size;
   line-height: $global-lineheight;

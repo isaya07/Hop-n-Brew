@@ -56,6 +56,7 @@ input {
     }
   }
   @extend %lineheight;
+  // position: relative;
 }
 
 select, textarea {
@@ -66,6 +67,7 @@ select, textarea {
     @extend %focus;
   }
   @extend %lineheight;
+  // position: relative;
 }
 
 label {
@@ -122,8 +124,9 @@ input[disabled], select[disabled], textarea[disabled] {
 
 .select {
   position: relative;
-  display: inline-block;
-  vertical-align: top;
+  display: inline-flex;
+  width: 100%;
+  // vertical-align: top;
   &::after {
     @include arrow($primary-color, 0);
     content: " ";
@@ -132,12 +135,14 @@ input[disabled], select[disabled], textarea[disabled] {
     right: 0.8rem;
     top: 50%;
     z-index: 4;
+    cursor: pointer;
   }
 
   select {
     -webkit-appearance: none;
     -moz-appearance: none;
     height: 100%;
+    cursor: pointer;
   }
 
   select, input {
@@ -148,7 +153,35 @@ input[disabled], select[disabled], textarea[disabled] {
 
 }
 
-i.input {
+.fa-icon {
+  width: auto;
+
+  vertical-align: middle;
+  height: $global-font-size;
+  margin: 0 $margin;
+  margin-top: ($global-font-size / 2);
+  @include respond-to("xsmall-up") {
+    height: $global-font-size-l;
+    margin-top: ($global-font-size-l / 2);
+  }
+  position: absolute;
+  top: 0;
+  
+}
+
+.has-icon {
+  position: relative;
+
+  .icon-left {
+    left: 0;
+  }
+
+  .icon-right {
+    right: 0;
+  }
+}
+
+/* .fa-icon.input {
   float: right;
   position: relative;
   margin-right: $global-font-size / 2;
@@ -157,7 +190,7 @@ i.input {
     margin-right: $global-font-size-l / 2;
     margin-top: -($global-font-size-l + $global-lineheight-l - 0.4);
   }
-}
+} */
 
 .form-message {
   font-size: 90%;

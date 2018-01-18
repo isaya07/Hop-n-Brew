@@ -15,18 +15,20 @@
            @keydown.27="showMenu = false"/>
 
     <div class="menu"
-         :class="{ 'active':showMenu, 'hidden':!showMenu }"
-         ref="menu"
-         @mousedown.prevent
-         @keydown.prevent
-         tabindex="-1">
-        <div v-for="(option, idx) in filteredOptions" class="item"
-             :class="{ 'selected': option.selected, 'current': pointer === idx }"
-             @click.stop="selectItem(option)"
-             @mousedown="mousedownItem"
-             @mouseenter="pointerSet(idx)">
-          {{option.text}}
-        </div>
+      :class="{ 'active':showMenu, 'hidden':!showMenu }"
+      ref="menu"
+      @mousedown.prevent
+      @keydown.prevent
+      tabindex="-1">
+      <div v-for="(option, idx) in filteredOptions"
+        :key="idx"
+        class="item"
+        :class="{ 'selected': option.selected, 'current': pointer === idx }"
+        @click.stop="selectItem(option)"
+        @mousedown="mousedownItem"
+        @mouseenter="pointerSet(idx)">
+        {{option.name}}
+      </div>
     </div>
   </div>
 </template>
@@ -38,8 +40,7 @@
         type: Array
       },
       selectedOption: {
-        type: Object,
-        default: () => { return { value: '', text: '' } }
+        type: Object
       },
       isError: {
         type: Boolean,
@@ -53,7 +54,7 @@
     data () {
       return {
         showMenu: false,
-        searchText: '',
+        searchText: this.selectedOption.name || '',
         // mousedownState: false, // mousedown on option menu
         pointer: 0
       }
@@ -61,24 +62,14 @@
     watch: {
       filteredOptions () {
         this.pointerAdjust()
+      },
+      selectedOption (newName) {
+        if (newName) this.searchText = newName.name
       }
     },
     computed: {
-      /* inputText () {
-        if (this.searchText) {
-          console.log('la')
-          return this.searchText
-        } else {
-          let text = this.placeholder
-          if (this.selectedOption.text) {
-            text = this.selectedOption.text
-          }
-          console.log(text)
-          return text
-        }
-      }, */
       textClass () {
-        if (!this.selectedOption.text && this.placeholder) {
+        if (!this.selectedOption.name && this.placeholder) {
           return 'default'
         } else {
           return ''
@@ -98,7 +89,7 @@
       filteredOptions () {
         if (this.searchText) {
           return this.options.filter(option => {
-            return option.text.match(new RegExp(this.searchText, 'i'))
+            return option.name.match(new RegExp(this.searchText, 'i'))
           })
         } else {
           return this.options
@@ -169,6 +160,7 @@
       },
       enterItem () {
         const currentItem = this.filteredOptions[this.pointer]
+        console.log(currentItem)
         if (currentItem) {
           this.selectItem(currentItem)
         }
@@ -185,9 +177,9 @@
         this.mousedownState = true
       },
       selectItem (option) {
-        this.searchText = option.text
-        this.closeOptions()
         this.$emit('select', option)
+        // this.searchText = option.name
+        this.closeOptions()
       }
     }
   }
@@ -207,7 +199,7 @@
     width: 100%;
     position: absolute;
     z-index: 1000;
-    margin-top: -$global-radius;
+    margin-top: $global-font-size-l * 2;
   }
 
   .menu:hover, .menu.active{

@@ -1,10 +1,10 @@
 <template>
 <div class="svg-container">
-  <svg :viewBox="'0 0 '+ width + ' ' +  height" preserveAspectRatio="none">
+  <svg :viewBox="'0 0 '+ width + ' ' +  height" :preserveAspectRatio="'none'">
     <g>
       <rect class="svgbar" :width="width" :height="height" rx="5" ry="5"></rect>
       <rect class="svgbar-interval" :x="points.start" :width="points.end" :height="height" rx="5" ry="5"></rect>
-      <line class="svgbar-value" :x1="points.value" y1="0" :x2="points.value" :y2="height"></line>
+      <line v-if="data.value" class="svgbar-value" :x1="points.value" y1="0" :x2="points.value" :y2="height"></line>
     </g>
   </svg>
 </div>
@@ -51,18 +51,20 @@ export default {
   }
 
   .svg-container {
-    width: 100%;
-    height: 0;
-    padding: 0; /* reset */
-    padding-bottom: 10%;
-    position: relative;
+//    width: 100%;
+//     height: 0;
+//     padding: 0; /* reset */
+//     padding-bottom: 10%;
+    // position: relative;
     // display: inline-block;
+
+    svg {
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+      max-height: 2.4rem;
+    }
   }
 
-  svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    max-height: 2.4rem;
-  }
+
 </style>

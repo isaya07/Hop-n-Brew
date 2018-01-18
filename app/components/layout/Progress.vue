@@ -48,6 +48,15 @@ export default {
     pause () {
       clearInterval(this.state.timer)
     },
+    play () {
+      this.state.timer = setInterval(() => {
+        this.increase(this.state.cut * Math.random())
+        if (this.percent > 95) {
+          this.finish()
+          clearInterval(this.state.timer)
+        }
+      }, 100)
+    },
     finish () {
       this.percent = 100
       clearInterval(this.state.timer)
@@ -58,13 +67,16 @@ export default {
     progressGest (action) {
       switch (action) {
         case 'start':
-          this.start(300)
+          this.start(500)
           break
         case 'stop':
           this.finish()
           break
         case 'pause':
           this.pause()
+          break
+        case 'play':
+          this.play()
           break
       }
     }

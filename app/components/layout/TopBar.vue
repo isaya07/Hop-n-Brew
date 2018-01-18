@@ -15,6 +15,7 @@
     </div>
     <div class="col">
       {{user.name}}
+      <a class="button" v-on:click="signOut" v-if="user">Sign-out</a>
     </div>
   </div>
 </template>

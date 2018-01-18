@@ -9,6 +9,9 @@ import Carbonation from './Carbonation'
 import Equipment from './Equipment'
 import Style from './Style'
 import Utils from './Utils'
+import {importXML, exportXML} from './Import'
+
+const typeList = ['Extract', 'Partial Mash', 'All Grain']
 
 export default class Recipe {
   constructor (config, options) {
@@ -17,11 +20,10 @@ export default class Recipe {
     this.brewer = ''
     this.asstBrewer = null
     this.type = ''
-    this.typeList = ['Extract', 'Partial Mash', 'All Grain']
     this.equipment = new Equipment()
     this.style = new Style()
-    this._batchSize = 20
-    this._boilSize = 23
+    this.batchSize = 20
+    this.boilSize = 23
     this.calcBoilSize = true
     this.boilTime = 60
     this.efficiency = 75
@@ -41,7 +43,7 @@ export default class Recipe {
     this.estOg = null
     this.estFg = null
     this.estColor = null
-    this._ibu = null
+    this.ibu = null
     this.ibuMethod = 'tinseth'
     this.estAbv = null
     this.abv = null
@@ -54,46 +56,140 @@ export default class Recipe {
     this._config = config
     if (options) {
       Object.assign(this, options)
+      if (options.fermentables && options.fermentables.length !== 0) {
+        this.fermentables = []
+        for (let i = 0; i < options.fermentables.length; i++) {
+          this.add('fermentable', options.fermentables[i])
+        }
+      }
+      if (options.hops && options.hops.length !== 0) {
+        this.hops = []
+        for (let i = 0; i < options.hops.length; i++) {
+          this.add('hop', options.hops[i])
+        }
+      }
+      if (options.yeasts && options.yeasts.length !== 0) {
+        this.yeasts = []
+        for (let i = 0; i < options.yeasts.length; i++) {
+          this.add('yeast', options.yeasts[i])
+        }
+      }
+      if (options.miscs && options.miscs.length !== 0) {
+        this.miscs = []
+        for (let i = 0; i < options.miscs.length; i++) {
+          this.add('misc', options.miscs[i])
+        }
+      }
+      if (options.waters && options.waters.length !== 0) {
+        this.waters = []
+        for (let i = 0; i < options.waters.length; i++) {
+          this.add('water', options.waters[i])
+        }
+      }
+      if (options.equipment) {
+        this.equipment = new Equipment(options.equipment)
+      }
     }
   }
 
-  get ibu () {
-    return this._ibu
+  getTypeList () {
+    return typeList
   }
 
-  set ibu (value) {
-    if (value) {
-      // console.log(value)
-      this._ibu = value
-    }
-  }
-
-  get batchSize () {
-    return this._batchSize
-  }
-
-  set batchSize (value) {
-    if (value) {
-      this._batchSize = value
-      this.updateOg()
-    }
-  }
-
-  get boilSize () {
-    if (this.equipment.calcBoilVolume) {
-      return this._batchSize + ((this._batchSize * this.equipment.evapRate / 100) * this.boilTime / 60) + this.equipment.turbChillerLoss
+  /**
+   * Getter/Setter
+   */
+  getBatchSize (unit) {
+    if (this.displayBatchSize) {
+      return Utils.convertTo(this.displayBatchSize, unit)
     } else {
-      return this._boilSize
+      return this.batchSize
+    }
+  }
+  setBatchSize (val, unit) {
+    this.batchSize = val
+    this.displayBatchSize = val + ' ' + unit
+  }
+
+  getBoilSize (unit) {
+    if (this.equipment.calcBoilVolume) {
+      return this.calculBoilSize()
+    } else {
+      if (this.displayBoilSize) {
+        return Utils.convertTo(this.displayBoilSize, unit)
+      } else {
+        return this.boilSize
+      }
+    }
+  }
+  setBoilSize (val, unit) {
+    if (!this.equipment.calcBoilVolume) {
+      this.boilSize = val
+      this.displayBoilSize = val + ' ' + unit
     }
   }
 
-  set boilSize (value) {
-    if (value !== this._boilSize) {
-      this._boilSize = value
-      this.updateOg()
+  getOg (unit) {
+    if (this.displayOg) {
+      return Utils.convertTo(this.displayOg, unit)
+    } else {
+      return this.og
     }
   }
+  setOg (val, unit) {
+    this.og = val
+    this.displayOg = val + ' ' + unit
+  }
 
+  getFg (unit) {
+    if (this.displayFg) {
+      return Utils.convertTo(this.displayFg, unit)
+    } else {
+      return this.fg
+    }
+  }
+  setFg (val, unit) {
+    this.fg = val
+    this.displayFg = val + ' ' + unit
+  }
+
+  getEstOg (unit) {
+    if (!this.estOg) this.updateOg()
+    // console.log(this.estOg, unit)
+    return Utils.convertTo(this.estOg, unit, 3)
+  }
+  setEstOg (val, unit) {
+    this.estOg = val + ' ' + unit
+  }
+
+  getEstFg (unit) {
+    if (!this.estFg) this.updateFg()
+    return Utils.convertTo(this.estFg, unit, 3)
+  }
+  setEstFg (val, unit) {
+    this.estFg = val + ' ' + unit
+  }
+
+  getEstAbv () {
+    if (this.estAbv) {
+      if (Utils.isType('string', this.estAbv)) {
+        return Utils.roundDecimal(this.estAbv.split(' ')[0], 1)
+      } else {
+        return this.estAbv
+      }
+    } else {
+      let abv = this.calculAbv()
+      this.setEstAbv(abv)
+      return abv
+    }
+  }
+  setEstAbv (val) {
+    this.estAbv = val + ' %'
+  }
+
+  /**
+   * Calculate
+   */
   getFementablesTotal () {
     let weight = 0
     for (let i = 0; i < this.fermentables.length; i++) {
@@ -101,17 +197,30 @@ export default class Recipe {
     }
     return weight
   }
+  // alcohol by vol
+  calculAbv () {
+    // this.estAbv = 131.25 * (this.estOg - this.estFg)
+    // this.estAbv = 133 * (this.estOg - this.estFg) / this.estOg
+    return Utils.roundDecimal((76.08 * (this.estOg - this.estFg) / (1.775 - this.estOg)) * (this.estFg / 0.794), 1)
+    // console.log('ABV: ' + this.estAbv)
+  }
+
+  calculBoilSize () {
+    return Utils.roundDecimal((this.batchSize / (1 - (this.equipment.evapRate / 100))) * this.boilTime / 60 + this.equipment.trubChillerLoss, 1)
+  }
 
   updateOg () {
     if (this.fermentables) {
       let i
       let sugar = 0
       let color = 0
+      // console.log(this.fermentables)
       for (i = 0; i < this.fermentables.length; i++) {
         sugar += this.fermentables[i].getSugar(this.efficiency)
-        color += this.fermentables[i].getColor(this._batchSize)
+        color += this.fermentables[i].getColor(this.batchSize)
       }
-      this.estOg = Utils.roundDecimal(((this._batchSize - (sugar / 1.59) + sugar) / this._batchSize), 3)
+      // console.log(sugar)
+      this.estOg = Utils.roundDecimal(((this.batchSize - (sugar / 1.59) + sugar) / this.batchSize), 3)
       this.estColor = Utils.roundDecimal(color, 1)
       // console.log('OG: ' + this.estOg)
       // console.log('EBC: ' + this.estColor)
@@ -127,26 +236,18 @@ export default class Recipe {
     this.estFg = Utils.roundDecimal((((this.estOg - 1) * (1 - (attenuation / 100))) + 1), 3)
     // console.log('FG: ' + this.estFg)
     this.setCalories()
-    this.setEstAbv()
+    // this.setEstAbv(this.calculAbv())
   }
 
   updateIbu () {
     let i
     let bitterness = 0
     for (i = 0; i < this.hops.length; i++) {
-      bitterness += this.hops[i].bitterness(this.ibuMethod, this.estOg, this._batchSize)
+      bitterness += this.hops[i].bitterness(this.ibuMethod.toLowerCase(), this.estOg, this.batchSize)
       // console.log(bitterness)
     }
-    this.ibu = Utils.roundDecimal(bitterness, 2)
+    this.ibu = Utils.roundDecimal(bitterness, 1)
     // console.log('IBU: ' + this.ibu)
-  }
-
-  // alcohol by vol
-  setEstAbv () {
-    // this.estAbv = 131.25 * (this.estOg - this.estFg)
-    // this.estAbv = 133 * (this.estOg - this.estFg) / this.estOg
-    this.estAbv = Utils.roundDecimal((76.08 * (this.estOg - this.estFg) / (1.775 - this.estOg)) * (this.estFg / 0.794), 1)
-    // console.log('ABV: ' + this.estAbv)
   }
 
   setCalories () {
@@ -192,7 +293,7 @@ export default class Recipe {
     return ret
   }
 
-  remove (type, name) {
+  remove (type, ingredient) {
     let lists
     let updateFunc
     switch (type) {
@@ -216,11 +317,20 @@ export default class Recipe {
         break
     }
     for (let i = 0; i < lists.length; i++) {
-      if (lists[i].name === name) {
+      if (JSON.stringify(lists[i]) === JSON.stringify(ingredient)) {
+      // if (lists[i].name === name) {
         lists.splice(i, 1)
       }
     }
     if (updateFunc) updateFunc()
+  }
+
+  static fromBeerXml (xml) {
+    return importXML(xml, 'recipe')
+  }
+
+  toBeerXml = (inRecipe = false) => {
+    return exportXML(this.toJSON(), 'recipe', inRecipe)
   }
 
   toJSON () {
@@ -249,6 +359,7 @@ export default class Recipe {
       tasteRating: this.tasteRating,
       date: this.date,
       estOg: this.estOg,
+      estAbv: this.estAbv,
       estFg: this.estFg,
       estColor: this.estColor,
       ibu: this.ibu

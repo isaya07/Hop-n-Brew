@@ -1,20 +1,35 @@
+'use strict'
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
-var webpack = require('webpack')
+// var webpack = require('webpack')
 var vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
+const createLintingRule = () => ({
+  test: /\.(js|vue)$/,
+  loader: 'eslint-loader',
+  enforce: 'pre',
+  include: [resolve('app'), resolve('server')],
+  options: {
+    formatter: require('eslint-friendly-formatter'),
+    emitWarning: !config.dev.showEslintErrorsInOverlay
+  }
+})
+
 module.exports = {
+  context: path.resolve(__dirname, '../'),
   entry: {
     app: './app/index.js',
     vendor: [
       'vue',
       'vue-router',
-      'pouchdb-browser'
+      'pouchdb-browser',
+      'vee-validate',
+      'd3'
     ]
   },
   output: {
@@ -34,19 +49,12 @@ module.exports = {
       'modules': resolve('app/components/modules'),
       'components': resolve('app/components'),
       '@': resolve('app')
-    }
+    },
+    symlinks: false
   },
   module: {
     rules: [
-      {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [resolve('app'), resolve('server')],
-        options: {
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
+      ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -62,11 +70,24 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: utils.assetsPath('img/[name].[ext]')
         }
       },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('fonts/[name].[ext]')
+        }
+      },
+      {
+        test: /\.svg$/,
+        loader: 'file-loader',
+        options: {
+          name: utils.assetsPath('img/[name].[ext]')
+        }
+      },
       /* {
         test: /\.(woff2?|eot($|\?)|\|ttf($|\?)|\|otf)(\?.*)?$/,
         loader: 'url-loader',
@@ -75,12 +96,26 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       } */
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: utils.assetsPath('media/[name].[ext]')
+        }
+      }
     ]
   },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.js'
-    })
-  ]
+  node: {
+    // prevent webpack from injecting useless setImmediate polyfill because Vue
+    // source contains it (although only uses it if it's native).
+    setImmediate: false,
+    // prevent webpack from injecting mocks to Node native modules
+    // that does not make sense for the client
+    dgram: 'empty',
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty'
+  }
 }

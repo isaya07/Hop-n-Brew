@@ -5,7 +5,7 @@
     <h3>Hop'n Brew</h3>
   </div>
   <ul class="menu-list">
-    <li class="menu-item" v-for="(item, x) in menus">
+    <li class="menu-item" v-for="(item, x) in menus" :key="x">
       <router-link :to="item.path" v-if="!item.children" class="menu-link">
         {{ item.name }}
       </router-link>
@@ -15,8 +15,8 @@
       </a>
       <transition name="fade">
         <ul v-if="item.children && item.children.length" v-show="(x)===index" class="menu-list">
-          <li class="menu-item children" v-for="subItem in item.children">
-            <router-link :to="subItem.path" class="menu-link" :index="x">
+          <li class="menu-item children" v-for="(subItem, index) in item.children" :key="index">
+            <router-link :to="subItem.path" class="menu-link" :index="x" exact>
               {{ subItem.name }}
             </router-link>
           </li>

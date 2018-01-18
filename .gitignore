@@ -1,7 +1,11 @@
 node_modules
+dist/*
+platforms/*
 xmlforimport
 verre.svg
 beer_312195
 beer_312195.zip
 .firebaserc
 .vscode
+d3.zip
+npm-debug*

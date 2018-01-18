@@ -1,96 +1,130 @@
+// import lazyLoading from './lazyLoading'
+
 const Menu =
   [
     {
-      name: 'Recette',
-      path: 'recetteslist',
+      name: 'recette',
+      path: '/recette',
+      component: () => import('components/modules/recettes/RecettesList'),
       meta: {
         // icon: 'home',
-        expanded: false,
-        link: 'modules/recettes/RecettesList.vue'
-      },
-      // component: lazyLoading('charts', true),
-
-      children: [
-        {
-          name: 'Recette',
-          path: 'recetteslist',
-          // component: lazyLoading('charts/Chartist'),
-          meta: {
-            link: 'modules/recettes/RecettesList.vue'
-          }
-        }
-      ]
+        expanded: false
+      }
     },
     {
-      name: 'Ingrédients',
+      name: 'ingrédients',
       path: '',
       meta: {
         // icon: 'fa-bar-chart-o',
         expanded: false
-        // link: 'modules/ingredient.vue'
       },
-      // component: lazyLoading('charts', true),
-
       children: [
         {
-          name: 'Fermentables',
-          path: 'fermentables',
-          // component: lazyLoading('charts/Chartist'),
+          name: 'fermentables',
+          path: '/fermentables',
+          component: () => import('components/modules/ingredients/Fermentables'),
           meta: {
-            link: 'modules/ingredients/Fermentables.vue'
+            requiresAuth: true
           }
         },
         {
-          name: 'Yeasts',
-          path: 'yeasts',
-          // component: lazyLoading('charts/Chartist'),
+          name: 'yeasts',
+          path: '/yeasts',
+          component: () => import('components/modules/ingredients/Yeasts'),
           meta: {
-            link: 'modules/ingredients/Yeasts.vue'
+            requiresAuth: true
           }
         },
         {
-          name: 'Hops',
-          path: 'hops',
-          // component: lazyLoading('charts/Chartist'),
+          name: 'hops',
+          path: '/hops',
+          component: () => import('components/modules/ingredients/Hops'),
           meta: {
-            link: 'modules/ingredients/Hops.vue'
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'miscs',
+          path: '/miscs',
+          component: () => import('components/modules/ingredients/Miscs'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'waters',
+          path: '/waters',
+          component: () => import('components/modules/ingredients/Waters'),
+          meta: {
+            requiresAuth: true
           }
         }
       ]
     },
     {
-      name: 'Test',
+      name: 'profils',
+      path: '',
+      meta: {
+        // icon: 'home',
+        expanded: false
+      },
+      children: [
+        {
+          name: 'style',
+          path: '/style',
+          component: () => import('components/modules/profils/Style'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'fermentation',
+          path: '/fermentation',
+          component: () => import('components/modules/profils/Fermentation'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'carbonation',
+          path: '/carbonation',
+          component: () => import('components/modules/profils/Carbonation'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'equipment',
+          path: '/equipment',
+          component: () => import('components/modules/profils/Equipment'),
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          name: 'mash',
+          path: '/mash',
+          component: () => import('components/modules/profils/MashList'),
+          meta: {
+            requiresAuth: true
+          }
+        }
+      ]
+    },
+    {
+      name: 'test',
       path: '',
       meta: {
         icon: 'home',
-        expanded: false,
-        link: 'modules/test/Test.vue'
+        expanded: false
       },
-      // component: lazyLoading('charts', true),
-
       children: [
         {
-          name: 'Test',
+          name: 'test',
           path: 'test',
-          // component: lazyLoading('charts/Chartist'),
+          component: () => import('components/modules/test/Test'),
           meta: {
-            link: 'modules/test/Test.vue'
-          }
-        },
-        {
-          name: 'Style',
-          path: 'style',
-          // component: lazyLoading('charts/Chartist'),
-          meta: {
-            link: 'modules/test/Style.vue'
-          }
-        },
-        {
-          name: 'EditRecettes',
-          path: 'editrecettes',
-          // component: lazyLoading('charts/Chartist'),
-          meta: {
-            link: 'modules/test/EditRecette.vue'
+            requiresAuth: true
           }
         }
       ]

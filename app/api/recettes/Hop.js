@@ -12,13 +12,10 @@ export default class Hop {
     this.alpha = null
     this.amount = null
     this.use = ''
-    // this.useList = useList
     this.time = null
     this.notes = null
     this.type = ''
-    // this.typeList = typeList
     this.form = ''
-    // this.formList = formList
     this.beta = null
     this.hsi = null
     this.origin = null
@@ -64,11 +61,8 @@ export default class Hop {
     let weight
     let time
 
-    this.displayAmount ? weight = Utils.convertWeight(this.displayAmount) : weight = this.amount
-    this.displayTime ? time = Utils.convertTime(this.displayTime) : time = this.time
-    // console.log(this)
-    // console.log(weight)
-    // console.log(time)
+    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'kg', 4) : weight = this.amount
+    this.displayTime ? time = Utils.convertTo(this.displayTime, 'min') : time = this.time
     if (ibuMethod === 'tinseth') {
       bitterness = 1.65 * (0.000125 ** (og - 1.0)) * ((1 - Math.E ** (-0.04 * time)) / 4.15) * ((this.alpha / 100.0 * weight * 1000000) / batchSize) * this.utilizationFactor()
     } else if (ibuMethod === 'rager') {
@@ -78,7 +72,6 @@ export default class Hop {
     } else {
       throw new Error("Unknown IBU method '" + ibuMethod + "'!")
     }
-    // console.log(bitterness)
     return bitterness
   }
 
@@ -90,6 +83,6 @@ export default class Hop {
   }
 
   toBeerXml = (inRecipe = false) => {
-    return exportXML(this.toJSON(), 'yeast', inRecipe)
+    return exportXML(this.toJSON(), 'hop', inRecipe)
   }
 }

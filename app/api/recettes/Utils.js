@@ -3,6 +3,7 @@
 // const BURNER_ENERGY = 9000
 
 // const MASH_HEAT_LOSS = 5.0
+import { Converter } from './../UnitConverter'
 
 const COLOR_NAMES = [
   [ 2, 'pale straw' ],
@@ -122,64 +123,38 @@ export default class Utils {
   /*
   Conversion functions ---------------------------------------------------------
    */
-  static convertTemp = displayTemp => {
-    let value = {}
-    let ref = displayTemp.split(' ')
-    switch (ref[1]) {
-      case 'C':
-        value.temp = ref[0]
-        break
-      case 'F':
-        value.temp = Utils.fToC(ref[0])
-        break
-      default:
-        value.temp = 0
-    }
-    value.unitie = 'C'
-    return value
-  }
 
-  static convertTime = displayTime => {
-    let ref = displayTime.split(' ')
-    switch (ref[1]) {
-      case 'min':
-        return ref[0]
-      case 'hour':
-        return ref[0] * 60
-      case 'day':
-        return ref[0] * 60 * 24
-      case 'week':
-        return ref[0] * 60 * 24 * 7
+  static convertTo = (val, unit, dec = 1) => {
+    if (val) {
+      if (Utils.isType('string', val)) {
+        let ref = val.toLowerCase().split(' ')
+        let ret = null
+        if (ref.length === 3) {
+          ref[1] = ref[1] + ' ' + ref[2]
+        }
+        if (ref.length === 2 || ref.length === 3) {
+          ret = Converter(ref[0], ref[1]).as(unit).val()
+        } else if (ref.length === 4) {
+          ret = Converter(ref[0], ref[1]).as(unit).val() + Converter(ref[2], ref[3]).as(unit).val()
+        }
+        return Utils.roundDecimal(ret, dec)
+      } else {
+        return val
+      }
     }
   }
 
-  static convertWeight = displayWeight => {
-    let ref = displayWeight.split(' ')
-    switch (ref[1]) {
-      case 'kg':
-        return ref[0]
-      case 'g':
-        return ref[0] / 1000
-      case 'oz':
-        return Utils.ozToKg(ref[0])
-      case 'lb':
-        return Utils.lbToKg(ref[0])
-    }
-  }
-
-  static convertColor = displayColor => {
-    let ref = displayColor.split(' ')
-    switch (ref[1]) {
-      case 'ebc':
-        return ref[0]
-      case 'srm':
-        return Utils.srmToEbc(ref[0])
-      case 'L':
-        return Utils.srmToEbc(Utils.lovibondToSrm(ref[0]))
-    }
+  static convertVolTo = (displayVol, unit, dec = 1) => {
+    /* let ref = displayVol.split(' ')
+    if (ref[1] === 'oz') ref[1] = 'fl-oz'
+    if (unit === 'oz') unit = 'fl-oz'
+    return Converter(Utils.roundDecimal(ref[0], dec), ref[1]).as(unit).val() */
+    return Utils.convertTo(displayVol.replace('oz', 'fl-oz'), unit.replace('oz', 'fl-oz'), dec)
   }
 
   static kgToLb = kg => kg * 2.20462
+
+  static kgToOz = kg => kg * 35.27396
 
   static lbToKg = lb => lb / 2.20462
 

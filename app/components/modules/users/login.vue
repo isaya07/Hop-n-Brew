@@ -1,6 +1,6 @@
 <template>
   <div class="grid">
-    <div class="col is-1-4 push">
+    <div class="col is-1-4">
       <div class="card">
         <h3 style="text-align: center;">Login using firebase</h3>
         <form>
@@ -12,23 +12,7 @@
             <p><strong>{{error}}</strong></p>
           </div>
           <button type="button" @click="login" class="btn primary">Login</button>
-        </form>
-      </div>
-    </div>
-    <div class="col is-1-4 pull">
-      <div class="card">
-        <h3>SignUp</h3>
-        <form>
-          <label>Email address</label>
-          <input v-model="email" type="email" placeholder="Email">
-          <label>User name</label>
-          <input v-model="name" type="text" placeholder="Name">
-          <label>Password</label>
-          <input v-model="password" type="password" placeholder="Password">
-          <div v-if="error !== ''" class="alert">
-            <p><strong>{{error}}</strong></p>
-          </div>
-          <button type="button" @click="signUp" class="btn success">Signup</button>
+          <p>You don't have an account ? You can <router-link to="/signup">create one</router-link></p>
         </form>
       </div>
     </div>
@@ -41,7 +25,6 @@ export default {
     return {
       email: '',
       password: '',
-      name: '',
       error: ''
     }
   },
@@ -58,48 +41,19 @@ export default {
       // vm.auth.message = ''
       // vm.auth.hasErrors = false
 
-      if (vm.email === '' || vm.password === '') {
+      if (this.email === '' || this.password === '') {
         this.error = 'Please provide the email and password'
         return
       }
       // Sign-in the user with the email and password
-      this.$auth.signInWithEmailAndPassword(vm.email, vm.password)
+      this.$auth.signInWithEmailAndPassword(this.email, this.password)
         .then((data) => {
           alert('Ok')
+          this.$router.replace('acceuil')
         }).catch((error) => {
           this.error = error.message
         })
     },
-
-    /**
-     * Create a new user account
-     *
-     * @param object event
-     */
-    signUp: function (event) {
-      // var vm = this
-      // vm.auth.message = ''
-      // vm.auth.hasErrors = false
-      this.error = ''
-      if (this.email === '' || this.name === '' || this.password === '') {
-        this.error = 'Please provide the email, name and password'
-        return
-      }
-
-      // Create a new user in firebase
-      this.$auth.createUserWithEmailAndPassword(this.email, this.password)
-        .then((data) => {
-          this.$auth.currentUser.updateProfile({
-            displayName: this.name
-          }).then(() => {
-            this.error = 'Successfully created user'
-          }, (error) => {
-            this.error = 'can\'t set the user name: ' + error
-          })
-        }).catch((error) => {
-          this.error = error.message
-        })
-    }
   }
 }
 </script>

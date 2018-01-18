@@ -9,18 +9,18 @@
           </router-link>
         </div>
         <ul class="menu-list">
-          <li class="menu-item" v-for="(item, x) in menus">
+          <li class="menu-item" v-for="(item, idx) in menus" :key="idx">
             <router-link :to="item.path" v-if="!item.children" class="menu-link">
               {{ item.name }}
             </router-link>
-            <a v-if="item.children && item.children.length" class="menu-link" @click="toggle(x)">
+            <a v-if="item.children && item.children.length" class="menu-link" @click="toggle(idx)">
               {{ item.name }}
-              <span v-if="item.children && item.children.length" :class="(x)===index ? 'close' : ''"></span>
+              <span v-if="item.children && item.children.length" :class="(idx)===index ? 'close' : ''"></span>
             </a>
             <transition name="fade">
-              <ul v-if="item.children && item.children.length" v-show="(x)===index" class="menu-list">
-                <li class="menu-item children" v-for="subItem in item.children">
-                  <router-link :to="subItem.path" class="menu-link" :index="x">
+              <ul v-if="item.children && item.children.length" v-show="(idx)===index" class="menu-list">
+                <li class="menu-item children" v-for="(subItem, id) in item.children" :key="id">
+                  <router-link :to="subItem.path" class="menu-link" :index="idx">
                     {{ subItem.name }}
                   </router-link>
                 </li>
@@ -43,14 +43,16 @@
             <div class="bar3"></div>
           </div>
         </div>
-        <div class="col">
-
+        <div class="col pull">
+          <div v-if="user">{{user.displayName}}</div>
+          <router-link to="login" class="button" v-if="!user">Sign-in</router-link>
+          <a class="button" v-on:click="logOut" v-if="user">Sign-out</a>
         </div>
       </div>
     </div>
     <div id="main">
       <progress-bar></progress-bar>
-      <!-- <nprogress-container></nprogress-container> -->
+      <div v-if="error">{{error}}</div>
       <transition
         mode="out-in"
         name="fade"
@@ -64,28 +66,29 @@
 </template>
 
 <script>
-// import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import ProgressBar from 'layout/Progress'
-// import MyProgress from 'components/plugins/MyProgress/MyProgress'
 import { Menu } from 'components/Menu'
-// import { db } from 'api/firebase'
 
 export default {
   name: 'app',
 
   components: {
-    /* NprogressContainer, */
     ProgressBar
-    // MyProgress
   },
 
   data () {
     return {
       index: '',
       menus: Menu,
-      user: ''// this.$auth.currentUser
+      user: this.$auth.currentUser,
+      error: null
     }
   },
+
+  /* errorCaptured (err, vm, info) {
+    this.error = `${err.stack}\n\nfound in ${info} of component`
+    return false
+  }, */
 
   firebase () {
     // const userId = this.$auth.currentUser.uid
@@ -119,7 +122,8 @@ export default {
     },
     logOut () {
       this.$auth.signOut().then(() => {
-        this.user = this.$auth.currentUser
+        this.user = ''
+        this.$router.replace('/');
       }).catch(() => {
         alert('Failed to signout user, try again later')
       })

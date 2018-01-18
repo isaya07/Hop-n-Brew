@@ -1,42 +1,79 @@
 import Utils from 'api/recettes/Utils'
 
-export function importXML (xml, type, children) {
+const child = ['hops', 'yeasts', 'fermentables', 'miscs', 'waters', 'mash', 'equipment', 'style', 'mashSteps']
+
+function testChild (props) {
+  let l = child.length
+  for (let x = 0; x < l; x++) {
+    if (props === child[x]) return true
+  }
+  return false
+}
+
+function importChildren (ref, propName, round = 3) {
+  if (ref[1].children.length !== 0) {
+    let arr = []
+    ref.forEach(child => {
+      if (child.nodeName.toLowerCase() === underscorize(singularize(propName))) {
+        let options = {}
+        let childProps = child.childNodes || []
+        childProps.forEach(childItem => {
+          if (childItem.nodeName !== '#text') {
+            let itemName = camelize(childItem.nodeName)
+            if (!isNaN(childItem.textContent)) {
+              // options[itemName] = +childItem.textContent
+              options[itemName] = Utils.roundDecimal(childItem.textContent, round)
+            } else {
+              options[itemName] = childItem.textContent
+            }
+          }
+        })
+        arr.push(options)
+      }
+    })
+    return arr
+  } else {
+    let obj = {}
+    ref.forEach(function (child) {
+      if (child.nodeName !== '#text') {
+        let propNames = camelize(child.nodeName)
+        if (testChild(propNames)) {
+          let newRef = child.childNodes || []
+          if (newRef.length !== 0) obj[propNames] = importChildren(newRef, propNames)
+        } else {
+          if (!isNaN(child.textContent)) {
+            // obj[propNames] = +child.textContent
+            obj[propNames] = Utils.roundDecimal(child.textContent, round)
+          } else {
+            obj[propNames] = child.textContent
+          }
+        }
+      }
+    })
+    return obj
+  }
+}
+
+export function importXML (xml, type, round = 3) {
   let imports = {}
-  let obj = {}
   let parser = new DOMParser()
   let doc = parser.parseFromString(xml, 'text/xml')
   let ref = doc.documentElement.childNodes || []
   ref.forEach((item, index) => {
-    obj = {}
+    let obj = {}
     if (item.nodeName.toLowerCase() === type) {
       let props = item.childNodes || []
       props.forEach(prop => {
         if (prop.nodeName !== '#text') {
           let propName = camelize(prop.nodeName)
-          if (children && propName === children) {
-            let arr = []
-            let ref = prop.childNodes || []
-            ref.forEach(function (child) {
-              if (child.nodeName.toLowerCase() === 'mash_step') {
-                let options = {}
-                let childProps = child.childNodes || []
-                childProps.forEach(function (childItem) {
-                  if (childItem.nodeName !== '#text') {
-                    let itemName = camelize(childItem.nodeName)
-                    if (!isNaN(childItem.textContent)) {
-                      options[itemName] = +childItem.textContent
-                    } else {
-                      options[itemName] = childItem.textContent
-                    }
-                  }
-                })
-                arr.push(options)
-              }
-            })
-            obj[propName] = arr
+          if (testChild(propName)) {
+            let ref = prop.childNodes
+            if (ref.length !== 0) obj[propName] = importChildren(ref, propName, round)
           } else {
             if (!isNaN(prop.textContent)) {
-              obj[propName] = +prop.textContent
+              // obj[propName] = prop.textContent.toString()
+              obj[propName] = Utils.roundDecimal(prop.textContent, round)
+              console.log(obj[propName], prop.textContent)
             } else {
               obj[propName] = prop.textContent
             }
@@ -118,4 +155,12 @@ export function htmlEncode (str) {
     'û': '&#251;'
   }
   return String(str).replace(/[<&>'"#èéôâçàû]/g, function (s) { return c[s] || s })
+}
+
+export function singularize (str) {
+  if (str.toLowerCase().slice(-1) === 's') {
+    return str.slice(0, -1)
+  } else {
+    return str
+  }
 }

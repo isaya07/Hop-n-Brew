@@ -1,5 +1,7 @@
-// const typeList = ['Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor', 'Other']
-// const useList = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling']
+import {importXML, exportXML} from './Import'
+
+const typeList = ['Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor', 'Other']
+const useList = ['Boil', 'Mash', 'Primary', 'Secondary', 'Bottling']
 
 export default class Misc {
   constructor (options) {
@@ -19,6 +21,21 @@ export default class Misc {
     }
   }
 
+  static getUseList () {
+    return useList
+  }
+
+  static getTypeList () {
+    return typeList
+  }
+
+  static fromBeerXml (xml) {
+    return importXML(xml, 'misc')
+  }
+
+  toBeerXml = (inRecipe = false) => {
+    return exportXML(this.toJSON(), 'misc', inRecipe)
+  }
   /* toJSON () {
   } */
 }

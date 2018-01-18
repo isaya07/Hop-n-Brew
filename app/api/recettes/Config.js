@@ -1,12 +1,13 @@
 const unitiesList = {
   weight: ['kg', 'g', 'oz', 'lb'],
-  vol: ['oz', 'cup', 'pt', 'qt', 'gal', 'ml', 'l'],
+  vol: ['oz', 'cup', 'pt', 'qt', 'gal', 'ml', 'l', 'tsp', 'tblsp'],
   temp: ['F', 'C'],
   time: ['min', 'hour', 'day', 'week'],
   color: ['srm', 'ebc', 'L'],
   grav: ['sg', 'plato'],
   press: ['bar', 'psi', 'kpa'],
-  ratio: ['qt/lb', 'l/kg']
+  ratio: ['qt/lb', 'l/kg'],
+  yeast: ['ml', 'g', 'pkg']
 }
 
 export default class Config {

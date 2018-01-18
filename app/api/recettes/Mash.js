@@ -60,7 +60,7 @@ export default class Mash {
 
   get grainTemp () {
     if (this.displayGrainTemp) {
-      return Utils.convertTemp(this.displayGrainTemp).temp
+      return Utils.convertTo(this.displayGrainTemp, 'c')
     } else {
       return this._grainTemp
     }
@@ -75,7 +75,7 @@ export default class Mash {
 
   get tunTemp () {
     if (this.displayTunTemp) {
-      return Utils.convertTemp(this.displayTunTemp).temp
+      return Utils.convertTo(this.displayTunTemp, 'c')
     } else {
       return this._tunTemp
     }
@@ -90,7 +90,7 @@ export default class Mash {
 
   get tunWeight () {
     if (this.displayTunWeight) {
-      return Utils.convertWeight(this.displayTunWeight)
+      return Utils.convertTo(this.displayTunWeight, 'kg')
     } else {
       return this._tunWeight
     }
@@ -105,7 +105,7 @@ export default class Mash {
 
   get spargeTemp () {
     if (this.displaySpargeTemp) {
-      return Utils.convertTemp(this.displaySpargeTemp).temp
+      return Utils.convertTo(this.displaySpargeTemp, 'c')
     } else {
       return this._spargeTemp
     }
@@ -187,7 +187,7 @@ export default class Mash {
   }
 
   static fromBeerXml = (xml) => {
-    return importXML(xml, 'mash', 'mashSteps')
+    return importXML(xml, 'mash')
   }
 
   toBeerXml = (inRecipe = false) => {
