@@ -1,3 +1,4 @@
+.DS_Store
 node_modules
 /dist/
 /www/
@@ -10,4 +11,4 @@ beer_312195.zip
 .firebaserc
 .vscode
 d3.zip
-npm-debug*
+npm-debug.log*
