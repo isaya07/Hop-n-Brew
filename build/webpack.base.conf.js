@@ -2,7 +2,6 @@
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
-// var webpack = require('webpack')
 var vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
@@ -23,14 +22,19 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './app/index.js',
+    app: './app/index.js'/* ,
     vendor: [
       'vue',
       'vue-router',
-      'pouchdb-browser',
+      'vuex',
+      'firebase',
       'vee-validate',
-      'd3'
-    ]
+      'd3',
+      '@fortawesome/fontawesome',
+      '@fortawesome/fontawesome-free-regular',
+      '@fortawesome/fontawesome-free-solid',
+      '@fortawesome/vue-fontawesome'
+    ] */
   },
   output: {
     path: config.build.assetsRoot,
@@ -42,15 +46,15 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      // 'vue$': 'vue/dist/vue.esm.js',
       'api': resolve('app/api'),
       'assets': resolve('app/assets'),
       'layout': resolve('app/components/layout'),
       'modules': resolve('app/components/modules'),
       'components': resolve('app/components'),
       '@': resolve('app')
-    },
-    symlinks: false
+    }/* ,
+    symlinks: false */
   },
   module: {
     rules: [

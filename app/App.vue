@@ -76,15 +76,15 @@ export default {
     return false
   }, */
 
-  firebase () {
+  /* firebase () {
     // const userId = this.$auth.currentUser.uid
     return {
       // users: db.ref('users').child(userId)
     }
-  },
+  }, */
 
   methods: {
-    toggleNav (event) {
+    /* toggleNav (event) {
       let side = document.getElementById('sidenav')
       let main = document.getElementById('main')
       let top = document.getElementById('topbar')
@@ -105,7 +105,7 @@ export default {
     toggle (index) {
       // console.log('new: %s, old: %s', index, this.index)
       this.index = (this.index === index) ? '' : index
-    },
+    }, */
     logOut () {
       this.$auth.signOut().then(() => {
         this.user = ''
@@ -121,6 +121,7 @@ export default {
     // this.$bus.$emit('progress', 'start')
     this.$router.beforeEach((to, from, next) => {
       this.$bus.$emit('progress', 'start')
+      this.showNav = false
       // this.$myProgress.start(300)
       next()
     })
@@ -130,11 +131,11 @@ export default {
   },
 
   mounted () {
-    let active = document.querySelectorAll('.active')
+    /* let active = document.querySelectorAll('.active')
     if (active[0]) {
       let index = active[0].getAttribute('index')
       this.index = index
-    }
+    } */
     // this.$bus.$emit('progress', 'stop')
     // this.$myProgress.stop()
   }

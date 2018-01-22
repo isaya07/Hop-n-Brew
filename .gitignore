@@ -1,6 +1,8 @@
 node_modules
-dist/*
-platforms/*
+/dist/
+/www/
+/platforms
+/plugins
 xmlforimport
 verre.svg
 beer_312195
