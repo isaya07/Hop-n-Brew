@@ -153,8 +153,8 @@ input[disabled], select[disabled], textarea[disabled] {
 
 }
 
-.fa-icon {
-  width: auto;
+.svg-inline--fa {
+  /* width: auto;
 
   vertical-align: middle;
   height: $global-font-size;
@@ -163,7 +163,7 @@ input[disabled], select[disabled], textarea[disabled] {
   @include respond-to("xsmall-up") {
     height: $global-font-size-l;
     margin-top: ($global-font-size-l / 2);
-  }
+  } */
   position: absolute;
   top: 0;
   
@@ -176,7 +176,7 @@ input[disabled], select[disabled], textarea[disabled] {
     left: 0;
   }
 
-  .icon-right {
+  span.icon-right {
     right: 0;
   }
 }

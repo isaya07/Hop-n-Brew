@@ -1,0 +1,22 @@
+@charset 'utf-8';
+
+.progress {
+    // margin-top: -3px;
+    z-index: 999999;
+    background-color: $primary;
+    height: 3px;
+    top: 0;
+    left: 0;
+    transition: width 0.3s, opacity 0.3s;
+    box-shadow: 0px 3px 8px rgba($black, 0.4);
+  }
+  @media screen and (min-width: 769px), print {
+    .field-label {
+      flex-basis: auto;
+    }
+  }
+
+  .bottom-null {
+    margin-bottom: 0 !important; 
+    padding-bottom: 0 !important;
+  }

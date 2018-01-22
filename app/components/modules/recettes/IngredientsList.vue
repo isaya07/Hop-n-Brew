@@ -1,72 +1,81 @@
 <template>
   <div>
     <div v-for="(lists, type) in ingredientList"
-      class="grid"
+      class=""
       :key="type">
-      <div class='col is-full'>
-        <div class="grid">
-          <h5 class='col'>{{type | capitalize}}</h5>
-          <add-ingredient class='col' :type="type" @add="addIngredient"></add-ingredient>
+      <div class=''>
+        <div class="columns">
+          <h5 class='column'>{{type | capitalize}}</h5>
+          <add-ingredient class='column' :type="type" @add="addIngredient"></add-ingredient>
         </div>
       </div>
 
-      <div class="col is-full">
-        <div class="grid card invert">
+      <div class="">
+        <div class="columns is-multiline is-mobile card">
           <item v-for="(ingredient, key) in lists"
             :itemData="ingredient"
             :key="key"
             :id="key"
             :type="type"
-            class="col is-full">
-            <input class="is-flex-grow-2" type="text" v-model="ingredient.name" readonly>
-            <input class="is-flex-grow-1" type="text" v-model="ingredient.amount">
-            <div class="select is-flex-grow-4">
-              <select v-if="type === 'fermentable'" v-model="$config.weightUnitie">
-                <option v-for="option in unitList.weight" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-              <select v-else-if="type === 'hop'" v-model="$config.hopUnitie">
+            class="column is-full">
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="ingredient.name" readonly>
+            </div>
+            <div class="control">
+              <input class="input" type="text" v-model="ingredient.amount">
+            </div>
+            <div class="control" v-if="type === 'fermentable'">
+              <div class="select">
+                <select v-model="$config.weightUnitie">
                   <option v-for="option in unitList.weight" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-              <select v-else-if="type === 'yeast'" v-model="$config.yeastUnitie">
-                  <option v-for="option in unitList.yeast" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </div>
-            <input v-if="type === 'hop'" class="is-flex-grow-1" type="text" v-model="ingredient.time">
-            <div class="select is-flex-grow-4" v-if="type === 'hop'">
-              <select v-model="$config.timeUnitie">
-                <option v-for="option in unitList.time" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </div>
-            <div class="select is-flex-grow-3" v-if="type === 'hop'">
-              <select v-model="ingredient.use">
-                <option v-for="option in useSelect" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </div>
-            <button class="btn last" @click="deleteIngredient(type, ingredient)"><i class="fa fa-trash-o"></i><span class="desktop-only">Remove</span></button>
-            <div v-for="(value, key) in ingredient"
-              :key="key"
-              class="item-data col middle grid-2"
-              :class="key === 'notes' ? 'item-last is-full' : ''"
-              slot="content">
-              <div :class="key === 'notes' ? 'col is-1-6' : 'col is-1-3'">
-                <label>{{ key | capitalize }}:</label>
-              </div>
-              <div :class="key === 'notes' ? 'col is-5-6' : 'col is-2-3'">
-                <textarea v-if="key === 'notes'" :value="value" type="text" disabled></textarea>
-                <input v-else-if="key === 'alpha'" type="text" :value="value">
-                <input v-else type="text" :value="value" disabled>
+                    {{ option }}
+                  </option>
+                </select>
               </div>
             </div>
+            <div class="control" v-else-if="type === 'hop'">
+              <div class="select">
+                <select v-model="$config.hopUnitie">
+                    <option v-for="option in unitList.weight" :key="option">
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control" v-else-if="type === 'yeast'">
+              <div class="select">
+                <select v-model="$config.yeastUnitie">
+                    <option v-for="option in unitList.yeast" :key="option">
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control" v-if="type === 'hop'">
+              <input class="input" type="text" v-model="ingredient.time">
+            </div>
+            <div class="control" v-if="type === 'hop'">
+              <div class="select">
+                <select v-model="$config.timeUnitie">
+                  <option v-for="option in unitList.time" :key="option">
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control" v-if="type === 'hop'">
+              <div class="select">
+                <select v-model="ingredient.use">
+                  <option v-for="option in useSelect" :key="option">
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <button class="button" @click="deleteIngredient(type, ingredient)"><i class="fa fa-trash-o"></i><span class="desktop-only">Remove</span></button>
+            </div>
+            <ingredient-detail :ingredient="ingredient" :notShow="['name', 'amount', 'time', 'use']" slot="content"></ingredient-detail>
           </item>
         </div>
       </div>
@@ -78,11 +87,16 @@
 import Hop from 'api/recettes/Hop'
 import Item from 'components/ui/Item'
 import AddIngredient from 'components/modules/recettes/AddIngredient'
+import VInput from 'components/ui/base/Input'
+import VTextarea from 'components/ui/base/Textarea'
 
 export default {
   components: {
     Item,
-    AddIngredient
+    AddIngredient,
+    VInput,
+    VTextarea,
+    IngredientDetail: () => import('components/ui/IngredientDetail')
   },
 
   props: {

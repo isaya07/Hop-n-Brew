@@ -1,21 +1,24 @@
 <template>
 <section class="section">
-  <div class="grid-3">
-    <div class="col">
-      <div class="has-icon">
-        <input type="text" placeholder="Search" name="query" v-model="filterKey">
-        <!-- <i class="input fa fa-search"></i> -->
-        <icon name="search" class="fa icon-right"></icon>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <p class="control field has-icons-right">
+        <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
+        <span class="icon is-small is-right">
+          <icon :icon="['fas', 'search']" />
+        </span>
+      </p>
+    </div>
+    <div class="field-body">
+      <div class="field is-grouped">
+        <import @import="importPress">Import</import>
+        <button type="button" class="button" @click="add">
+          <span class="icon is-small">
+            <icon :icon="['fas', 'plus']" />
+          </span>
+          <span>Create</span>
+        </button>
       </div>
-    </div>
-    <div class="col">
-      <import @import="importClick">Import</import>
-    </div>
-    <div class="col">
-      <button type="button" class="" @click="add">
-      <i class="fa fa-plus"></i>
-        <span>Create</span>
-      </button>
     </div>
   </div>
   <ul id="example-1">
@@ -102,7 +105,7 @@ export default {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
-    importClick (data) {
+    importPress (data) {
       // console.log(data)
       let recipe = Recipe.fromBeerXml(data)
       console.log(recipe)

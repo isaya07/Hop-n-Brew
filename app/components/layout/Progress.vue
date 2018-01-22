@@ -62,7 +62,7 @@ export default {
       clearInterval(this.state.timer)
       this.state.timer = null
       this.show = false
-      setTimeout(() => { this.percent = 0 }, 500)
+      // setTimeout(() => { this.percent = 0 }, 500)
     },
     progressGest (action) {
       switch (action) {
@@ -87,18 +87,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-@import './../../assets/scss/settings';
-
-.progress {
-  margin-top: -3px;
-  z-index: 999999;
-  background-color: $primary-color;
-  height: 3px;
-  top: 0;
-  left: 0;
-  transition: width 0.3s, opacity 0.3s;
-  box-shadow: 0px 3px 8px rgba($black, 0.4);
-}
-</style>

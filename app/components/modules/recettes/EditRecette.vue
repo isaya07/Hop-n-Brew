@@ -1,96 +1,91 @@
 <template>
   <section>
-    <h3 class="txtcenter">{{$route.params.name === 'new' ? 'Create recipe' : $route.params.name}}</h3>
-    <div class="grid-2 medium-1" v-if="recipe">
-      <div class="col">
+    <h3 class="title is-3 has-text-centered">{{$route.params.name === 'new' ? 'Create recipe' : recipe.name}}</h3>
+    <div class="columns is-multiline is-mobile" v-if="recipe">
+      <div class="column is-half">
         <div class="card">
-          <div class="card-content grid-4 small-2 middle">
-            <div class="is-1-4 col">
-              <label>Name:</label>
-            </div>
-            <div class="is-1-4 col">
-              <input class="pure-input-1" v-model="recipe.name" type="text">
-            </div>
-            <div class="is-1-4 col">
-              <label>Type:</label>
-            </div>
-            <div class="is-1-4 col">
-              <span class="select">
-                <select class="pure-input-1" v-model="recipe.type">
-                  <option v-for="option in recipe.getTypeList()" :key="option">
-                    {{ option }}
-                  </option>
-                </select>
-              </span>
-            </div>
-            <div class="is-1-4 col">
-              <label>Brewer:</label>
-            </div>
-            <div class="is-1-4 col">
-              <input class="pure-input-1" v-model="recipe.brewer" type="text">
-            </div>
-            <div class="is-1-4 col">
-              <label>Efficiency:</label>
-            </div>
-            <div class="is-1-4 col">
-              <input class="pure-input-1" v-model.number="recipe.efficiency" type="number">
-            </div>
-            <div class="is-1-4 col">
-              <label>Boil Time:</label>
-            </div>
-            <div class="is-1-4 col">
-              <input class="pure-input-1" v-model.number="recipe.boilTime" type="number">
-            </div>
-            <div class="is-1-4 col">
-              <label>Batch size:</label>
-            </div>
-            <div class="is-1-4 col">
-              <input class="pure-input-1" :value="recipe.getBatchSize($config.volUnitie)" @input="value => { recipe.setBatchSize(value, $config.volUnitie) }" type="text">
-            </div>
-            <div class="is-1-2 col">
-              <label class="checkbox">
-                Calc Boil Volume
-                <input type="checkbox" v-model="recipe.equipment.calcBoilVolume">
-              </label>
-            </div>
-            <div class="is-1-4 col">
-              <label class="label">Boil size:</label>
-            </div>
-            <div class="is-1-4 col">
-              <input class="pure-input-1" :value="recipe.getBoilSize($config.volUnitie)" @input="value => { recipe.setBoilSize(value, $config.volUnitie) }" :disabled="recipe.equipment.calcBoilVolume" type="text">
-            </div>
-            <div class="is-1-4 col">
-              <label class="label">Style:</label>
-            </div>
-            <div class="is-3-4 col">
-              <styles-select :selectStyle="recipe.style.name" @style-change="updateStyle"></styles-select>
+          <header class="card-header">
+            <p class="card-header-title">
+              About
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="content columns is-multiline is-mobile">
+              <div class="column is-half">
+                <v-input label="Name" v-model="recipe.name"></v-input>
+              </div>
+              <div class="column is-half">
+                <my-select label="Type" v-model="recipe.type" :typeList="recipe.getTypeList()"></my-select>
+              </div>
+              <div class="column is-half">
+                <v-input label="Brewer" v-model="recipe.brewer"></v-input>
+              </div>
+              <div class="column is-half">
+                <v-input label="Efficiency" v-model="recipe.efficiency" :rules="'myNumeric'"></v-input>
+              </div>
+              <div class="column is-half">
+                <v-input label="Boil Time" v-model="recipe.boilTime" :rules="'myNumeric'"></v-input>
+              </div>
+              <div class="column is-half">
+                <v-input label="Batch size" :value="recipe.getBatchSize($config.volUnitie)" @input="value => { recipe.setBatchSize(value, $config.volUnitie) }" :rules="'myNumeric'"></v-input>
+              </div>
+              <div class="column is-half">
+                <my-checkbox label="Calc Boil Volume" v-model="recipe.equipment.calcBoilVolume" :rules="''"></my-checkbox>
+              </div>
+              <div class="column is-half">
+                <v-input label="Boil size" :value="recipe.getBoilSize($config.volUnitie)" @input="value => { recipe.setBoilSize(value, $config.volUnitie) }" :disabled="recipe.equipment.calcBoilVolume" :rules="'myNumeric'"></v-input>
+              </div>
+              <div class="column is-one-quarter">
+                <label class="label">Style :</label>
+              </div>
+              <div class="column is-three-quarter">
+                <styles-select :selectStyle="recipe.style.name" @style-change="updateStyle"></styles-select>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col">
+      <div class="column is-half">
         <div class="card">
-          <bar-graph class="card-content" :og="recipe.getEstOg($config.gravUnit)" :fg="recipe.getEstFg($config.gravUnit)" :ibu="recipe.ibu" :abv="recipe.getEstAbv()" :color="parseInt(recipe.estColor)" :beerStyle="recipe.style"></bar-graph>
-        </div>
-      </div>
-      <div class="col is-full">
-        <div class="card">
-          <ingredients-list
-            class="card-content"
-            :recepice="recipe"
-            :ingredientsData="ingredients"
-            @add="addIngredient"
-            @delete="deleteIngredient">
-          </ingredients-list>
-          <div class="pure-u-1 pure-form">
-            <label class="label">Notes:</label>
-            <textarea class="pure-input-1" v-model="recipe.notes"></textarea>
+          <header class="card-header">
+            <p class="card-header-title">
+              Stats
+            </p>
+          </header>
+          <div class="card-content">
+            <bar-graph class="content" :og="recipe.getEstOg($config.gravUnit)" :fg="recipe.getEstFg($config.gravUnit)" :ibu="recipe.ibu" :abv="recipe.getEstAbv()" :color="parseInt(recipe.estColor)" :beerStyle="recipe.style"></bar-graph>
           </div>
         </div>
       </div>
-      <div class="col is-full">
+      <div class="column is-full">
         <div class="card">
-          <mash-list class="card-content" :recepice="recipe" :mashName="'test'" @add="addMashStep"></mash-list>
+          <header class="card-header">
+            <p class="card-header-title">
+              Ingredients
+            </p>
+          </header>
+          <div class="card-content">
+            <ingredients-list
+              class="content"
+              :recepice="recipe"
+              :ingredientsData="ingredients"
+              @add="addIngredient"
+              @delete="deleteIngredient">
+            </ingredients-list>
+            <v-textarea label="Notes" v-model="recipe.notes" :rules="'myAlpha'"></v-textarea>
+          </div>
+        </div>
+      </div>
+      <div class="column is-full">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Mash
+            </p>
+          </header>
+          <div class="card-content">
+            <mash-list class="card-content" :recepice="recipe" :mashName="'test'" @add="addMashStep"></mash-list>
+          </div>
         </div>
       </div>
     </div>
@@ -104,13 +99,21 @@ import BarGraph from 'components/ui/BarGraph'
 import IngredientsList from 'components/modules/recettes/IngredientsList'
 import StylesSelect from 'components/ui/StyleSelect'
 import MashList from 'components/modules/profils/MashList'
+import VInput from 'components/ui/base/Input'
+import MySelect from 'components/ui/form/base/MySelect'
+import VTextarea from 'components/ui/base/Textarea'
+import MyCheckbox from 'components/ui/form/base/MyCheckbox'
 
 export default {
   components: {
     IngredientsList,
     BarGraph,
     StylesSelect,
-    MashList
+    MashList,
+    VInput,
+    MySelect,
+    VTextarea,
+    MyCheckbox
   },
 
   /* props: {

@@ -1,37 +1,47 @@
 <template>
   <div class="txtcenter">
-    <div class="grid-3 middle">
-      <div class="col right">
-        <div class="has-icon">
-          <input type="text" placeholder="Search" name="query" v-model="filterKey">
-          <icon name="search" class="fa icon-right"></icon>
+    <div class="field is-horizontal">
+      <div class="field-body">
+        <p class="control field has-icons-right">
+          <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
+          <span class="icon is-small is-right">
+            <icon :icon="['fas', 'search']" />
+          </span>
+        </p>
+      </div>
+      <div v-if="inStock" class="field-label">
+        <label class="label">In stock</label>
+      </div>
+      <div v-if="inStock" class="field-body">
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox" v-model="instock">
+            </label>
+          </div>
         </div>
       </div>
-      <div v-if="inStock" class="col middle">
-        <label class="checkbox">
-          <input type="checkbox" v-model="instock">
-          In stock
-        </label>
-      </div>
-      <div class="col left">
-        <div class="grid-2">
+      <div class="field-body">
+        <div class="field is-grouped">
           <import v-if="createImport" @import="importPress">Import</import>
-          <button v-if="createImport" type="button" class="" @click="create">
-            <i class="fa fa-plus"></i>
+          <button v-if="createImport" type="button" class="button" @click="create">
+            <span class="icon is-small">
+              <icon :icon="['fas', 'plus']" />
+            </span>
             <span>Create</span>
           </button>
         </div>
       </div>
     </div>
     <div class="center">
-      <table class="rounded">
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th class="small" v-for="key in columns" :key="key" @click="sortBy(key)" :class="{ active: sortKey == key }">
+            <th class="" v-for="key in columns" :key="key" @click="sortBy(key)" :class="{ active: sortKey == key }">
               {{ key | capitalize }}
               <span :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
             </th>
-            <th class="small">Action</th>
+            <th class="">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -40,18 +50,32 @@
               {{entry[key]}}
             </td>
             <td data-th='Action'>
-              <button type="button" v-if="editBut" class="small primary has-tooltip" data-tooltip="edit entry" @click="edit(entry)">
-                <i class="fa fa-pencil-square-o"></i>
-                <span class="desktop-only">Edit</span>
-              </button>
-              <button type="button" v-if="deleteBut" class="small alert has-tooltip" data-tooltip="delete entry" @click="supress(entry)">
-                <i class="fa fa-times-circle"></i>
-                <span class="desktop-only">Delete</span>
-              </button>
-              <button type="button" v-if="addBut" class="small success has-tooltip" data-tooltip="add entry" @click="add(entry)">
-                <i class="fa fa-plus"></i>
-                <span class="desktop-only">Add</span>
-              </button>
+              <div class="field is-grouped">
+                <p class="control">
+                  <button type="button" v-if="editBut" class="button is-info is-small has-tooltip" data-tooltip="edit entry" @click="edit(entry)">
+                    <span class="icon is-small">
+                      <icon :icon="['fas', 'edit']" />
+                    </span>
+                    <span>Edit</span>
+                  </button>
+                </p>
+                <p class="control">
+                  <button type="button" v-if="deleteBut" class="button is-danger is-small has-tooltip" data-tooltip="delete entry" @click="supress(entry)">
+                    <span class="icon is-small">
+                      <icon :icon="['fas', 'trash']" />
+                    </span>
+                    <span>Delete</span>
+                  </button>
+                </p>
+                <p class="control">
+                  <button type="button" v-if="addBut" class="button is-success is-small has-tooltip" data-tooltip="add entry" @click="add(entry)">
+                    <span class="icon is-small">
+                      <icon :icon="['fas', 'plus']" />
+                    </span>
+                    <span>Add</span>
+                  </button>
+                </p>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -182,6 +206,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import './../../../assets/scss/table';
+// @import './../../../assets/scss/table';
 @import './../../../assets/scss/tooltip';
 </style>

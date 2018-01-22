@@ -21,7 +21,7 @@ function generateRoute (menu = [], routes = []) {
 
 export default new Router({
   mode: 'history', // hash ou history ou abstract
-  linkActiveClass: 'active',
+  linkActiveClass: '',
   base: '/',
   scrollBehavior: () => ({ y: 0 }),
   routes: [

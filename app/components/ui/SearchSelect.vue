@@ -1,7 +1,7 @@
 <template>
   <div class="search-select select" @click="openOptions">
     <input type="text"
-           class="search"
+           class="input search"
            autocomplete="off"
            tabindex="0"
            :value="searchText"
@@ -15,7 +15,7 @@
            @keydown.27="showMenu = false"/>
 
     <div class="menu"
-      :class="{ 'active':showMenu, 'hidden':!showMenu }"
+      v-show="showMenu"
       ref="menu"
       @mousedown.prevent
       @keydown.prevent
@@ -186,25 +186,37 @@
 </script>
 
 <style lang="scss">
-@import './../../assets/scss/settings';
+@import "./node_modules/bulma/sass/utilities/initial-variables";
+@import "./node_modules/bulma/sass/utilities/derived-variables";
+
+.select {
+  &:not(.is-multiple) {
+    &::after {
+      cursor: default;
+      pointer-events: auto;
+    }
+  }
+}
+    
+
 .search-select {
   .menu {
     background-color: $white;
-    border-bottom-left-radius: $global-radius;
-    border-bottom-right-radius: $global-radius;
-    border: 1px solid $light-grey;
+    border-bottom-left-radius: $radius;
+    border-bottom-right-radius: $radius;
+    border: 1px solid $border;
     border-top: 0;
     overflow-y: scroll;
     height: 20rem;
     width: 100%;
     position: absolute;
     z-index: 1000;
-    margin-top: $global-font-size-l * 2;
   }
 
   .menu:hover, .menu.active{
-    border: 1px solid $primary-color;
+    border: 1px solid $link;
     border-top: 0;
+    box-shadow: 0 0 0 0.125em rgba($link, 0.25)
   }
 
   .menu > .item:hover {

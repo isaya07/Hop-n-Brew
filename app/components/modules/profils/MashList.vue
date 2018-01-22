@@ -1,10 +1,10 @@
 <template>
-  <div class='grid'>
-    <div class='col is-1-3'>
-      <h5>Mash</h5>
+  <div class='columns is-multiline is-mobile"'>
+    <div class='column is-3'>
+      <h5>Profils:</h5>
     </div>
-    <div class="is-1-3 col">
-      <div class="select is-flex-grow-4">
+    <div class="column is-3">
+      <div class="select">
         <select v-model="selectedMash" @input="selectMash($event.target.value)">
           <option v-for="option in mashs" v-bind:value="option.name" :key="option.name">
             {{ option.name }}
@@ -12,166 +12,169 @@
         </select>
       </div>
     </div>
-    <div class="col is-1-3">
-      <import @import="importPress">Import</import>
-      <button @click="exportPress">Export</button>
-      <button @click="savePress">Save</button>
-      <button @click="deletePress">Delete</button>
+    <div class="column is-6">
+      <div class="columns is-1">
+        <div class="column is-narrow">
+          <import @import="importPress">Import</import>
+        </div>
+        <div class="column is-narrow">
+          <button class="button" @click="exportPress">Export</button>
+        </div>
+        <div class="column is-narrow">
+          <button class="button" @click="savePress">Save</button>
+        </div>
+        <div class="column is-narrow">
+          <button class="button" @click="deletePress">Delete</button>
+        </div>
+      </div>      
     </div>
-    <div class='col is-full grid-4 small-2 middle'>
-      <div class="is-1-6 col">
-        <label>Name:</label>
-      </div>
-      <div class="is-1-3 col">
-        <input v-model.number="recepice.mash.name" type="text" placeholder="Name">
-      </div>
-      <div class="is-1-6 col">
-        <label>Grain temp:</label>
-      </div>
-      <div class="is-1-6 col">
-        <input v-model.number="recepice.mash.grainTemp" type="text">
-      </div>
-      <div class="is-1-6 col">
-        °{{$config.tempUnitie}}
-      </div>
-      <div class="is-1-6 col">
-        <label>Tun temp:</label>
-      </div>
-      <div class="is-1-6 col">
-        <input v-model.number="recepice.mash.tunTemp" type="text">
-      </div>
-      <div class="is-1-6 col">
-        °{{$config.tempUnitie}}
-      </div>
-      <div class="is-1-2 col">
-        <label class="checkbox">
-          Adjust temp equipment
-          <input type="checkbox" v-model="recepice.mash.equipAdjust">
-        </label>
-      </div>
-      <div class="is-1-6 col">
-        <label>Sparge temp:</label>
-      </div>
-      <div class="is-1-6 col">
-        <input v-model.number="recepice.mash.spargeTemp" type="text">
-      </div>
-      <div class="is-1-6 col">
-        °{{$config.tempUnitie}}
-      </div>
-      <div class="is-1-6 col">
-        <label>Sparge vol:</label>
-      </div>
-      <div class="is-1-6 col">
-        <input v-model.number="recepice.mash.spargeVol" type="text">
-      </div>
-      <div class="is-1-6 col">
-        {{$config.volUnitie.toUpperCase()}}
-      </div>
-    </div>
-    <div class='col is-1-2'>
-      <button @click="addStep"><i class="fa fa-plus"></i>Add Step</button>
-    </div>
-    <div class="grid card invert">
-    <item v-for="(step, index) in recepice.mash.mashSteps"
-      :key="index"
-      :id="index"
-      class="col is-full">
-      <input class="is-flex-grow-2" type="text" v-model="step.name" placeholder="Step name">
-      <div class="select is-flex-grow-4">
-        <select v-model="step.type">
-          <option v-for="option in typeSelect" :key="option">
-            {{ option }}
-          </option>
-        </select>
-      </div>
-      <input class="is-flex-grow-1" type="text" v-model.number="step.stepTemp" placeholder="Step temperature">
-      <div class="select is-flex-grow-4">
-        <select v-model="$config.tempUnitie">
-          <option v-for="option in unitList.temp" :value=option :key="option">
-            °{{ option }}
-          </option>
-        </select>
-      </div>
-      <input class="is-flex-grow-1" type="text" v-model.number="step.stepTime" placeholder="Step time">
-      <div class="select is-flex-grow-4">
-        <select v-model="$config.timeUnitie">
-          <option v-for="option in unitList.time" :key=option>
-            {{ option }}
-          </option>
-        </select>
-      </div>
-      <button class="btn last" @click="removeStep(index)"><i class="fa fa-trash-o"></i><span class="desktop-only">Remove</span></button>
-      <div class="item-data col middle grid-2" slot="content">
-        <div class="col is-1-3">
-          <label>Ramp Time:</label>
+    <div class='column is-full'>
+      <div class="columns is-multiline is-mobile">
+        <div class="column is-6">
+          <v-input label="Name" v-model="recepice.mash.name"></v-input>
         </div>
-        <div class="col is-1-3">
-          <input type="text" v-model.number="step.rampTime">
+        <div class="column is-4">
+          <v-input label="Grain temp" v-model.number="recepice.mash.grainTemp"></v-input>
         </div>
-        <div class="col is-1-3">
-          {{$config.timeUnitie}}
-        </div>
-      </div>
-      <div class="item-data col middle grid-2" slot="content">
-        <div class="col is-1-3">
-          <label>Warter Grain Ratio:</label>
-        </div>
-        <div class="col is-1-3">
-          <input type="text" v-model.number="step.waterGrainRatio">
-        </div>
-        <div class="col is-1-3">
-          {{$config.ratioUnitie}}
-        </div>
-      </div>
-      <div v-if="step.type == 'Decoction'" class="item-data col middle grid-2" slot="content">
-        <div class="col is-1-3">
-          <label>Decoction Amount:</label>
-        </div>
-        <div class="col is-1-3">
-          <input type="text" v-model.number="step.decoctionAmt">
-        </div>
-        <div class="col is-1-3">
-          {{$config.volUnitie.toUpperCase()}}
-        </div>
-      </div>
-      <div v-if="step.type == 'Infusion'" class="item-data col middle grid-2" slot="content">
-        <div class="col is-1-3">
-          <label>Infuse Amount:</label>
-        </div>
-        <div class="col is-1-3">
-          <input type="text" v-model.number="step.infuseAmount">
-        </div>
-        <div class="col is-1-3">
-          {{$config.volUnitie.toUpperCase()}}
-        </div>
-      </div>
-      <div v-if="step.type == 'Infusion'" class="item-data col middle grid-2" slot="content">
-        <div class="col is-1-3">
-          <label>Infuse Temp:</label>
-        </div>
-        <div class="col is-1-3">
-          <input type="text" v-model.number="step.infuseTemp">
-        </div>
-        <div class="col is-1-3">
+        <div class="column is-2">
           °{{$config.tempUnitie}}
         </div>
-      </div>
-      <div class="item-data col middle grid-2" slot="content">
-        <div class="col is-1-3">
-          <label>Description:</label>
+        <div class="column is-4">
+          <v-input label="Tun temp" v-model.number="recepice.mash.tunTemp"></v-input>
         </div>
-        <div class="col is-2-3">
-          <input type="text" v-model.number="step.description">
+        <div class="column is-2">
+          °{{$config.tempUnitie}}
+        </div>
+        <div class="column is-6">
+          <label class="checkbox">
+            Adjust temp equipment
+            <input type="checkbox" v-model="recepice.mash.equipAdjust">
+          </label>
+        </div>
+        <div class="column is-4">
+          <v-input label="Sparge temp" v-model.number="recepice.mash.spargeTemp"></v-input>
+        </div>
+        <div class="column is-2">
+          °{{$config.tempUnitie}}
+        </div>
+        <div class="column is-4">
+          <v-input label="Sparge vol" v-model.number="recepice.mash.spargeVol"></v-input>
+        </div>
+        <div class="column is-2">
+          {{$config.volUnitie.toUpperCase()}}
         </div>
       </div>
-    </item>
     </div>
-    <div class="col is-full">
+    <div class='column is-full'>
+      <button class="button" @click="addStep"><i class="fa fa-plus"></i>Add Step</button>
+    </div>
+    <div class="columns is-multiline is-mobile card">
+      <item v-for="(step, index) in recepice.mash.mashSteps"
+        :key="index"
+        :id="index"
+        class="column is-full">
+        <div class="control is-expanded">
+          <input class="input" type="text" v-model="step.name" placeholder="Step name">
+        </div>
+        <div class="control">
+          <div class="select">
+            <select v-model="step.type">
+              <option v-for="option in typeSelect" :key="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control">
+          <input class="input" type="text" v-model.number="step.stepTemp" placeholder="Step temperature">
+        </div>
+        <div class="control">
+          <div class="select">
+            <select v-model="$config.tempUnitie">
+              <option v-for="option in unitList.temp" :value=option :key="option">
+                °{{ option }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control">
+          <input class="input" type="text" v-model.number="step.stepTime" placeholder="Step time">
+        </div>
+        <div class="control">
+          <div class="select">
+            <select v-model="$config.timeUnitie">
+              <option v-for="option in unitList.time" :key="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="control">
+          <button class="button" @click="removeStep(index)"><i class="fa fa-trash-o"></i><span class="desktop-only">Remove</span></button>
+        </div>
+        <div class="columns" slot="content">
+          <div class="column is-4">
+            <v-input label="Ramp Time" v-model.number="step.rampTime"></v-input>
+          </div>
+          <div class="column is-2">
+            {{$config.timeUnitie}}
+          </div>
+          <div class="column is-2">
+            <label>Warter Grain Ratio:</label>
+          </div>
+          <div class="column is-2">
+            <input class="input" type="text" v-model.number="step.waterGrainRatio">
+          </div>
+          <div class="column is-2">
+            {{$config.ratioUnitie}}
+          </div>
+        </div>
+        <div v-if="step.type == 'Decoction'" class="columns" slot="content">
+          <div class="column is-2">
+            <label>Decoction Amount:</label>
+          </div>
+          <div class="column is-2">
+            <input class="input" type="text" v-model.number="step.decoctionAmt">
+          </div>
+          <div class="column is-2">
+            {{$config.volUnitie.toUpperCase()}}
+          </div>
+        </div>
+        <div v-else-if="step.type == 'Infusion'" class="columns" slot="content">
+          <div class="column is-2">
+            <label>Infuse Amount:</label>
+          </div>
+          <div class="column is-2">
+            <input class="input" type="text" v-model.number="step.infuseAmount">
+          </div>
+          <div class="column is-2">
+            {{$config.volUnitie.toUpperCase()}}
+          </div>
+          <div class="column is-2">
+            <label>Infuse Temp:</label>
+          </div>
+          <div class="column is-2">
+            <input class="input" type="text" v-model.number="step.infuseTemp">
+          </div>
+          <div class="column is-2">
+            °{{$config.tempUnitie}}
+          </div>
+        </div>
+        <div class="columns" slot="content">
+          <div class="column is-2">
+            <label>Description:</label>
+          </div>
+          <div class="column is-10">
+            <input class="input" type="text" v-model.number="step.description">
+          </div>
+        </div>
+      </item>
+    </div>
+    <div class="column is-full">
       <area-chart :chartData="chartData" :width="500" :height="150" :xLabel="'min'" :yLabel="'°' + $config.tempUnitie"></area-chart>
     </div>
-    <div class="col is-full">
-      <label class="label">Mash Notes:</label>
-      <textarea class="" v-model="recepice.mash.notes"></textarea>
+    <div class="column is-full">
+      <v-textarea label="Mash Notes" v-model="recepice.mash.notes"></v-textarea>
     </div>
   </div>
 </template>
@@ -185,6 +188,8 @@ import Import from 'components/ui/Import'
 // import Config from 'api/recettes/Config'
 // import Utils from 'api/recettes/Utils'
 import AreaChart from 'components/ui/AreaChart'
+import VTextarea from 'components/ui/base/Textarea'
+import VInput from 'components/ui//base/Input'
 
 export default {
   name: 'mash-list',
@@ -198,7 +203,9 @@ export default {
     Chart,
     Item,
     Import,
-    AreaChart
+    AreaChart,
+    VTextarea,
+    VInput
   },
 
   mounted () {

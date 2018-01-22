@@ -1,11 +1,17 @@
 <template>
-    <label class="btn">
-      <i class="fa fa-upload"></i>
-      <input @change="inputChange" type="file" name="file" />
-      <span>
-        <slot></slot>
+  <div class="file">
+    <label class="file-label">
+      <input @change="inputChange" class="file-input" type="file" name="file">
+      <span class="file-cta">
+        <span class="file-icon">
+          <icon :icon="['fas', 'upload']" />
+        </span>
+        <span class="file-label">
+          <slot></slot>
+        </span>
       </span>
     </label>
+  </div>
 </template>
 
 <script>

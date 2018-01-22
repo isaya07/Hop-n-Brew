@@ -1,17 +1,23 @@
 <template>
-  <div class="item">
-    <div class="item-inline">
-      <button class="btn first" @click="toggleContent">
-        <span class="right-arrow" :class="contentVisible ? 'close' : ''"></span>
+<div>
+  <div class="field has-addons bottom-null">
+    <div class="control">
+      <button class="button" @click="toggleContent">
+        <span class="icon is-small">
+          <icon :icon="contentVisible ? ['fas', 'minus'] : ['fas', 'plus']" />
+        </span>
       </button>
-      <slot></slot>
     </div>
-    <transition name="fade">
-      <div v-show="contentVisible" class="item-content grid-2 medium-1 small-1">
+    <slot></slot>
+  </div>
+  <transition name="fade">
+    <div v-show="contentVisible" class="card">
+      <div class="card-content">
         <slot name="content"></slot>
       </div>
-    </transition>
-  </div>
+    </div>
+  </transition>
+</div>
 </template>
 
 <script>

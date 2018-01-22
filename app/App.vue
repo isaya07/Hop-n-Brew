@@ -1,59 +1,44 @@
 <template>
 	<div id="app">
-    <div id="sidenav">
-      <div class="menu">
-        <div class="menu-titre">
-          <img src="./assets/img/icon.svg" alt="Logo">
-          <router-link :to="{ name: 'acceuil'}">
-            <h3>Hop'n Brew</h3>
-          </router-link>
+    <nav id="topbar" class="navbar is-light is-fixed-top">
+      <div class="navbar-brand">
+        <div class="navbar-item">
+          <img src="./assets/img/icon.svg" alt="Logo" height="10">          
         </div>
-        <ul class="menu-list">
-          <li class="menu-item" v-for="(item, idx) in menus" :key="idx">
-            <router-link :to="item.path" v-if="!item.children" class="menu-link">
+        <router-link :to="{ name: 'acceuil'}" class="navbar-item">
+          <h5 class="title is-5">Hop'n Brew</h5>
+        </router-link>
+        <div class="navbar-burger"  @click="showNav = !showNav" :class="{ 'is-active': showNav }">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>        
+      </div>
+      <div class="navbar-menu" :class="{ 'is-active': showNav }">
+        <div class="navbar-start">
+          <div v-for="(item, idx) in menus" :key="idx">
+            <router-link :to="item.path" v-if="!item.children" class="navbar-item">
               {{ item.name }}
             </router-link>
-            <a v-if="item.children && item.children.length" class="menu-link" @click="toggle(idx)">
-              {{ item.name }}
-              <span v-if="item.children && item.children.length" :class="(idx)===index ? 'close' : ''"></span>
-            </a>
-            <transition name="fade">
-              <ul v-if="item.children && item.children.length" v-show="(idx)===index" class="menu-list">
-                <li class="menu-item children" v-for="(subItem, id) in item.children" :key="id">
-                  <router-link :to="subItem.path" class="menu-link" :index="idx">
-                    {{ subItem.name }}
-                  </router-link>
-                </li>
-              </ul>
-            </transition>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div id="topbar">
-      <div  class="grid">
-        <!-- <div class="col">
-          <img src="./assets/img/icon.svg" alt="Logo">
-          <h3>Hop'n Brew</h3>
-        </div> -->
-        <div class="col">
-          <div id="hanburger" class="change" @click="toggleNav">
-            <div class="bar1"></div>
-            <div class="bar2"></div>
-            <div class="bar3"></div>
+            <div v-else-if="item.children.length" class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                {{ item.name }}
+              </a>
+              <div class="navbar-dropdown is-boxed">
+                <router-link :to="subItem.path" class="navbar-item" :index="idx" v-for="(subItem, id) in item.children" :key="id">
+                  {{ subItem.name }}
+                </router-link>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col pull">
-          <div v-if="user">{{user.displayName}}</div>
-          <router-link to="login" class="button" v-if="!user">Sign-in</router-link>
-          <a class="button" v-on:click="logOut" v-if="user">Sign-out</a>
-        </div>
       </div>
-    </div>
-    <div id="main">
-      <progress-bar></progress-bar>
+    </nav>
+    <progress-bar></progress-bar>
+    <div id="main" class="container has-text-left">
       <div v-if="error">{{error}}</div>
       <transition
+        class="container"
         mode="out-in"
         name="fade"
         enter-active-class="fadeIn"
@@ -81,7 +66,8 @@ export default {
       index: '',
       menus: Menu,
       user: this.$auth.currentUser,
-      error: null
+      error: null,
+      showNav: false
     }
   },
 
@@ -156,39 +142,11 @@ export default {
 </script>
 
 <style lang="scss">
-	@import './assets/scss/app';
+  // @import './assets/scss/app';
+  @import "./node_modules/bulma/sass/utilities/initial-variables";
+  @import "./node_modules/bulma/sass/utilities/derived-variables";
 
-	.nprogress-container {
-    position: fixed !important;
-    width: 100%;
-    height: 50px;
-    z-index: 2048;
-    pointer-events: none;
-
-    #nprogress {
-      $color: $primary-color;
-      // $color: black;
-
-      .bar {
-        background: $color;
-      }
-      .peg {
-        box-shadow: 0 0 10px $color, 0 0 5px $color;
-      }
-      .spinner {
-        // top:30px;
-        // right: 30px;
-      }
-      .spinner-icon {
-        border-top-color: $color;
-        border-left-color: $color;
-        // width: 32px;
-        // height: 32px;
-      }
-    }
-  }
-
-  #topbar {
+  /* #topbar {
     width: 100%;
     height: 42px;
     background-color: $white;
@@ -207,23 +165,23 @@ export default {
       margin-left: 5rem;
       line-height: 35px;
     }
-  }
+  } */
 
   /* The side navigation menu */
-  #sidenav {
-      height: 100%; /* 100% Full-height */
-      width: 220px; /* 0 width - change this with JavaScript */
-      position: fixed; /* Stay in place */
-      z-index: 3; /* Stay on top */
+  /* #sidenav {
+      height: 100%; // 100% Full-height
+      width: 220px; // 0 width - change this with JavaScript
+      position: fixed; // Stay in place
+      z-index: 3; // Stay on top
       top: 0px;
       left: 0;
-      background-color: $white; /* Black*/
-      overflow-x: hidden; /* Disable horizontal scroll */
-      // padding-top: 20px; /* Place content 60px from the top */
-      transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+      background-color: $white; // Black
+      overflow-x: hidden; // Disable horizontal scroll
+      // padding-top: 20px; // Place content 60px from the top
+      transition: 0.5s; // 0.5 second transition effect to slide in the sidenav
       // border-right: 1px solid rgba($black, 0.3);
       box-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
-  }
+  } */
 
   /* The navigation menu links */
   /* .sidenav a {
@@ -242,7 +200,7 @@ export default {
 
   /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
   #main {
-    margin-left: 220px;
+    // margin-left: 220px;
     transition: 0.5s;
     //padding: 20px;
     /* max-width: 1280px;
@@ -265,7 +223,7 @@ export default {
     .bar1, .bar2, .bar3 {
         width: 30px;
         height: 3px;
-        background-color: $text-color;
+        background-color: $text;
         margin: 6px 0;
         border-radius: 3px;
         transition: 0.5s;

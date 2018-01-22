@@ -11,22 +11,42 @@ import Notif from 'components/plugins/notification'
 
 import VueCordova from 'vue-cordova'
 
+import './assets/scss/main.scss'
+
 /* Pick one way between the 2 following ways */
 
 // only import the icons you use to reduce bundle size
-import 'vue-awesome/icons/search'
+// import 'vue-awesome/icons/search'
 
 // or import all icons if you don't care about bundle size
 // import 'vue-awesome/icons'
 
 /* Register component with one of 2 methods */
 
-import Icon from 'vue-awesome/components/Icon'
+// import Icon from 'vue-awesome/components/Icon'
 
 // globally (in your main .js file)
-Vue.component('icon', Icon)
+// Vue.component('icon', Icon)
 
-// Vue.config.productionTip = false
+import fontawesome from '@fortawesome/fontawesome'
+import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
+import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import faUpload from '@fortawesome/fontawesome-free-solid/faUpload'
+import faEdit from '@fortawesome/fontawesome-free-solid/faEdit'
+import faTrash from '@fortawesome/fontawesome-free-solid/faTrash'
+import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
+// import faCircle from '@fortawesome/fontawesome-free-regular/faCircle'
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+
+fontawesome.library.add(faSearch)
+fontawesome.library.add(faPlus)
+fontawesome.library.add(faUpload)
+fontawesome.library.add(faEdit)
+fontawesome.library.add(faTrash)
+fontawesome.library.add(faMinus)
+// fontawesome.library.add(faCircle)
+
+Vue.component('icon', FontAwesomeIcon) // Use the icon component anywhere in the app
 
 Vue.use(VueCordova, {
   optionTestKey: 'optionTestValue'
@@ -67,7 +87,7 @@ VeeValidate.Validator.extend('myAlpha', {
   // eslint-disable-next-line
   validate: value => {
     let test = /^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ:()_'.",%/\-\s]*$/i.test(value)
-    console.log(test)
+    // console.log(test)
     return test
   }
 })
@@ -78,19 +98,19 @@ VeeValidate.Validator.extend('myNumeric', {
   validate: value => /\d*([.,\/]?\d+)/.test(value)
 })
 
-Vue.config.performance = true
 Vue.config.warnHandler = function (msg, vm, trace) {
   console.log(msg)
   console.log(vm)
   console.log(trace)
 }
-
 Vue.config.errorHandler = (err, vm, info) => {
   console.error(err)
   console.log(vm)
   console.info(info)
 }
 
+Vue.config.performance = false
+Vue.config.productionTip = false
 Vue.config.debug = true
 
 const db = new DB()

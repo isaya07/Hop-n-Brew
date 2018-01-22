@@ -1,21 +1,21 @@
 <template>
   <transition name="modal">
-    <div class="modal">
-      <div class="modal-overlay" @click="close"></div>
-      <div class ="modal-content" :class="size">
-        <div class="modal-header">
+    <div class="modal animated is-active">
+      <div class="modal-background" @click="close"></div>
+      <div class ="modal-card" :class="size">
+        <header class="modal-card-head has-text-centered">
+          <p class="modal-card-title">{{ title }}</p>
+          <button class="delete" aria-label="close" @click="close"></button>          
+        </header>
+        <section class="modal-card-body" @keydown.27="close">
           <slot name="header">
-            <h4 class="modal-title txtcenter">{{ title }}</h4>
           </slot>
-          <a class="modal-close" @click="close">&times;</a>
-        </div>
-        <div class="modal-body" @keydown.27="close">
           <slot></slot>
-        </div>
-        <div class="modal-footer">
-          <button v-if="cancelText !== ''" type="button" class="warning is-right" @click="cancel">{{ cancelText }}</button>
-          <button v-if="okText !== ''" type="button" class="primary is-right" @click="ok">{{ okText }}</button>
-        </div>
+        </section>
+        <footer  class="modal-card-foot">
+          <button v-if="cancelText !== ''" type="button" class="button is-warning is-pulled-right" @click="cancel">{{ cancelText }}</button>
+          <button v-if="okText !== ''" type="button" class="button is-primary is-pulled-right" @click="ok">{{ okText }}</button>
+        </footer >
       </div>
     </div>
   </transition>
@@ -77,7 +77,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-@import './../../assets/scss/modal';
-</style>

@@ -1,29 +1,29 @@
 <template>
   <!-- <div class="card"> -->
-      <div class="grid-3">
-        <div class="col is-1-6">OG:</div>
-        <div class="col is-1-6">{{ ogData.value }}</div>
-        <div class="col is-2-3">
+      <div class="columns is-multiline is-mobile">
+        <div class="column is-2">OG:</div>
+        <div class="column is-2">{{ ogData.value }}</div>
+        <div class="column is-8">
           <svg-bar :width="200" :height="20" :data="ogData" :max="0.150"></svg-bar>
         </div>
-        <div class="col is-1-6">FG:</div>
-        <div class="col is-1-6">{{ fgData.value }}</div>
-        <div class="col is-2-3">
+        <div class="column is-2">FG:</div>
+        <div class="column is-2">{{ fgData.value }}</div>
+        <div class="column is-8">
           <svg-bar :width="200" :height="20" :data="fgData" :max="0.150"></svg-bar>
         </div>
-        <div class="col is-1-6">IBU:</div>
-        <div class="col is-1-6">{{ ibuData.value }}</div>
-        <div class="col is-2-3">
+        <div class="column is-2">IBU:</div>
+        <div class="column is-2">{{ ibuData.value }}</div>
+        <div class="column is-8">
           <svg-bar :width="200" :height="20" :data="ibuData" :max="200"></svg-bar>
         </div>
-        <div class="col is-1-6">ABV:</div>
-        <div class="col is-1-6">{{ abvData.value }}</div>
-        <div class="col is-2-3">
+        <div class="column is-2">ABV:</div>
+        <div class="column is-2">{{ abvData.value }}</div>
+        <div class="column is-8">
           <svg-bar :width="200" :height="20" :data="abvData" :max="20"></svg-bar>
         </div>
-        <div class="col is-1-6">Color:</div>
-        <div class="col is-1-6">{{ colorData.value }}</div>
-        <div class="col is-2-3">
+        <div class="column is-2">Color:</div>
+        <div class="column is-2">{{ colorData.value }}</div>
+        <div class="column is-8">
             <svg-bar :width="200" :height="20" :data="colorData" :max="200"></svg-bar>
         </div>
       </div>

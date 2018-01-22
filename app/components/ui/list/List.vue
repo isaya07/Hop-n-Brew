@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="txtcenter">{{ type | capitalize}}</h3>
+    <h3 class="title is-3 has-text-centered">{{ type | capitalize}}</h3>
     <card-list
       v-if="card"
       :ingredientsData="data"
@@ -20,7 +20,7 @@
       :butEdit="editBut"
       :butDelete="deleteBut"
       :search="true"
-      :inStock="false"
+      :inStock="true"
       :createImport="true"
       @import="importList"
       @supress="deleteList"
@@ -134,6 +134,7 @@ export default {
     },
     editList (liste) {
       this.editListeTitle = 'Edit ' + this.$options.filters.capitalize(this.type)
+      console.log("List emit dataform")
       this.$emit('dataForm', this.newFunc(liste))
       this.editListeShow = true
     },

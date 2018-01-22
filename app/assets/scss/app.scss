@@ -11,8 +11,8 @@
 @import 'button';
 @import 'item';
 
-$fa-font-path: "~assets/font-awesome/fonts";
-@import '~assets/font-awesome/scss/font-awesome';
+// $fa-font-path: "~assets/font-awesome/fonts";
+// @import '~assets/font-awesome/scss/font-awesome';
 
 .center {
   margin-left: auto;
@@ -57,9 +57,9 @@ $fa-font-path: "~assets/font-awesome/fonts";
   }
 }
 
-.fa {
-  color: $text-color;
-  font-size: 2rem;
+.svg-inline--fa {
+  // color: $text-color;
+  // font-size: 2rem;
   /* font-size: 21px;
   // line-height: 2rem;
   &.small {
