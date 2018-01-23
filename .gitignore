@@ -6,9 +6,7 @@ node_modules
 /plugins
 xmlforimport
 verre.svg
-beer_312195
-beer_312195.zip
 .firebaserc
 .vscode
-d3.zip
 npm-debug.log*
+package-lock.json

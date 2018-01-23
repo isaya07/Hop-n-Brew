@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import * as d3 from 'd3'
+import d3 from './d3Import.js'
 
 export default {
   name: 'area-chart',
