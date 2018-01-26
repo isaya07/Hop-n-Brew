@@ -51,7 +51,7 @@ export default {
     play () {
       this.state.timer = setInterval(() => {
         this.increase(this.state.cut * Math.random())
-        if (this.percent > 95) {
+        if (this.percent >= 100) {
           this.finish()
           clearInterval(this.state.timer)
         }
@@ -60,9 +60,11 @@ export default {
     finish () {
       this.percent = 100
       clearInterval(this.state.timer)
-      this.state.timer = null
       this.show = false
-      // setTimeout(() => { this.percent = 0 }, 500)
+      this.state.timer = null
+      setTimeout(() => {
+        this.percent = 0
+      }, 250)
     },
     progressGest (action) {
       switch (action) {
@@ -87,3 +89,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "./node_modules/bulma/sass/utilities/initial-variables";
+@import "./node_modules/bulma/sass/utilities/derived-variables";
+
+.progress {
+  // margin-top: -3px;
+  z-index: 999999;
+  background-color: $info;
+  height: 3px;
+  top: 0;
+  left: 0;
+  transition: width 0.3s, opacity 0.3s;
+  box-shadow: 0px 3px 8px rgba($black, 0.4);
+}
+</style>
+

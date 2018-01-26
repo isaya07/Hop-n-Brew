@@ -8,7 +8,8 @@ const Menu =
       component: () => import('components/modules/recettes/RecettesList'),
       meta: {
         // icon: 'home',
-        expanded: false
+        expanded: false,
+        requiresAuth: true
       }
     },
     {

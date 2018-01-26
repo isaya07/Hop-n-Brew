@@ -172,13 +172,21 @@ export default {
       }
     }, */
     showModal () {
+      this.$binding(this.database, this.$db.db.collection(this.database))
+      .then((data) => {
+        this.modalIngredients = data
+         this.loading = false
+        // this.$bus.$emit('progress', 'stop')
+      }).catch(err => {
+        console.error(err)
+      })
       this.modalVisible = true
-      this.$db.gets(this.database).then(rows => {
+      /* this.$db.gets(this.database).then(rows => {
         this.modalIngredients = rows
         this.loading = false
       }).catch(err => {
         console.log(err)
-      })
+      }) */
     },
     hideModal () {
       this.modalVisible = false

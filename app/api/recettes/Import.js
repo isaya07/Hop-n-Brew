@@ -23,7 +23,11 @@ function importChildren (ref, propName, round = 3) {
             if (!isNaN(childItem.textContent)) {
               // options[itemName] = +childItem.textContent
               options[itemName] = Utils.roundDecimal(childItem.textContent, round)
-            } else {
+            } else/* if (childItem.textContent === 'TRUE') {
+              options[itemName] = (childItem.textContent === 'TRUE')
+            } else if (childItem.textContent === 'FALSE') {
+              options[itemName] = (childItem.textContent === 'FALSE')
+            } else */{
               options[itemName] = childItem.textContent
             }
           }
@@ -44,7 +48,11 @@ function importChildren (ref, propName, round = 3) {
           if (!isNaN(child.textContent)) {
             // obj[propNames] = +child.textContent
             obj[propNames] = Utils.roundDecimal(child.textContent, round)
-          } else {
+          } else/* if (child.textContent === 'TRUE') {
+            obj[propName] = (child.textContent === 'TRUE')
+          } else if (child.textContent === 'FALSE') {
+            obj[propName] = (child.textContent === 'FALSE')
+          } else */{
             obj[propNames] = child.textContent
           }
         }
@@ -71,10 +79,12 @@ export function importXML (xml, type, round = 3) {
             if (ref.length !== 0) obj[propName] = importChildren(ref, propName, round)
           } else {
             if (!isNaN(prop.textContent)) {
-              // obj[propName] = prop.textContent.toString()
               obj[propName] = Utils.roundDecimal(prop.textContent, round)
-              console.log(obj[propName], prop.textContent)
-            } else {
+            } else/* if (prop.textContent === 'TRUE') {
+              obj[propName] = (prop.textContent === 'TRUE')
+            } else if (prop.textContent === 'FALSE') {
+              obj[propName] = (prop.textContent === 'FALSE')
+            } else */{
               obj[propName] = prop.textContent
             }
           }

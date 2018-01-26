@@ -45,6 +45,9 @@
 import TableList from 'components/ui/list/TableList'
 import CardList from 'components/ui/list/CardList'
 import Modal from 'components/layout/Modal'
+import firebase from 'firebase/app'
+
+const db = firebase.firestore()
 
 export default {
   name: 'List',
@@ -76,27 +79,25 @@ export default {
   },
 
   created () {
-    this.$bus.$emit('progress', 'pause')
+    // this.$bus.$emit('progress', 'pause')
+  },
+
+  firestore() {
+    return {
+        // Collection
+        data: this.$db.collection(this.db)
+        // Doc
+        // ford: this.$db.collection('cars').doc('ford')
+    }
   },
 
   mounted () {
-    // this.$db.sync(this.db, 'http://localhost:5984/' + this.db)
-    this.fetchData()
     this.$bus.$on('validated', (status, liste) => {
       this.validEditList(status, liste)
     })
   },
 
   methods: {
-    fetchData () {
-      this.$db.gets(this.db).then(rows => {
-        this.$bus.$emit('progress', 'play')
-        this.data = rows
-      }).catch(err => {
-        this.$bus.$emit('progress', 'stop')
-        console.log(err)
-      })
-    },
     importList (xml) {
       let newLists = this.staticFunc(xml)
       let item
@@ -106,25 +107,20 @@ export default {
       for (item in newLists) {
         data = newLists[item]
         number++
-        data['_id'] = data.name
-        // console.log(data)
-        this.$db.put(this.db, data, {force: false}).then(() => {
-          // this.$notification.success(data.name + ' successfully imported')
-        }).catch(err => {
+        this.$firestoreRefs.data.add(data).catch(err => {
           error = err
         })
         if (error) break
       }
       if (error) {
-        this.$notification.error('Import of ' + data.name + ' failed: ' + error)
+        this.$store.commit('setMessage', {type: 'error', text: 'Import of ' + data.name + ' failed: ' + error})
         console.error('Import of ' + name + ' failed: ' + error)
       }
       if ( !error && number > 1 ) {
-        this.$notification.success(number + ' ' + this.db + ' successfully imported')
+        this.$store.commit('setMessage', {type: 'succes', text: number + ' ' + this.db + ' successfully imported'})
       } else if (!error) {
-        this.$notification.success(data.name + ' successfully imported')
+        this.$store.commit('setMessage', {type: 'succes', text: data.name + ' successfully imported'})
       }
-      this.fetchData()
     },
     createList () {
       this.editListeTitle = 'Add ' + this.$options.filters.capitalize(this.type)
@@ -140,14 +136,21 @@ export default {
     },
     deleteList (liste) {
       let name = liste.name
-      let vm = this
-      this.$db.remove(this.db, liste).then(result => {
-        vm.$notification.success(name + ' successfully removed')
-        vm.fetchData()
+      console.log(liste)
+      //let vm = this
+      this.$firestoreRefs.data.doc(liste.id).delete().then(result => {
+        this.$store.commit('setMessage', {type: 'succes', text: name + ' successfully removed'})
       }).catch(err => {
-        vm.$notification.error('Remove of ' + name + ' failed: ' + err)
+        this.$store.commit('setMessage', {type: 'error', text: 'Remove of ' + name + ' failed: ' + err})
         console.error('Remove of ' + name + ' failed: ' + err)
       })
+      /* this.$db.remove(this.db, liste).then(result => {
+        vm.$store.dispatch('setMessage', {type: 'succes', text: name + ' successfully removed'})
+        vm.fetchData()
+      }).catch(err => {
+        vm.$store.dispatch('setMessage', {type: 'error', text: 'Remove of ' + name + ' failed: ' + err})
+        console.error('Remove of ' + name + ' failed: ' + err)
+      }) */
     },
     saveList (liste) {
       let newList = JSON.parse(JSON.stringify(liste))
@@ -157,21 +160,19 @@ export default {
       }
       if (newList['_id'] != null) {
         this.$db.put(this.db, newList).then(() => {
-          this.$notification.success(newList.name + ' successfully updated')
+          this.$store.dispatch('setMessage', {type: 'succes', text: newList.name + ' successfully updated'})
           this.fetchData()
         }).catch(err => {
-          console.log(this)
-          this.$notification.error('Update of ' + newList.name + ' failed: ' + err)
+          this.$store.dispatch('setMessage', {type: 'error', text: 'Update of ' + newList.name + ' failed: ' + err})
           console.error('Update of ' + newList + ' failed: ' + err)
         })
       } else {
         newList._id = newList.name
         this.$db.put(this.db, newList).then(response => {
-          this.$notification.success(newList.name + ' successfully created')
+          this.$store.dispatch('setMessage', {type: 'succes', text: newList.name + ' successfully created'})
           this.fetchData()
         }).catch(err => {
-          console.log(this)
-          this.$notification.error('Creation of' + newList.name + ' failed: ' + err)
+          this.$store.dispatch('setMessage', {type: 'error', text: 'Creation of ' + newList.name + ' failed: ' + err})
           console.error('Creation of ' + newList + ' failed: ' + err)
         })
       }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { Menu } from 'components/Menu'
 import Error404 from 'components/Error404'
-// import lazyLoading from 'components/lazyLoading'
+import store from '../store'
 
 Vue.use(Router)
 
@@ -19,7 +19,7 @@ function generateRoute (menu = [], routes = []) {
   return routes
 }
 
-export default new Router({
+const router = new Router({
   mode: 'history', // hash ou history ou abstract
   linkActiveClass: '',
   base: '/',
@@ -33,10 +33,11 @@ export default new Router({
     },
     ...generateRoute(Menu),
     {
-      path: '/edit/:name',
+      path: '/edit/:item',
       name: 'edit',
       component: () => import('components/modules/recettes/EditRecette'),
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props: true
     },
     /* {
       path: '/success',
@@ -44,9 +45,9 @@ export default new Router({
       component: () => import('components/modules/users/succes')
     }, */
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('components/modules/users/login')
+      path: '/signin',
+      name: 'signin',
+      component: () => import('components/modules/users/signin')
     },
     {
       path: '/signup',
@@ -69,3 +70,17 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const currentUser = store.getters.user
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  if (requiresAuth && !currentUser) {
+    next('/signin')
+  } else if (requiresAuth && currentUser) {
+    next()
+  } else {
+    next()
+  }
+})
+
+export default router

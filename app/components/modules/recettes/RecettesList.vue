@@ -23,7 +23,7 @@
   </div>
   <ul id="example-1">
     <li v-for="(item, index) in filteredData" :key="index">
-      <router-link :to="{ name: 'edit', params: { name: item.name }}">{{ item.name }}</router-link>
+      <router-link :to="{ name: 'edit', params: { item: item }}">{{ item.name }}</router-link>
     </li>
   </ul>
   <router-view></router-view>
@@ -43,7 +43,19 @@ export default {
 
   mounted () {
     // this.$db.sync(this.db, 'http://localhost:5984/' + this.db)
-    this.fetchData()
+    // this.fetchData()
+    /* this.$bind('data', this.$db.collection(this.db)).catch(err => {
+      console.error(err)
+    }) */
+  },
+
+  firestore() {
+    return {
+        // Collection
+        data: this.$db.collection(this.db).orderBy('name').limit(20),
+        // Doc
+        // ford: this.$db.collection('cars').doc('ford')
+    }
   },
 
   data () {
@@ -56,7 +68,7 @@ export default {
       sortOrders: sortOrders,
       modalTitle: '',
       modalData: null,
-      db: 'recipes',
+      db: 'recipes' ,
       data: []
     }
     data.columns.forEach(function (key) {
@@ -95,10 +107,12 @@ export default {
 
   methods: {
     fetchData () {
-      this.$db.gets(this.db).then(rows => {
-        this.data = rows
+      this.$binding(this.db, this.$db.db.collection(this.db))
+      .then((data) => {
+        this.data = data
+        // this.$bus.$emit('progress', 'stop')
       }).catch(err => {
-        console.log(err)
+        console.error(err)
       })
     },
     sortBy (key) {

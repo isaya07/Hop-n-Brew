@@ -5,11 +5,11 @@
         class="is-checkradio"
         :id="label"
         :name="label"
-        v-bind:value="value"
-        v-on:input="updateValue($event.target.value)"
+        :checked="value"
+        @change="updateValue($event.target.checked)"
         v-validate="rules"
         :class="{'is-danger': errors.has(label) }">
-      <label :for="label">
+      <label :for="label" class="label">
         {{ label }}
       </label>
       <p v-show="errors.has(label)" class="help is-danger">
@@ -34,6 +34,7 @@ export default {
 
   methods: {
     updateValue: function(value) {
+      console.log(value)
       this.$emit('input', value)
     }
   }

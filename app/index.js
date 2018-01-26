@@ -3,81 +3,51 @@ import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 import App from './App'
 import router from './router'
-
+// import VueFirestore from 'components/plugins/vue-firestore'
 import Config from 'api/recettes/Config'
-import { firebase, DB } from 'api/firebase'
-
-import Notif from 'components/plugins/notification'
-
-import VueCordova from 'vue-cordova'
-
+import store from './store'
+import FontAwesomeIcon from './fontawesome'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+import VueFire from 'components/plugins/vuefire'
+// Style
 import './assets/scss/main.scss'
 
-/* Pick one way between the 2 following ways */
+Vue.use(VueFire)
 
-// only import the icons you use to reduce bundle size
-// import 'vue-awesome/icons/search'
+let fireConfig = {
+  apiKey: 'AIzaSyCZGuCrxMas0dWC2LXm9mrj7vIKAHYyf6M',
+  authDomain: 'hop-n-brew.firebaseapp.com',
+  databaseURL: 'https://hop-n-brew.firebaseio.com',
+  projectId: 'hop-n-brew',
+  storageBucket: 'hop-n-brew.appspot.com',
+  messagingSenderId: '716052929936'
+}
 
-// or import all icons if you don't care about bundle size
-// import 'vue-awesome/icons'
-
-/* Register component with one of 2 methods */
-
-// import Icon from 'vue-awesome/components/Icon'
-
-// globally (in your main .js file)
-// Vue.component('icon', Icon)
-
-import fontawesome from '@fortawesome/fontawesome'
-import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
-import faUpload from '@fortawesome/fontawesome-free-solid/faUpload'
-import faEdit from '@fortawesome/fontawesome-free-solid/faEdit'
-import faTrash from '@fortawesome/fontawesome-free-solid/faTrash'
-import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
-// import faCircle from '@fortawesome/fontawesome-free-regular/faCircle'
-import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-
-fontawesome.library.add(faSearch)
-fontawesome.library.add(faPlus)
-fontawesome.library.add(faUpload)
-fontawesome.library.add(faEdit)
-fontawesome.library.add(faTrash)
-fontawesome.library.add(faMinus)
-// fontawesome.library.add(faCircle)
+firebase.initializeApp(fireConfig)
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+  // console.log('Persistance OK')
+}).catch(error => {
+  console.log(error.code + ' : ' + error.message)
+})
+firebase.firestore().enablePersistence().then(() => {
+  // Initialize Cloud Firestore through firebase
+  firebase.firestore()
+}).catch(err => {
+  if (err.code === 'failed-precondition') {
+    console.log('Multiple tabs open, persistence can only be enabled in one tab at a a time')
+  } else if (err.code === 'unimplemented') {
+    console.log('The current browser does not support all of the features required to enable persistence')
+  }
+})
 
 Vue.component('icon', FontAwesomeIcon) // Use the icon component anywhere in the app
 
-Vue.use(VueCordova, {
-  optionTestKey: 'optionTestValue'
-})
-
-if (window.location.protocol === 'file://' || window.location.port === '8000') {
-  var cordovaScript = document.createElement('script')
-  cordovaScript.setAttribute('type', 'text/javascript')
-  cordovaScript.setAttribute('src', 'cordova.js')
-  document.body.appendChild(cordovaScript)
-}
-
-// import MyProgress from 'components/plugins/MyProgress'
-
-/* import PouchDB from 'pouchdb-browser'
-PouchDB.plugin(require('pouchdb-find'))
-PouchDB.plugin(require('pouchdb-live-find'))
-// PouchDB.plugin(require('pouchdb-authentication'))
-// PouchDB.debug.disable('*')
-if (process.env.NODE_ENV !== 'production') {
-  window.PouchDB = PouchDB
-}
-// PouchDB.debug.disable('*')
-
-Vue.use(require('vue-pouch'), {
-  pouch: PouchDB/* ,    // optional if `PouchDB` is available on the global object
-  defaultDB:         // the database to use if none is specified in the pouch setting of the vue component
-}) */
+// Vue.use(VueFirestore)
 
 Vue.use(VeeValidate)
-Vue.use(Notif, {timeout: 5000})
+// Vue.use(Notif, {timeout: 5000})
 
 Vue.filter('capitalize', str => str.charAt(0).toUpperCase() + str.slice(1).replace(/([A-Z])/g, ' $1'))
 
@@ -109,18 +79,9 @@ Vue.config.errorHandler = (err, vm, info) => {
   console.info(info)
 }
 
-Vue.config.performance = false
+Vue.config.performance = true
 Vue.config.productionTip = false
 Vue.config.debug = true
-
-const db = new DB()
-Object.defineProperties(Vue.prototype, {
-  $db: {
-    get: function () {
-      return db
-    }
-  }
-})
 
 Object.defineProperties(Vue.prototype, {
   $auth: {
@@ -131,12 +92,20 @@ Object.defineProperties(Vue.prototype, {
 })
 
 Object.defineProperties(Vue.prototype, {
-  $firestore: {
+  $db: {
     get: function () {
       return firebase.firestore()
     }
   }
 })
+
+/* Object.defineProperties(Vue.prototype, {
+  $firestore: {
+    get: function () {
+      return firebase.firestore()
+    }
+  }
+}) */
 
 const config = new Config()
 Object.defineProperties(Vue.prototype, {
@@ -157,38 +126,15 @@ Object.defineProperties(Vue.prototype, {
   }
 })
 
-// Check before each page load whether the page requires authentication/
-// if it does check whether the user is signed into the web app or
-// redirect to the sign-in page to enable them to sign-in
-router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-  if (requiresAuth && !currentUser) {
-    next('/login')
-  } else if (requiresAuth && currentUser) {
-    next()
-  } else {
-    next()
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    let olduser = store.getters.user
+    if (!olduser || !olduser.email || olduser.email !== user.email) store.dispatch('autoSignIn', user)
   }
 })
 
-// Wrap the vue instance in a Firebase onAuthStateChanged method
-// This stops the execution of the navigation guard 'beforeEach'
-// method until the Firebase initialization ends
-firebase.auth().onAuthStateChanged(function (user) {
-  if (window.location.port !== '8000') {
-    new Vue({
-      router,
-      ...App
-    }).$mount('#app')
-  } else {
-    // listen to Cordova event
-    Vue.cordova.on('deviceready', () => {
-      new Vue({
-        router,
-        ...App
-      }).$mount('#app')
-    })
-  }
-})
+new Vue({
+  router,
+  store,
+  ...App
+}).$mount('#app')

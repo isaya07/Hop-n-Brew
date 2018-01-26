@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h3 class="title is-3 has-text-centered">{{$route.params.name === 'new' ? 'Create recipe' : recipe.name}}</h3>
+    <h3 class="title is-3 has-text-centered">{{$route.params.item.name === 'new' ? 'Create recipe' : recipe.name}}</h3>
     <div class="columns is-multiline is-mobile" v-if="recipe">
       <div class="column is-half">
         <div class="card">
@@ -116,14 +116,11 @@ export default {
     MyCheckbox
   },
 
-  /* props: {
-    data: Object,
-    db: 'recipes'
-  }, */
+  props: ['item'],
 
   mounted () {
     // let test
-    this.fetchData()
+    // this.fetchData()
     /* if (this.data) test = new Recipe(this.$config, this.data)
     else test = new Recipe(this.$config, { name: 'test', brewer: 'isaya', notes: 'testing notes' })
     this.recipe = test */
@@ -136,8 +133,8 @@ export default {
     if (data) test = new Recipe(this.$config, data)
     else test = new Recipe(this.$config, { name: 'test', brewer: 'isaya', notes: 'testing notes' }) */
     return {
-      recipe: null,
-      data: null
+      recipe: new Recipe(this.$config, this.item)/* ,
+      data: this.$route.params.item */
     }
   },
 
@@ -186,11 +183,19 @@ export default {
     },
     fetchData () {
       if (this.$route.params.name !== 'new') {
-        this.$db.get('recipes', this.$route.params.name).then(rows => {
+        console.log(this.$route.params)
+        this.$binding('recipes', this.$db.db.collection('recipes').where('_id', '==', this.$route.params.name))
+        .then((data) => {
+          this.data = data
+          // this.$bus.$emit('progress', 'stop')
+        }).catch(err => {
+          console.error(err)
+        })
+        /* this.$db.get('recipes', this.$route.params.name).then(rows => {
           this.data = rows
         }).catch(err => {
           console.log(err)
-        })
+        }) */
       } else {
         this.data = {}
       }

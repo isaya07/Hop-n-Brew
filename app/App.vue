@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+    <v-notif></v-notif>
     <top-bar></top-bar>
     <progress-bar></progress-bar>
     <div class="container has-text-left">
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import VNotif from 'layout/Notification'
 import TopBar from 'layout/TopBar'
 import ProgressBar from 'layout/Progress'
 // import { Menu } from 'components/Menu'
@@ -20,6 +22,7 @@ export default {
   name: 'app',
 
   components: {
+    VNotif,
     TopBar,
     ProgressBar
   },
@@ -58,6 +61,9 @@ export default {
   }, */
 
   created () {
+    if (this.$auth.currentUser) {
+      this.$store.dispatch('autoSignIn', this.$auth.currentUser)
+    }
     // this.$myProgress.start(300)
     // this.$bus.$emit('progress', 'start')
     this.$router.beforeEach((to, from, next) => {

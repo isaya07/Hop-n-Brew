@@ -28,13 +28,13 @@
         <v-input label="Potential" v-model="formData.potential" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-one-quarter">
-        <v-checkbox label="Recomend Mash" v-model="formData.recomendMash" :rules="''"></v-checkbox>
+        <v-checkbox label="Recommend Mash" v-model="formData.recommendMash" :rules="''"></v-checkbox>
       </div>
       <div class="column is-one-quarter">
         <v-checkbox label="Add after Boil" v-model="formData.addAfterBoil" :rules="''"></v-checkbox>
       </div>
       <div class="column is-half">
-        <v-input label="Coarse Fine Dif" v-model="formData.coarseFineDif" :rules="'myNumeric'"></v-input>
+        <v-input label="Coarse Fine Diff" v-model="formData.coarseFineDiff" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
         <v-input label="Moisture" v-model="formData.moisture" :rules="'myNumeric'"></v-input>
@@ -43,7 +43,7 @@
         <v-input label="Diastatic Power" v-model="formData.diastaticPower" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Proteine" v-model="formData.proteine" :rules="'myNumeric'"></v-input>
+        <v-input label="Protein" v-model="formData.protein" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
         <v-input label="Ibu Gal Per Lb" v-model="formData.ibuGalPerLb" :rules="'myNumeric'"></v-input>

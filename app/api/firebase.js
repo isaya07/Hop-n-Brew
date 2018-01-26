@@ -12,6 +12,11 @@ let config = {
 }
 
 firebase.initializeApp(config)
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+  // console.log('Persistance OK')
+}).catch(error => {
+  console.log(error.code + ' : ' + error.message)
+})
 
 class DB {
   constructor (options) {
@@ -51,22 +56,25 @@ class DB {
         console.log(querySnapshot)
         if (!querySnapshot.empty) resolve(querySnapshot.docs[0].data())
       }).catch(error => {
-        console.log('Error getting documents: ', error)
+        console.error('Error getting documents: ', error)
         reject(error)
       })
     })
   }
 
   gets (database) {
+    console.log(database)
     return new Promise((resolve, reject) => {
-      this.db.collection(database).get().then(querySnapshot => {
+      let col = this.db.collection(database)
+      console.log(database)
+      col.get().then(querySnapshot => {
         let data = []
         querySnapshot.forEach(doc => {
           data.push(doc.data())
         })
         resolve(data)
       }).catch(error => {
-        console.log('Error getting documents: ', error)
+        console.error('Error getting documents: ', error)
         reject(error)
       })
     })
@@ -89,7 +97,7 @@ class DB {
       this.db.collection(database).doc(doc).delete().then(querySnapshot => {
         resolve(querySnapshot)
       }).catch(error => {
-        console.log('Error removing  documents: ', error)
+        console.error('Error removing  documents: ', error)
         reject(error)
       })
     })

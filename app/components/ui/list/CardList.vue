@@ -1,31 +1,35 @@
 <template>
   <section class="txtcenter">
-    <div class="grid-3 middle">
-      <div class="col right">
-        <div class="has-icon">
-          <input type="text" placeholder="Search" name="query" v-model="filterKey">
-          <icon name="search" class="fa icon-right"></icon>
-        </div>
+    <div class="field is-horizontal">
+      <div class="field-body">
+        <p class="control field has-icons-right">
+          <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
+          <span class="icon is-small is-right">
+            <icon :icon="['fas', 'search']" />
+          </span>
+        </p>
       </div>
-      <div class="col left">
-        <div class="grid-2">
+      <div class="field-body">
+        <div class="field is-grouped">
           <import v-if="createImport" @import="importPress">Import</import>
-          <button v-if="createImport" type="button" class="" @click="create">
-            <i class="fa fa-plus"></i>
+          <button v-if="createImport" type="button" class="button" @click="create">
+            <span class="icon is-small">
+              <icon :icon="['fas', 'plus']" />
+            </span>
             <span>Create</span>
           </button>
         </div>
       </div>
     </div>
-    <div class="grid-4" v-if="filteredData">
-      <div class="col" v-for="(entry, index) in filteredData" :key="index">
+    <div class="columns is-multiline is-mobile" v-if="filteredData">
+      <div class="column is-3" v-for="(entry, index) in filteredData" :key="index">
         <div class="card">
           <header class="card-header txtcenter">
-              <p class="card-header-title" @click="edit(entry)">{{ entry.name }}</p>
-              <button @click="supress(entry)">Delete</button>
+              <p class="card-header-title is-link" @click="edit(entry)">{{ entry.name }}</p>
+              <button class="button" @click="supress(entry)">Delete</button>
           </header>
           <div class="card-content">
-              <img src="./../../../assets/img/marmite.svg" alt="Equipment">
+              <img src="~assets/img/marmite.svg" alt="Equipment">
           </div>
           <footer class="card-footer">
             <div class="card-footer-item">Batch : {{ entry.batchSize + ' '}}{{$config.volUnitie | capitalize}}</div>

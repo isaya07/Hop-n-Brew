@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { firebaseMutations } from 'vuexfire'
 import createLogger from 'vuex/dist/logger'
-import { state, mutations } from './mutations'
+// import { state, mutations } from './mutations'
+import user from './user'
+import shared from './shared'
 
 Vue.use(Vuex)
 
 const logger = createLogger({
-  collapsed: false, // auto-expand logged mutations
+  collapsed: true, // auto-expand logged mutations
   filter (mutation, stateBefore, stateAfter) {
     // returns `true` if a mutation should be logged
     // `mutation` is a `{ type, payload }`
@@ -15,7 +18,7 @@ const logger = createLogger({
   transformer (state) {
     // transform the state before logging it.
     // for example return only a specific sub-tree
-    return state.subTree
+    return state // state.subTree
   },
   mutationTransformer (mutation) {
     // mutations are logged in the format of `{ type, payload }`
@@ -27,8 +30,17 @@ const logger = createLogger({
 
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
-  state,
-  mutations,
+  modules: {
+    user: user,
+    shared: shared
+  },
+  state: {
+    recepices: [],
+    user: null
+  },
+  mutations: {
+    ...firebaseMutations
+  },
   plugins: process.env.NODE_ENV !== 'production'
     ? [logger]
     : []
