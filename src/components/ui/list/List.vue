@@ -78,10 +78,6 @@ export default {
     }
   },
 
-  created () {
-    // this.$bus.$emit('progress', 'pause')
-  },
-
   firestore() {
     return {
         // Collection
@@ -130,58 +126,44 @@ export default {
     },
     editList (liste) {
       this.editListeTitle = 'Edit ' + this.$options.filters.capitalize(this.type)
-      console.log("List emit dataform")
-      this.$emit('dataForm', this.newFunc(liste))
+      // let newList = {...this.newFunc(liste), ...{id: liste.id}}
+      // console.log(newList)
+      this.$emit('dataForm', liste)
       this.editListeShow = true
     },
     deleteList (liste) {
       let name = liste.name
-      console.log(liste)
-      //let vm = this
       this.$firestoreRefs.data.doc(liste.id).delete().then(result => {
         this.$store.commit('setMessage', {type: 'succes', text: name + ' successfully removed'})
       }).catch(err => {
         this.$store.commit('setMessage', {type: 'error', text: 'Remove of ' + name + ' failed: ' + err})
         console.error('Remove of ' + name + ' failed: ' + err)
       })
-      /* this.$db.remove(this.db, liste).then(result => {
-        vm.$store.dispatch('setMessage', {type: 'succes', text: name + ' successfully removed'})
-        vm.fetchData()
-      }).catch(err => {
-        vm.$store.dispatch('setMessage', {type: 'error', text: 'Remove of ' + name + ' failed: ' + err})
-        console.error('Remove of ' + name + ' failed: ' + err)
-      }) */
     },
     saveList (liste) {
       let newList = JSON.parse(JSON.stringify(liste))
-      if (liste['_id'] && liste['_rev']) {
-        let rev = { _id: liste['_id'], _rev: liste['_rev'] }
-        newList = Object.assign(newList, rev)
-      }
-      if (newList['_id'] != null) {
-        this.$db.put(this.db, newList).then(() => {
-          this.$store.dispatch('setMessage', {type: 'succes', text: newList.name + ' successfully updated'})
-          this.fetchData()
+      if (liste.id) {
+        this.$firestoreRefs.data.doc(liste.id).set(newList).then(() => {
+          this.$store.commit('setMessage', {type: 'succes', text: newList.name + ' successfully updated'})
         }).catch(err => {
-          this.$store.dispatch('setMessage', {type: 'error', text: 'Update of ' + newList.name + ' failed: ' + err})
+          this.$store.commit('setMessage', {type: 'error', text: 'Update of ' + newList.name + ' failed: ' + err})
           console.error('Update of ' + newList + ' failed: ' + err)
         })
       } else {
-        newList._id = newList.name
-        this.$db.put(this.db, newList).then(response => {
-          this.$store.dispatch('setMessage', {type: 'succes', text: newList.name + ' successfully created'})
-          this.fetchData()
+        this.$firestoreRefs.data.add(newList).then(response => {
+          this.$store.commit('setMessage', {type: 'succes', text: newList.name + ' successfully created'})
         }).catch(err => {
-          this.$store.dispatch('setMessage', {type: 'error', text: 'Creation of ' + newList.name + ' failed: ' + err})
+          this.$store.commit('setMessage', {type: 'error', text: 'Creation of ' + newList.name + ' failed: ' + err})
           console.error('Creation of ' + newList + ' failed: ' + err)
         })
       }
     },
     validEditList (status, liste) {
-      console.log('retest')
       if (status) {
         this.saveList(liste)
         this.editListeShow = false
+      } else {
+        console.log('Validation error')
       }
     }
   }

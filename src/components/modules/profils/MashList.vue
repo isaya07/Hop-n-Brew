@@ -1,10 +1,10 @@
 <template>
   <div class='columns is-multiline is-mobile"'>
-    <div class='column is-3'>
-      <h5>Profils:</h5>
+    <div class='column is-2'>
+      <h5 class="label">Profils:</h5>
     </div>
-    <div class="column is-3">
-      <div class="select">
+    <div class="column is-4">
+      <div class="select is-fullwidth">
         <select v-model="selectedMash" @input="selectMash($event.target.value)">
           <option v-for="option in mashs" v-bind:value="option.name" :key="option.name">
             {{ option.name }}
@@ -208,21 +208,21 @@ export default {
     VInput
   },
 
-  mounted () {
-    // this.$db.sync('mashs', 'http://localhost:5984/mashs')
-    this.$db.gets('mashs').then(rows => {
-      this.mashs = rows
-    }).catch(err => {
-      console.log(err)
-    })
-  },
-
   data () {
     return {
       contentVisible: false,
       selectedMash: this.mashName,
       mashs: [],
       unitList: this.$config.getUnitiesList()
+    }
+  },
+
+  firestore() {
+    return {
+        // Collection
+        mashs: this.$db.collection('mashs'),
+        // Doc
+        // ford: this.$db.collection('cars').doc('ford')
     }
   },
 
@@ -266,6 +266,7 @@ export default {
       }) */
       let test = new Mash(this.$config, Object.assign(mash, {recipe: this.recepice}))
       this.recepice.mash = test
+      this.recepice.mash.id = mash.id
       // console.log(test)
     },
     // toggleContent (comp) {
@@ -284,19 +285,24 @@ export default {
       let number = 0
       let error = false
       let imports = Mash.fromBeerXml(xml)
+      let data
       for (item in imports) {
-        let data = imports[item]
-        data['_id'] = data.name
-        this.$db.put('mashs', data, {force: false}).then(() => {
-          this.$notification.success(data.name + ' successfully imported')
-        }).catch(err => {
-          error = true
-          this.$notification.error('Import of ' + data.name + ' failed: ' + err)
-          console.error('Import of ' + data.name + ' failed: ' + err)
-        })
+        data = imports[item]
         number++
+        this.$firestoreRefs.mashs.add(data).catch(err => {
+          error = err
+        })
+        if (error) break
       }
-      if (!error) this.$notification.success(number + ' mash profile successfully imported')
+      if (error) {
+        this.$store.commit('setMessage', {type: 'error', text: 'Import of ' + data.name + ' failed: ' + error})
+        console.error('Import of ' + data.name + ' failed: ' + error)
+      }
+      if ( !error && number > 1 ) {
+        this.$store.commit('setMessage', {type: 'succes', text: number + ' mashs profile successfully imported'})
+      } else if (!error) {
+        this.$store.commit('setMessage', {type: 'succes', text: data.name + 'mash profile successfully imported'})
+      }
 
       // this.recepice.mash = Mash.fromBeerXml(xml, this.recepice, this.$config)
       // console.log(this.recepice.mash)
@@ -344,12 +350,10 @@ export default {
       // console.log(this.mashs)
       // console.log(this.this.selectedmash)
       let name = this.recepice.mash.name
-      this.$db.remove('mashs', this.recepice.mash).then(response => {
-        console.log(response)
-        this.$notification.success(name + ' successfully removed')
-        this.selectedMash = ''
+      this.$firestoreRefs.mashs.doc(this.recepice.mash.id).delete().then(result => {
+        this.$store.commit('setMessage', {type: 'succes', text: name + ' successfully removed'})
       }).catch(err => {
-        this.$notification.error('Remove of ' + name + ' failed: ' + err)
+        this.$store.commit('setMessage', {type: 'error', text: 'Remove of ' + name + ' failed: ' + err})
         console.error('Remove of ' + name + ' failed: ' + err)
       })
     }

@@ -126,15 +126,18 @@ Object.defineProperties(Vue.prototype, {
   }
 })
 
+let testStrat = 0
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     let olduser = store.getters.user
-    if (!olduser || !olduser.email || olduser.email !== user.email) store.dispatch('autoSignIn', user)
+    if (!olduser || !olduser.email || olduser.email !== user.email) store.commit('setUser', user)
+  }
+  if (testStrat === 0) {
+    testStrat = 1
+    new Vue({
+      router,
+      store,
+      ...App
+    }).$mount('#app')
   }
 })
-
-new Vue({
-  router,
-  store,
-  ...App
-}).$mount('#app')

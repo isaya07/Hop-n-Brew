@@ -1,17 +1,13 @@
 <template>
   <div>
-    <div v-for="(lists, type) in ingredientList"
-      class=""
-      :key="type">
-      <div class=''>
-        <div class="columns">
-          <h5 class='column'>{{type | capitalize}}</h5>
-          <add-ingredient class='column' :type="type" @add="addIngredient"></add-ingredient>
-        </div>
+    <div v-for="(lists, type) in ingredientList" class="card" :key="type">
+      <div class='card-header'>
+        <p class='card-header-title'>{{type | capitalize}}</p>
+        <add-ingredient class='column' :type="type" @add="addIngredient"></add-ingredient>
       </div>
 
-      <div class="">
-        <div class="columns is-multiline is-mobile card">
+      <div class="card-content">
+        <div class="columns is-multiline is-mobile">
           <item v-for="(ingredient, key) in lists"
             :itemData="ingredient"
             :key="key"

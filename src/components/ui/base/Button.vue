@@ -2,7 +2,7 @@
   <button 
     class="button"
     :class="classe"
-    v-on:click="sendClick">
+    @click="sendClick">
     <slot>Button</slot>
   </button>
 </template>

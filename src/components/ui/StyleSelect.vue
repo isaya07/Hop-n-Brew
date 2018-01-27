@@ -17,15 +17,12 @@ export default {
   },
 
   mounted () {
-    this.$db.gets('styles').then(rows => {
+    /* this.$db.gets('styles').then(rows => {
       this.styles = rows
       this.selected = this.search(this.selectStyle, 'name', this.styles)
-      /* if (!this.selected && this.sele) {
-        //
-      } */
     }).catch(err => {
       console.log(err)
-    })
+    }) */
   },
 
   props: {
@@ -36,6 +33,15 @@ export default {
     return {
       selected: {name: this.selectStyle} || '',
       styles: []
+    }
+  },
+
+  firestore() {
+    return {
+        // Collection
+        styles: this.$db.collection('styles'),
+        // Doc
+        // ford: this.$db.collection('cars').doc('ford')
     }
   },
 

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <my-button @click="showModal()">
+    <v-button @click="showModal()" :class="'is-info'">
       <span class="icon is-small">
         <icon :icon="['fas', 'plus']" />
       </span>
       <span>
         Add
       </span>
-    </my-button>
+    </v-button>
     <modal
       v-if="modalVisible"
       :title="modalTitle"
@@ -96,7 +96,7 @@ import Modal from 'components/layout/Modal'
 import Loader from 'components/ui/Loader'
 import Item from 'components/ui//Item'
 import Hop from 'api/recettes/Hop'
-import MyButton from 'components/ui/base/MyButton'
+import VButton from 'components/ui/base/Button'
 import MySearch from 'components/ui/base/MySearch'
 import VInput from 'components/ui/base/Input'
 import VTextarea from 'components/ui/base/Textarea'
@@ -108,7 +108,7 @@ export default {
     Modal,
     Item,
     Loader,
-    MyButton,
+    VButton,
     MySearch,
     VInput,
     VTextarea,

@@ -61,9 +61,6 @@ export default {
   }, */
 
   created () {
-    if (this.$auth.currentUser) {
-      this.$store.dispatch('autoSignIn', this.$auth.currentUser)
-    }
     // this.$myProgress.start(300)
     // this.$bus.$emit('progress', 'start')
     this.$router.beforeEach((to, from, next) => {

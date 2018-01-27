@@ -75,7 +75,7 @@ export default {
   },
 
   props: {
-    formData: Fermentable
+    formData: [Fermentable, Object]
   },
 
   computed: {

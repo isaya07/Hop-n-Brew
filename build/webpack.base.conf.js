@@ -12,7 +12,7 @@ const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
   enforce: 'pre',
-  include: [resolve('app'), resolve('server')],
+  include: [resolve('src'), resolve('server')],
   options: {
     formatter: require('eslint-friendly-formatter'),
     emitWarning: !config.dev.showEslintErrorsInOverlay
@@ -22,7 +22,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './app/index.js'/* ,
+    app: './src/index.js'/* ,
     vendor: [
       'vue',
       'vue-router',
@@ -47,12 +47,12 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      'api': resolve('app/api'),
-      'assets': resolve('app/assets'),
-      'layout': resolve('app/components/layout'),
-      'modules': resolve('app/components/modules'),
-      'components': resolve('app/components'),
-      '@': resolve('app')
+      'api': resolve('src/api'),
+      'assets': resolve('src/assets'),
+      'layout': resolve('src/components/layout'),
+      'modules': resolve('src/components/modules'),
+      'components': resolve('src/components'),
+      '@': resolve('src')
     }/* ,
     symlinks: false */
   },
@@ -67,7 +67,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('app'), resolve('server')]
+        include: [resolve('src'), resolve('server')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { firebaseMutations } from 'vuexfire'
+// import { firebaseMutations } from 'vuexfire'
 import createLogger from 'vuex/dist/logger'
 // import { state, mutations } from './mutations'
 import user from './user'
@@ -34,13 +34,13 @@ export default new Vuex.Store({
     user: user,
     shared: shared
   },
-  state: {
+  /* state: {
     recepices: [],
     user: null
   },
   mutations: {
     ...firebaseMutations
-  },
+  }, */
   plugins: process.env.NODE_ENV !== 'production'
     ? [logger]
     : []

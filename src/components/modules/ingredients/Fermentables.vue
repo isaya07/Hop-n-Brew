@@ -43,7 +43,6 @@ export default {
 
   methods: {
     validated (status, liste) {
-      console.log('test')
       this.$bus.$emit('validated', status, liste)
     },
     updateFormData (data) {
