@@ -128,7 +128,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scopped>
 @import './../../assets/scss/settings';
 
 .area-chart {
@@ -137,7 +137,7 @@ export default {
 
   .focus {
     .focus-point {
-      fill: $alert-color;
+      fill: $warning;
     }
 
     .focus-text {
@@ -148,30 +148,30 @@ export default {
 
   path.domain {
     transition: all .4s ease;
-    stroke: $darker-grey;
+    stroke: $grey-darker;
   }
 
   text {
-    font-family: $font-stack;
+    font-family: $family-primary;
     // font-size: 100%;
   }
 
   g.tick {
-    fill: $darker-grey;
+    fill: $grey-darker;
     line {
-      stroke: $darker-grey;
+      stroke: $grey-darker;
     }
   }
 
   path.area {
     transition: all .4s ease;
-    fill: rgba($alert-color, 0.4);
+    fill: rgba($warning, 0.4);
     stroke: none;
   }
   path.line {
     transition: all .4s ease;
     fill: none;
-    stroke: $alert-color;
+    stroke: $warning;
     stroke-width: 1.5;
   }
   path.selector {

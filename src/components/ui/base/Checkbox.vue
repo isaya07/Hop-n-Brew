@@ -1,6 +1,6 @@
 <template>
-  <div class="field">
-    <div class="control">
+  <div class="field-body">
+    <p class="control field">
       <input type="checkbox"
         class="is-checkradio"
         :id="label"
@@ -15,7 +15,7 @@
       <p v-show="errors.has(label)" class="help is-danger">
         {{ errors.first(label) }}
       </p>
-    </div>
+    </p>
   </div>
 </template>
 
@@ -34,7 +34,6 @@ export default {
 
   methods: {
     updateValue: function(value) {
-      console.log(value)
       this.$emit('input', value)
     }
   }

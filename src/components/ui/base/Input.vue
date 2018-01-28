@@ -1,11 +1,11 @@
 <template>
   <div class="field is-horizontal">
-    <div v-if="label" class="field-label has-text-left">
+    <div v-if="label" class="field-label is-normal has-text-left">
       <label class="label">{{ label }} :</label>
     </div>
     <div class="field-body">
       <div class="field">
-        <div class="control">
+        <div class="control is-expanded">
           <input 
             class="input"
             :type="type"

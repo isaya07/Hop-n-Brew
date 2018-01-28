@@ -1,11 +1,11 @@
 <template>
   <div class="field is-horizontal">
-    <div class="field-label has-text-left">
+    <div class="field-label is-normal has-text-left">
       <label class="label">{{ label }} :</label>
     </div>
     <div class="field-body">
       <div class="field">
-        <div class="control">
+        <div class="control is-expanded">
           <div class="select is-fullwidth" :class="{'is-danger': errors.has(label) }">
             <select 
               v-bind:value="value"

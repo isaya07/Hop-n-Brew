@@ -9,27 +9,20 @@
           </span>
         </p>
       </div>
-      <div v-if="inStock" class="field-label">
-        <label class="label">In stock</label>
-      </div>
-      <div v-if="inStock" class="field-body">
-        <div class="field">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox" v-model="instock">
-            </label>
-          </div>
-        </div>
-      </div>
+      <checkbox v-if="inStock" :label="'In stock'" :rules="''" v-model="instock"></checkbox>
       <div class="field-body">
-        <div class="field is-grouped">
-          <import v-if="createImport" @import="importPress">Import</import>
-          <button v-if="createImport" type="button" class="button" @click="create">
-            <span class="icon is-small">
-              <icon :icon="['fas', 'plus']" />
-            </span>
-            <span>Create</span>
-          </button>
+        <div class="field is-grouped is-grouped-right">
+          <p class="control">
+            <import v-if="createImport" @import="importPress">Import</import>
+          </p>
+          <p class="control">
+            <button v-if="createImport" type="button" class="button" @click="create">
+              <span class="icon is-small">
+                <icon :icon="['fas', 'plus']" />
+              </span>
+              <span>Create</span>
+            </button>
+          </p>
         </div>
       </div>
     </div>
@@ -52,27 +45,27 @@
             <td data-th='Action'>
               <div class="field is-grouped">
                 <p class="control">
-                  <button type="button" v-if="editBut" class="button is-info is-small has-tooltip" data-tooltip="edit entry" @click="edit(entry)">
+                  <button type="button" v-if="editBut" class="button is-info is-small tooltip" data-tooltip="edit entry" @click="edit(entry)">
                     <span class="icon is-small">
                       <icon :icon="['fas', 'edit']" />
                     </span>
-                    <span>Edit</span>
+                    <!-- <span class="is-hidden-mobile">Edit</span> -->
                   </button>
                 </p>
                 <p class="control">
-                  <button type="button" v-if="deleteBut" class="button is-danger is-small has-tooltip" data-tooltip="delete entry" @click="supress(entry)">
+                  <button type="button" v-if="deleteBut" class="button is-danger is-small tooltip" data-tooltip="delete entry" @click="supress(entry)">
                     <span class="icon is-small">
                       <icon :icon="['fas', 'trash']" />
                     </span>
-                    <span>Delete</span>
+                    <!-- <span class="is-hidden-mobile">Delete</span> -->
                   </button>
                 </p>
                 <p class="control">
-                  <button type="button" v-if="addBut" class="button is-success is-small has-tooltip" data-tooltip="add entry" @click="add(entry)">
+                  <button type="button" v-if="addBut" class="button is-success is-small tooltip" data-tooltip="add entry" @click="add(entry)">
                     <span class="icon is-small">
                       <icon :icon="['fas', 'plus']" />
                     </span>
-                    <span>Add</span>
+                    <!-- <span class="is-hidden-mobile">Add</span> -->
                   </button>
                 </p>
               </div>
@@ -86,12 +79,14 @@
 
 <script>
 import Import from 'components/ui/Import'
+import Checkbox from 'components/ui/base/Checkbox'
 
 export default {
   name: 'tablelist',
 
   components: {
-    Import
+    Import,
+    Checkbox
   },
 
   props: {
@@ -207,5 +202,5 @@ export default {
 
 <style lang="scss">
 // @import './../../../assets/scss/table';
-@import './../../../assets/scss/tooltip';
+// @import './../../../assets/scss/tooltip';
 </style>

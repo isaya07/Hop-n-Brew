@@ -1,6 +1,6 @@
 <template>
-  <div class="field is-horizontal">
-    <div class="field-label has-text-left">
+  <div class="field has-addons">
+    <div class="field-label is-expanded has-text-left">
       <label class="label">{{ label }} :</label>
     </div>
     <div class="field-body">
@@ -8,44 +8,53 @@
         <div class="control">
           <input 
             class="input"
-            type="text"
+            type="number"
+            step=".1"
             ref="input"
             :name="label"
             :placeholder="label"
             v-bind:value="value"
             v-on:input="updateValue($event.target.value)"
             v-validate="rules"
-            :disabled="disabled"
-            :readonly="readonly"
             :class="{'is-danger': errors.has(label) }">
+          <div class="select" :class="{'is-danger': errors.has(label) }">
+            <select
+              v-bind:value="unitie"
+              v-on:input="updateValue($event.target.value)"
+              :name="label"
+              v-validate="rules">
+              <option v-for="option in unitieList" selected="value" :key="option">
+                {{ option }}
+              </option>
+            </select>
+            <p v-show="errors.has(label)" class="help is-danger">{{ errors.first(label) }}</p>
+          </div>
           <p v-show="errors.has(label)" class="help is-danger">
             {{ errors.first(label) }}
           </p>
         </div>
       </div>
     </div>
-  </div>
+  </div>  
 </template>
 
 <script>
 export default {
-  name: "MyTextInput",
+  name: "v-unitie-input",
 
   props: {
     label: String,
-    value: [String, Number],
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
+    value: Number,
+    unitie: String,
+    unitieList: Array,
     rules: {
       type: String,
-      default: 'required|myAlpha'
+      default: 'required|myNumeric'
     }
+  },
+
+  computed: {
+
   },
 
   methods: {
@@ -53,7 +62,6 @@ export default {
       this.$emit('input', value)
     }
   }
-
 }
 </script>
 

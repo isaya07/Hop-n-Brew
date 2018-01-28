@@ -15,7 +15,7 @@
                 <v-input label="Name" v-model="recipe.name"></v-input>
               </div>
               <div class="column is-half">
-                <my-select label="Type" v-model="recipe.type" :typeList="recipe.getTypeList()"></my-select>
+                <v-select label="Type" v-model="recipe.type" :typeList="recipe.getTypeList()"></v-select>
               </div>
               <div class="column is-half">
                 <v-input label="Brewer" v-model="recipe.brewer"></v-input>
@@ -30,7 +30,7 @@
                 <v-input label="Batch size" :value="recipe.getBatchSize($config.volUnitie)" @input="value => { recipe.setBatchSize(value, $config.volUnitie) }" :rules="'myNumeric'"></v-input>
               </div>
               <div class="column is-half">
-                <my-checkbox label="Calc Boil Volume" v-model="recipe.equipment.calcBoilVolume" :rules="''"></my-checkbox>
+                <v-checkbox label="Calc Boil Volume" v-model="recipe.equipment.calcBoilVolume" :rules="''"></v-checkbox>
               </div>
               <div class="column is-half">
                 <v-input label="Boil size" :value="recipe.getBoilSize($config.volUnitie)" @input="value => { recipe.setBoilSize(value, $config.volUnitie) }" :disabled="recipe.equipment.calcBoilVolume" :rules="'myNumeric'"></v-input>
@@ -100,9 +100,9 @@ import IngredientsList from 'components/modules/recettes/IngredientsList'
 import StylesSelect from 'components/ui/StyleSelect'
 import MashList from 'components/modules/profils/MashList'
 import VInput from 'components/ui/base/Input'
-import MySelect from 'components/ui/form/base/MySelect'
+import VSelect from 'components/ui/base/Select'
 import VTextarea from 'components/ui/base/Textarea'
-import MyCheckbox from 'components/ui/form/base/MyCheckbox'
+import VCheckbox from 'components/ui/base/Checkbox'
 
 export default {
   components: {
@@ -111,9 +111,9 @@ export default {
     StylesSelect,
     MashList,
     VInput,
-    MySelect,
+    VSelect,
     VTextarea,
-    MyCheckbox
+    VCheckbox
   },
 
   data () {
