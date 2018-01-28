@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h3 class="title is-3 has-text-centered">{{$route.params.item.name === 'new' ? 'Create recipe' : recipe.name}}</h3>
+    <h3 class="title is-3 has-text-centered">{{$route.params.name === 'new' ? 'Create recipe' : recipe.name}}</h3>
     <div class="columns is-multiline is-mobile" v-if="recipe">
       <div class="column is-half">
         <div class="card">
@@ -116,25 +116,16 @@ export default {
     MyCheckbox
   },
 
-  props: ['item'],
-
-  mounted () {
-    // let test
-    // this.fetchData()
-    /* if (this.data) test = new Recipe(this.$config, this.data)
-    else test = new Recipe(this.$config, { name: 'test', brewer: 'isaya', notes: 'testing notes' })
-    this.recipe = test */
+  data () {
+    return {
+      data: null,
+      recipe: new Recipe(this.$config, this.data)
+    }
   },
 
-  data () {
-    /* let test
-    let data = this.fetchData()
-    console.log(data)
-    if (data) test = new Recipe(this.$config, data)
-    else test = new Recipe(this.$config, { name: 'test', brewer: 'isaya', notes: 'testing notes' }) */
+  firestore() {
     return {
-      recipe: new Recipe(this.$config, this.item)/* ,
-      data: this.$route.params.item */
+      data: this.$db.collection('recipes').doc(this.$route.params.name),
     }
   },
 
@@ -164,7 +155,6 @@ export default {
     data: function () {
       if (this.data) this.recipe = new Recipe(this.$config, this.data)
       else this.recipe = new Recipe(this.$config, { name: 'test', brewer: 'isaya', notes: 'testing notes' })
-      console.log(this.recipe)
     }
   },
 
@@ -180,25 +170,6 @@ export default {
     },
     addMashStep (mashStep) {
       console.log(mashStep)
-    },
-    fetchData () {
-      if (this.$route.params.name !== 'new') {
-        console.log(this.$route.params)
-        this.$binding('recipes', this.$db.db.collection('recipes').where('_id', '==', this.$route.params.name))
-        .then((data) => {
-          this.data = data
-          // this.$bus.$emit('progress', 'stop')
-        }).catch(err => {
-          console.error(err)
-        })
-        /* this.$db.get('recipes', this.$route.params.name).then(rows => {
-          this.data = rows
-        }).catch(err => {
-          console.log(err)
-        }) */
-      } else {
-        this.data = {}
-      }
     }
   }
 }

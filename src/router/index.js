@@ -21,7 +21,7 @@ function generateRoute (menu = [], routes = []) {
 
 const router = new Router({
   mode: 'history', // hash ou history ou abstract
-  linkActiveClass: '',
+  linkActiveClass: 'is-active',
   base: '/',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
@@ -33,7 +33,7 @@ const router = new Router({
     },
     ...generateRoute(Menu),
     {
-      path: '/edit/:item',
+      path: '/edit/:name',
       name: 'edit',
       component: () => import('components/modules/recettes/EditRecette'),
       meta: { requiresAuth: true },

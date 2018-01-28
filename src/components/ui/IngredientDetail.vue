@@ -32,15 +32,9 @@ export default {
 
   data () {
     return {
-      nshow: ['toBeerXml', '_id'].concat(this.notShow)
+      nshow: ['toBeerXml', 'version'].concat(this.notShow)
     }
   },
-
-  /* computed: {
-    nshow: function () {
-      return ['toBeerXml', '_id'].concat(notShow)
-    }
-  }, */
 
   methods: {
     keyTest: function (key) {
@@ -54,6 +48,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scopped>
+  .item-last {
+    // flex-grow: 0.9;
+    order: 1;
+  }
 </style>

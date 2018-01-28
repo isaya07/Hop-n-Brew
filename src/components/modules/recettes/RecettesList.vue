@@ -12,7 +12,7 @@
     <div class="field-body">
       <div class="field is-grouped">
         <import @import="importPress">Import</import>
-        <button type="button" class="button" @click="add">
+        <button type="button" class="button is-info" @click="add">
           <span class="icon is-small">
             <icon :icon="['fas', 'plus']" />
           </span>
@@ -23,7 +23,7 @@
   </div>
   <ul id="example-1">
     <li v-for="(item, index) in filteredData" :key="index">
-      <router-link :to="{ name: 'edit', params: { item: item }}">{{ item.name }}</router-link>
+      <router-link :to="{ name: 'edit', params: { name: item.id }}">{{ item.name }}</router-link>
     </li>
   </ul>
   <router-view></router-view>
@@ -42,11 +42,6 @@ export default {
   },
 
   mounted () {
-    // this.$db.sync(this.db, 'http://localhost:5984/' + this.db)
-    // this.fetchData()
-    /* this.$bind('data', this.$db.collection(this.db)).catch(err => {
-      console.error(err)
-    }) */
   },
 
   firestore() {
@@ -106,15 +101,6 @@ export default {
   },
 
   methods: {
-    fetchData () {
-      this.$binding(this.db, this.$db.db.collection(this.db))
-      .then((data) => {
-        this.data = data
-        // this.$bus.$emit('progress', 'stop')
-      }).catch(err => {
-        console.error(err)
-      })
-    },
     sortBy (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1

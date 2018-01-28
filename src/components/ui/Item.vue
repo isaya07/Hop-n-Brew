@@ -2,7 +2,7 @@
 <div>
   <div class="field has-addons bottom-null">
     <div class="control">
-      <button class="button" @click="toggleContent">
+      <button class="button is-success" @click="toggleContent">
         <span class="icon is-small">
           <icon :icon="contentVisible ? ['fas', 'minus'] : ['fas', 'plus']" />
         </span>

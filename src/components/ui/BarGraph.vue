@@ -4,27 +4,27 @@
         <div class="column is-2">OG:</div>
         <div class="column is-2">{{ ogData.value }}</div>
         <div class="column is-8">
-          <svg-bar :width="200" :height="20" :data="ogData" :max="0.150"></svg-bar>
+          <svg-bar :width="200" :height="15" :data="ogData" :max="0.150"></svg-bar>
         </div>
         <div class="column is-2">FG:</div>
         <div class="column is-2">{{ fgData.value }}</div>
         <div class="column is-8">
-          <svg-bar :width="200" :height="20" :data="fgData" :max="0.150"></svg-bar>
+          <svg-bar :width="200" :height="15" :data="fgData" :max="0.150"></svg-bar>
         </div>
         <div class="column is-2">IBU:</div>
         <div class="column is-2">{{ ibuData.value }}</div>
         <div class="column is-8">
-          <svg-bar :width="200" :height="20" :data="ibuData" :max="200"></svg-bar>
+          <svg-bar :width="200" :height="15" :data="ibuData" :max="200"></svg-bar>
         </div>
         <div class="column is-2">ABV:</div>
         <div class="column is-2">{{ abvData.value }}</div>
         <div class="column is-8">
-          <svg-bar :width="200" :height="20" :data="abvData" :max="20"></svg-bar>
+          <svg-bar :width="200" :height="15" :data="abvData" :max="20"></svg-bar>
         </div>
         <div class="column is-2">Color:</div>
         <div class="column is-2">{{ colorData.value }}</div>
         <div class="column is-8">
-            <svg-bar :width="200" :height="20" :data="colorData" :max="200"></svg-bar>
+            <svg-bar :width="200" :height="15" :data="colorData" :max="200"></svg-bar>
         </div>
       </div>
   <!-- </div> -->

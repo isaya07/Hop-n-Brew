@@ -3,7 +3,7 @@
     <div v-for="(lists, type) in ingredientList" class="card" :key="type">
       <div class='card-header'>
         <p class='card-header-title'>{{type | capitalize}}</p>
-        <add-ingredient class='column' :type="type" @add="addIngredient"></add-ingredient>
+        <add-ingredient class='card-header-icon' :type="type" @add="addIngredient"></add-ingredient>
       </div>
 
       <div class="card-content">
@@ -69,7 +69,12 @@
               </div>
             </div>
             <div class="control">
-              <button class="button" @click="deleteIngredient(type, ingredient)"><i class="fa fa-trash-o"></i><span class="desktop-only">Remove</span></button>
+              <button class="button is-danger" @click="deleteIngredient(type, ingredient)"><i class="fa fa-trash-o"></i>
+                <span class="icon is-small">
+                  <icon :icon="['fas', 'trash']" />
+                </span>
+                <span class="desktop-only">Remove</span>
+              </button>
             </div>
             <ingredient-detail :ingredient="ingredient" :notShow="['name', 'amount', 'time', 'use']" slot="content"></ingredient-detail>
           </item>
