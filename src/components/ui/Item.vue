@@ -11,7 +11,7 @@
     <slot></slot>
   </div>
   <transition name="fade">
-    <div v-show="contentVisible" class="card">
+    <div v-if="contentVisible" class="card">
       <div class="card-content">
         <slot name="content"></slot>
       </div>

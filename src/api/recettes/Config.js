@@ -23,6 +23,7 @@ export default class Config {
     this.colUnit = 'EBC'
     this.timeUnitie = 'min'
     this.ratioUnitie = 'l/kg'
+    this.bitterUnitie = 'IBU'
     // this.refactUnit = 'Brix'
     if (options) {
       Object.assign(this, options)
@@ -45,6 +46,7 @@ export default class Config {
     this.colUnit = 'EBC'
     this.timeUnitie = 'min'
     this.ratioUnitie = 'l/kg'
+    this.bitterUnitie = 'IBU'
   }
 
   setImperial () {
@@ -59,5 +61,6 @@ export default class Config {
     this.colUnit = 'SRM'
     this.timeUnitie = 'min'
     this.ratioUnitie = 'qt/lb'
+    this.bitterUnitie = 'IBU'
   }
 }

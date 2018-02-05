@@ -139,7 +139,7 @@ export default class Utils {
         }
         return Utils.roundDecimal(ret, dec)
       } else {
-        return val
+        return Utils.roundDecimal(val, dec)
       }
     }
   }
@@ -276,4 +276,11 @@ export default class Utils {
   }
 
   static isType = (type, val) => val.constructor.name.toLowerCase() === type
+
+  static getDate = () => {
+    let date = new Date()
+    let year = '' + date.getFullYear()
+    let month = date.getMonth() + 1
+    return date.getDate() + '/' + month + '/' + year.slice(2)
+  }
 }

@@ -36,6 +36,11 @@ $link: #6ed3cf;
 $link-invert: findColorInvert($link);
 $success: #92B558;
 $success-invert: findColorInvert($success);
+$coconut-milk: #F0EDE5;
+$whitesmoke: #fbfbf9;
+//@import "./node_modules/bulma/sass/utilities/derived-variables.sass";
+
+$body-background-color: $whitesmoke;
 
 // 4. Import the rest of Bulma
 
@@ -52,4 +57,18 @@ $colors: map-merge($colors, $addColors); */
 // $gap: 24px;
 $card-background-color: $white-bis;
 $card-header-background-color: $white-ter;
+
 $modal-content-width: 720px;
+$modal-card-spacing: 40px;
+$modal-card-head-padding: 10px;
+$modal-card-head-background-color: $body-background-color;
+$modal-card-body-background-color: $white-ter;
+$modal-card-body-padding: 20px;
+
+$tooltip-background-color: $grey;
+
+$table-cell-border: 1px solid $grey-lighter;
+$table-background-color: $body-background-color;
+$table-row-hover-background-color: lighten($body-background-color, 5%);
+$table-striped-row-even-background-color: lighten($body-background-color, 5%);
+$table-striped-row-even-hover-background-color: darken($body-background-color, 5%);

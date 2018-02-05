@@ -6,13 +6,54 @@
 
 @import "settings";
 @import "./node_modules/bulma/bulma";
+@import '~bulma-calendar';
 @import '~bulma-checkradio';
 @import '~bulma-tooltip';
+@import 'divider';
 // @import "bulma_material/overrides";
 // @import 'ext/myform';
-@import "my";
+// @import "my";
+
+  .bottom-null {
+    margin-bottom: 0 !important; 
+    padding-bottom: 0 !important;
+  }
+
+@include desktop {
+  .field-label {
+    flex-basis: auto;
+    margin-right: 0.5em;
+    flex-grow: 0;
+  }
+}
 
 .card-header {
   background-color: $card-header-background-color;
   box-shadow: none;
+}
+
+.modal-card-foot {
+  justify-content: flex-end;
+}
+
+.is-normal {
+  .is-checkradio[type="radio"] + label,
+  .is-checkradio[type="checkbox"] + label {
+    vertical-align: top;
+    margin-left: 0;
+  }
+}
+
+.is-checkradio[type="radio"] + label::before, 
+.is-checkradio[type="checkbox"] + label::before {
+  background-color: $white;
+}
+
+.table thead {
+  background-color: darken($body-background-color, 10%);
+}
+
+
+.navbar {
+  box-shadow: 0 5px 10px rgba($black, 0.1)
 }

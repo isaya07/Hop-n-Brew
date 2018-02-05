@@ -1,6 +1,6 @@
 <template>
 <section class="section">
-  <div class="field is-horizontal">
+  <!-- <div class="field is-horizontal">
     <div class="field-body">
       <p class="control field has-icons-right">
         <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
@@ -26,19 +26,34 @@
       <router-link :to="{ name: 'edit', params: { name: item.id }}">{{ item.name }}</router-link>
     </li>
   </ul>
-  <router-view></router-view>
+  <router-view></router-view> -->
+    <card-list
+      :ingredientsData="data"
+      :butEdit="true"
+      :butDelete="true"
+      :type="'recipes'"
+      :search="true"
+      :createImport="true"
+      @import="importPress"
+      @supress="supress"
+      @create="add"
+      @edit="edit">
+    </card-list>
+
 </section>
 </template>
 
 <script>
 import Import from 'components/ui/Import'
 import Recipe from 'api/recettes/Recipe'
+import CardList from 'components/ui/list/CardList'
 
 export default {
   name: 'recettesList',
 
   components: {
-    Import
+    Import,
+    CardList
   },
 
   mounted () {
@@ -127,17 +142,11 @@ export default {
       }
       if (!error) this.$notification.success(number + ' ' + this.db + ' successfully imported')
     },
-    // toggle (index) {
-    //  this.index = (this.index === index) ? '' : index
-    // }
     add () {
       this.$router.push({name: 'edit', params: { name: 'new' }})
-      // router.push({ name: 'user', params: { userId: 123 }})
     },
     edit (entry) {
-      this.modalTitle = 'Editer Recettes'
-      this.$emit('update', entry)
-      this.showModal = true
+      this.$router.push({name: 'edit', params: { name: entry.id }})
     },
     supress (entry) {
       this.$http.delete('/api/recettes/' + entry.id)
@@ -146,9 +155,6 @@ export default {
         }, response => {
           console.log('error from delete request /api/recettes')
         })
-    },
-    closeModal () {
-      this.showModal = false
     }
   }
 }
@@ -156,7 +162,4 @@ export default {
 
 <style lang="scss">
 
-.title .icon.is-angle.asc {
-  transform: rotate(180deg);
-}
 </style>

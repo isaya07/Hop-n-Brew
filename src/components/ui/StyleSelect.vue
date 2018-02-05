@@ -1,9 +1,20 @@
 <template>
-  <search-select :options="styles"
-                :selectedOption="selected"
-                placeholder="Select a style"
-                @select="onSelect">
-  </search-select>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal has-text-left">
+      <label class="label">Style :</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control is-expanded">
+          <search-select :options="styles"
+            :selectedOption="selected"
+            placeholder="Select a style"
+            @select="onSelect">
+          </search-select>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -4,6 +4,7 @@
     <card-list
       v-if="card"
       :ingredientsData="data"
+      :type="type"
       :butEdit="editBut"
       :butDelete="deleteBut"
       :search="true"
@@ -45,9 +46,6 @@
 import TableList from 'components/ui/list/TableList'
 import CardList from 'components/ui/list/CardList'
 import Modal from 'components/layout/Modal'
-import firebase from 'firebase/app'
-
-const db = firebase.firestore()
 
 export default {
   name: 'List',
@@ -125,7 +123,7 @@ export default {
       this.editListeShow = true
     },
     editList (liste) {
-      this.editListeTitle = 'Edit ' + this.$options.filters.capitalize(this.type)
+      this.editListeTitle = 'Edit ' + liste.name
       // let newList = {...this.newFunc(liste), ...{id: liste.id}}
       // console.log(newList)
       this.$emit('dataForm', liste)
@@ -141,8 +139,10 @@ export default {
       })
     },
     saveList (liste) {
+      console.log('savelist')
       let newList = JSON.parse(JSON.stringify(liste))
       if (liste.id) {
+        console.log('merde savelist', this.$firestoreRefs)
         this.$firestoreRefs.data.doc(liste.id).set(newList).then(() => {
           this.$store.commit('setMessage', {type: 'succes', text: newList.name + ' successfully updated'})
         }).catch(err => {
@@ -166,6 +166,6 @@ export default {
         console.log('Validation error')
       }
     }
-  }
+  },
 }
 </script>

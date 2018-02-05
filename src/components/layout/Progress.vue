@@ -30,17 +30,20 @@ export default {
     }
   },
   methods: {
+    startTimer () {
+      this.state.timer = setInterval(() => {
+        this.increase(this.state.cut * Math.random())
+        if (this.percent >= 100) {
+          this.finish()
+          // clearInterval(this.state.timer)
+        }
+      }, 100)
+    },
     start (time) {
       this.percent = 0
       this.show = true
       this.state.cut = 10000 / Math.floor(time)
-      this.state.timer = setInterval(() => {
-        this.increase(this.state.cut * Math.random())
-        if (this.percent > 95) {
-          this.finish()
-          clearInterval(this.state.timer)
-        }
-      }, 100)
+      this.startTimer()
     },
     increase (num) {
       this.percent = this.percent + Math.floor(num)
@@ -49,13 +52,7 @@ export default {
       clearInterval(this.state.timer)
     },
     play () {
-      this.state.timer = setInterval(() => {
-        this.increase(this.state.cut * Math.random())
-        if (this.percent >= 100) {
-          this.finish()
-          clearInterval(this.state.timer)
-        }
-      }, 100)
+      this.startTimer()
     },
     finish () {
       this.percent = 100
@@ -97,7 +94,7 @@ export default {
 .progress {
   // margin-top: -3px;
   z-index: 999999;
-  background-color: $info;
+  background-color: $primary;
   height: 3px;
   top: 0;
   left: 0;

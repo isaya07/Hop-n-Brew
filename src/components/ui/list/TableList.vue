@@ -1,22 +1,17 @@
 <template>
   <div class="txtcenter">
-    <div class="field is-horizontal">
-      <div class="field-body">
-        <p class="control field has-icons-right">
-          <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
-          <span class="icon is-small is-right">
-            <icon :icon="['fas', 'search']" />
-          </span>
-        </p>
+    <div class="columns is-multiline is-mobile">
+      <div class="column is-12-mobile is-6-tablet">
+        <v-search-input v-model="filterKey"></v-search-input>
       </div>
-      <checkbox v-if="inStock" :label="'In stock'" :rules="''" v-model="instock"></checkbox>
-      <div class="field-body">
+      <div class="column"></div>
+      <div  v-if="createImport" class="column is-narrow">
         <div class="field is-grouped is-grouped-right">
           <p class="control">
-            <import v-if="createImport" @import="importPress">Import</import>
+            <import @import="importPress">Import</import>
           </p>
           <p class="control">
-            <button v-if="createImport" type="button" class="button" @click="create">
+            <button type="button" class="button is-info" @click="create">
               <span class="icon is-small">
                 <icon :icon="['fas', 'plus']" />
               </span>
@@ -30,9 +25,13 @@
       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th class="" v-for="key in columns" :key="key" @click="sortBy(key)" :class="{ active: sortKey == key }">
-              {{ key | capitalize }}
-              <span :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+            <th class="" v-for="key in columns" :key="key" @click="sortBy(key)" :class="{ 'is-active': sortKey == key }">
+              <div class="has-dropdown">
+                <div class="table-header">
+                  {{ key | capitalize }}
+                </div>
+                <span :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+              </div>
             </th>
             <th class="">Action</th>
           </tr>
@@ -45,7 +44,7 @@
             <td data-th='Action'>
               <div class="field is-grouped">
                 <p class="control">
-                  <button type="button" v-if="editBut" class="button is-info is-small tooltip" data-tooltip="edit entry" @click="edit(entry)">
+                  <button type="button" v-if="editBut" class="button is-info is-small tooltip" data-tooltip="Edit item" @click="edit(entry)">
                     <span class="icon is-small">
                       <icon :icon="['fas', 'edit']" />
                     </span>
@@ -53,7 +52,7 @@
                   </button>
                 </p>
                 <p class="control">
-                  <button type="button" v-if="deleteBut" class="button is-danger is-small tooltip" data-tooltip="delete entry" @click="supress(entry)">
+                  <button type="button" v-if="deleteBut" class="button is-danger is-small tooltip" data-tooltip="Delete item" @click="supress(entry)">
                     <span class="icon is-small">
                       <icon :icon="['fas', 'trash']" />
                     </span>
@@ -61,7 +60,7 @@
                   </button>
                 </p>
                 <p class="control">
-                  <button type="button" v-if="addBut" class="button is-success is-small tooltip" data-tooltip="add entry" @click="add(entry)">
+                  <button type="button" v-if="addBut" class="button is-success is-small tooltip" data-tooltip="Add item" @click="add(entry)">
                     <span class="icon is-small">
                       <icon :icon="['fas', 'plus']" />
                     </span>
@@ -80,12 +79,14 @@
 <script>
 import Import from 'components/ui/Import'
 import Checkbox from 'components/ui/base/Checkbox'
+import VSearchInput from 'components/ui/base/SearchInput'
 
 export default {
   name: 'tablelist',
 
   components: {
     Import,
+    VSearchInput,
     Checkbox
   },
 
@@ -203,4 +204,31 @@ export default {
 <style lang="scss">
 // @import './../../../assets/scss/table';
 // @import './../../../assets/scss/tooltip';
+@import './../../../assets/scss/settings';
+@import "./node_modules/bulma/sass/utilities/mixins";
+th {
+  &.is-active {
+    color: $link !important; 
+  }
+  .has-dropdown {
+    position: relative;
+    display: flex;
+    .table-header {
+      flex-grow: 2;
+    }
+    span {
+      @include arrow($link);
+      display: flex;
+      position: relative;
+      align-self: center;
+      &.dsc {
+        transform: rotate(-45deg);
+      }
+      &.asc {
+        transform: rotate(135deg);
+        margin-top: 0.5em;
+      }
+    }
+  }
+}
 </style>

@@ -1,8 +1,8 @@
 <template>
-  <section>
+  <section v-if="recipe">
     <h3 class="title is-3 has-text-centered">{{$route.params.name === 'new' ? 'Create recipe' : recipe.name}}</h3>
-    <div class="columns is-multiline is-mobile" v-if="recipe">
-      <div class="column is-half">
+    <div class="columns is-multiline is-mobile is-centered" v-if="recipe">
+      <div class="column is-narrow-mobile is-11-mobile is-6-desktop is-6-tablet">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
@@ -15,37 +15,37 @@
                 <v-input label="Name" v-model="recipe.name"></v-input>
               </div>
               <div class="column is-half">
+                <date-picker label="Date" v-model="recipe.date"></date-picker>
+              </div>
+              <div class="column is-half">
                 <v-select label="Type" v-model="recipe.type" :typeList="recipe.getTypeList()"></v-select>
               </div>
               <div class="column is-half">
                 <v-input label="Brewer" v-model="recipe.brewer"></v-input>
               </div>
               <div class="column is-half">
-                <v-input label="Efficiency" v-model="recipe.efficiency" :rules="'myNumeric'"></v-input>
+                <v-input label="Efficiency" v-model.number.lazy="recipe.efficiency" :rules="'myNumeric'"></v-input>
               </div>
               <div class="column is-half">
-                <v-input label="Boil Time" v-model="recipe.boilTime" :rules="'myNumeric'"></v-input>
+                <v-input label="Boil Time" v-model.number.lazy="recipe.boilTime" :rules="'myNumeric'"></v-input>
               </div>
               <div class="column is-half">
-                <v-input label="Batch size" :value="recipe.getBatchSize($config.volUnitie)" @input="value => { recipe.setBatchSize(value, $config.volUnitie) }" :rules="'myNumeric'"></v-input>
+                <v-input label="Batch size" v-model.number.lazy="batchSize" :rules="'myNumeric'"></v-input>
               </div>
               <div class="column is-half">
                 <v-checkbox label="Calc Boil Volume" v-model="recipe.equipment.calcBoilVolume" :rules="''"></v-checkbox>
               </div>
               <div class="column is-half">
-                <v-input label="Boil size" :value="recipe.getBoilSize($config.volUnitie)" @input="value => { recipe.setBoilSize(value, $config.volUnitie) }" :disabled="recipe.equipment.calcBoilVolume" :rules="'myNumeric'"></v-input>
+                <v-input label="Boil size" v-model.number.lazy="boilSize" :readonly="recipe.equipment.calcBoilVolume" :rules="'myNumeric'"></v-input>
               </div>
-              <div class="column is-one-quarter">
-                <label class="label">Style :</label>
-              </div>
-              <div class="column is-three-quarter">
+              <div class="column is-full">
                 <styles-select :selectStyle="recipe.style.name" @style-change="updateStyle"></styles-select>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="column is-half">
+      <div class="column is-narrow-mobile is-11-mobile is-6-desktop is-6-tablet">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="column is-full">
+      <div class="column is-narrow-mobile is-11-mobile is-12-desktop is-11-tablet">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
@@ -66,25 +66,36 @@
           </header>
           <div class="card-content">
             <ingredients-list
-              class="content"
               :recepice="recipe"
               :ingredientsData="ingredients"
               @add="addIngredient"
               @delete="deleteIngredient">
             </ingredients-list>
-            <v-textarea label="Notes" v-model="recipe.notes" :rules="'myAlpha'"></v-textarea>
           </div>
         </div>
       </div>
-      <div class="column is-full">
+      <div class="column is-narrow-mobile is-11-mobile is-12-desktop is-11-tablet">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
-              Mash
+              Profile
             </p>
           </header>
           <div class="card-content">
-            <mash-list class="card-content" :recepice="recipe" :mashName="'test'" @add="addMashStep"></mash-list>
+            <tabs>
+              <tab class="box" :name="'Mashs'">
+                <mash-list class="card-content" :recepice="recipe" @add="addMashStep"></mash-list>
+              </tab>
+              <tab class="box" :name="'Starter'">
+                Comming...
+              </tab>
+              <tab class="box" :name="'Fermentation'">
+                Comming...
+              </tab>
+              <tab class="box" :name="'Notes'">
+                <v-textarea label="Notes" v-model="recipe.notes" :rules="'myAlpha'"></v-textarea>
+              </tab>
+            </tabs>
           </div>
         </div>
       </div>
@@ -103,6 +114,8 @@ import VInput from 'components/ui/base/Input'
 import VSelect from 'components/ui/base/Select'
 import VTextarea from 'components/ui/base/Textarea'
 import VCheckbox from 'components/ui/base/Checkbox'
+import {Tab, Tabs} from 'components/ui/Tabs'
+import DatePicker from 'components/ui/DatePicker'
 
 export default {
   components: {
@@ -113,13 +126,16 @@ export default {
     VInput,
     VSelect,
     VTextarea,
-    VCheckbox
+    VCheckbox,
+    Tab,
+    Tabs,
+    DatePicker
   },
 
   data () {
     return {
       data: null,
-      recipe: new Recipe(this.$config, this.data)
+      recipe: new Recipe(this.$config, this.data)// new Recipe(this.$config, this.data)
     }
   },
 
@@ -130,6 +146,10 @@ export default {
   },
 
   computed: {
+    /* recipe () {
+      if (this.data) return new Recipe(this.$config, this.data)
+      else return new Recipe(this.$config, { name: 'New Recepice', brewer: 'New Brewer', notes: 'Testing notes' })
+    }, */
     ingredients () {
       return this.recipe.fermentables.concat(this.recipe.hops).concat(this.recipe.yeasts)
     },

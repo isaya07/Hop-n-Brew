@@ -1,39 +1,49 @@
 <template>
   <section class="txtcenter">
-    <div class="field is-horizontal">
-      <div class="field-body">
-        <p class="control field has-icons-right">
-          <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
-          <span class="icon is-small is-right">
-            <icon :icon="['fas', 'search']" />
-          </span>
-        </p>
+    <div class="columns is-multiline is-mobile">
+      <div class="column is-12-mobile is-6-tablet">
+        <v-search-input v-model="filterKey"></v-search-input>
       </div>
-      <div class="field-body">
-        <div class="field is-grouped">
-          <import v-if="createImport" @import="importPress">Import</import>
-          <button v-if="createImport" type="button" class="button" @click="create">
-            <span class="icon is-small">
-              <icon :icon="['fas', 'plus']" />
-            </span>
-            <span>Create</span>
-          </button>
+      <div class="column"></div>
+      <div  v-if="createImport" class="column is-narrow">
+        <div class="field is-grouped is-grouped-right">
+          <p class="control">
+            <import @import="importPress">Import</import>
+          </p>
+          <p class="control">
+            <button type="button" class="button is-info" @click="create">
+              <span class="icon is-small">
+                <icon :icon="['fas', 'plus']" />
+              </span>
+              <span>Create</span>
+            </button>
+          </p>
         </div>
       </div>
     </div>
     <div class="columns is-multiline is-mobile" v-if="filteredData">
-      <div class="column is-3" v-for="(entry, index) in filteredData" :key="index">
+      <div class="column is-6-mobile is-4-tablet is-3-desktop is-2-widescreen" v-for="(entry, index) in filteredData" :key="index">
         <div class="card">
-          <header class="card-header txtcenter">
-              <p class="card-header-title is-link" @click="edit(entry)">{{ entry.name }}</p>
-              <button class="button" @click="supress(entry)">Delete</button>
+          <header class="card-header">
+            <p class="card-header-title has-text-info" @click="edit(entry)">
+              {{ entry.name }}
+            </p>
+            <a class="card-header-icon tooltip" data-tooltip="Delete item" @click="supress(entry)">
+              <span class="icon is-small has-text-danger">
+                <icon :icon="['fas', 'trash']" />
+              </span>
+              <!-- <span>Delete</span> -->
+            </a>
           </header>
           <div class="card-content">
-              <img src="~assets/img/marmite.svg" alt="Equipment">
+              <img v-if="type === 'equipment'" src="~assets/img/marmite.svg" @click="edit(entry)" alt="Equipment">
+              <img v-else-if="type === 'recipes'" src="~assets/img/bottle-longneck.svg" @click="edit(entry)" alt="bottle">
           </div>
           <footer class="card-footer">
-            <div class="card-footer-item">Batch : {{ entry.batchSize + ' '}}{{$config.volUnitie | capitalize}}</div>
-            <div class="card-footer-item">Boil : {{ entry.boilSize + ' ' }}{{$config.volUnitie | capitalize}}</div>
+            <div class="card-footer-item" v-if="type === 'equipment' || type === 'recipes'">Batch : {{ entry.batchSize + ' '}}{{$config.volUnitie | capitalize}}</div>
+            <div class="card-footer-item" v-if="type === 'equipment'">Boil : {{ entry.boilSize + ' ' }}{{$config.volUnitie | capitalize}}</div>
+            <div class="card-footer-item" v-if="type === 'recipes'">Bitterness : {{ entry.ibu + ' ' }}</div>
+            <div class="card-footer-item" v-if="type === 'recipes'">Alc : {{ entry.estAbv + ' ' }}</div>
           </footer>
         </div>
       </div>
@@ -43,16 +53,18 @@
 
 <script>
 import Import from 'components/ui/Import'
+import VSearchInput from 'components/ui/base/SearchInput'
 
 export default {
   name: 'cardlist',
 
   components: {
-    Import
+    Import,
+    VSearchInput
   },
 
   props: {
-    types: String,
+    type: String,
     butAdd: {
       type: Boolean,
       default: false
@@ -148,3 +160,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .card-content {
+    flex-grow: 2;
+    img {
+      max-height: 10em;
+      cursor: pointer;
+    }
+  }
+  .card-header-title {
+    cursor: pointer;
+  }
+  .card-footer {
+    flex-direction: column;
+  }
+}
+
+</style>

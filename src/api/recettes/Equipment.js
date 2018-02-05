@@ -6,17 +6,17 @@ export default class Equipment {
     this.name = 'default'
     this.boilSize = 23
     this.batchSize = 20
-    this.tunVolume = null
-    this.tunWeight = null
-    this.tunSpecificHeat = null
-    this.topUpWater = null
-    this.trubChillerLoss = 1
+    this.tunVolume = 30
+    this.tunWeight = 3
+    this.tunSpecificHeat = 0.12
+    this.topUpWater = 0
+    this.trubChillerLoss = 2
     this.evapRate = 10
-    this.boilTime = null
+    this.boilTime = 60
     this.calcBoilVolume = true
-    this.lauterDeadspace = null
-    this.topUpKettle = null
-    this.hopUtilization = null
+    this.lauterDeadspace = 0
+    this.topUpKettle = 0
+    this.hopUtilization = 100
     this.notes = ''
     this.displayBoilSize = ''
     this.displayBatchSize = ''
@@ -31,7 +31,22 @@ export default class Equipment {
     }
   }
 
+  getVolLost () {
+    return this.trubChillerLoss + this.lauterDeadspace
+  }
+
+  getVolEvap () {
+    // console.log('evap : ', ((this.batchSize / (1 - (this.equipment.evapRate / 100))) * this.boilTime / 60) - this.batchSize)
+    return this.batchSize * (this.evapRate / 100) * this.boilTime / 60
+  }
+
+  calculBoilSize () {
+    let boil = Utils.roundDecimal((this.batchSize + this.getVolEvap() + this.getVolLost()) * 1.04, 1) // 1.04 coefficient de rétraction du moût entre 100°C et 20°C
+    this.setBoilSize(boil, 'l')
+  }
+
   getBoilSize (unit) {
+    if (this.calcBoilVolume) this.calculBoilSize()
     if (this.displayBoilSize) {
       return Utils.convertTo(this.displayBoilSize, unit)
     } else {

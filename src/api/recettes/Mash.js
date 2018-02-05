@@ -1,16 +1,20 @@
+import Event from './event'
+
 import MashStep from './MashStep'
 import {importXML, exportXML} from './Import' // importXml, camelize, htmlEncode, underscorize
 import Utils from 'api/recettes/Utils'
 
 export default class Mash {
   constructor (config, options) {
+    // super()
+
     this.name = ''
     this._grainTemp = 20
     this.mashSteps = []
     this.notes = ''
     this._tunTemp = 20
     this._spargeTemp = 77
-    this.empatSize = 0
+    this._empatSize = 0 // not in xml
     this.ph = 5.4
     this._tunWeight = 0
     this.tunSpecificHeat = 0.12
@@ -40,14 +44,12 @@ export default class Mash {
     this.calcData()
   }
 
-  get spargeVol () {
+  getSpargeVol (unit) {
     let stepsNum = this.mashSteps.length
     if (stepsNum !== 0) {
-      // console.log(stepsNum, this.mashSteps)
       let grains = this.recipe.getFementablesTotal()
-      let ratio = this.mashSteps[stepsNum - 1]._waterGrainRatio
-      // console.log(grains, ratio, grains * ratio)
-      return this.recipe.boilSize - grains * ratio
+      let test = this.recipe.boilSize - (0.96 * grains) * (this.getStepWaterRatio() - 1)
+      return Utils.convertTo(test, unit, 2)
     }
   }
 
@@ -111,31 +113,49 @@ export default class Mash {
     }
   }
 
-  updateStepWaterRatio = (stepName, ratio) => {
+  /* updateStepWaterRatio = (stepName, ratio) => {
     for (let i = 0; i < this.mashSteps.length; i++) {
       if (this.mashSteps[i].name !== stepName) {
         this.mashSteps[i].waterGrainRatio = ratio
       }
     }
+  } */
+
+  getStepNum = (stepName) => {
+    return this.mashSteps.findIndex(element => {
+      return element.name === stepName
+    }) + 1
+  }
+
+  getStepWaterRatio = (stepName, unit = 'l/kg') => {
+    let ratio = 0
+    let stepNum = this.getStepNum(stepName)
+    if (stepNum <= 0) stepNum = this.mashSteps.length - 1
+    // console.log(stepNum)
+    for (let i = 0; i < stepNum; i++) {
+      if (this.mashSteps[i].type !== 'Temperature') ratio += this.mashSteps[i].getWaterGrainRatio()
+    }
+    return ratio
   }
 
   calcData = () => {
     for (let i = 0; i < this.mashSteps.length; i++) {
       this.mashSteps[i].calcData()
     }
+    // Event.emit('event', Event)
   }
 
-  calcEmpatVol = () => {
-    let stepsVol
+  get empatSize () {
+    let stepsVol = 0
     for (let i = 0; i < this.mashSteps.length; i++) {
       if (this.mashSteps[i].type.toLowerCase() === 'infusion') {
         stepsVol += this.mashSteps[i].infuseAmount
       }
     }
-    this.empatSize = stepsVol
+    return stepsVol
   }
 
-  calcSpargeVol = () => {
+  /* calcSpargeVol = () => {
     let stepsNum = this.mashSteps.length
     if (stepsNum !== 0) {
       console.log(stepsNum, this.mashSteps)
@@ -144,7 +164,7 @@ export default class Mash {
       console.log(ratio)
       this.spargVol = this.recipe.boilSize - grains * (ratio - 1)
     }
-  }
+  } */
 
   stepSort = (a, b) => {
     if (a.stepTemp < b.stepTemp) return -1
@@ -153,18 +173,19 @@ export default class Mash {
   }
 
   add = (options) => {
-    if (options) {
-      Object.assign(options, {mash: this})
-    } else {
-      options = {mash: this}
-    }
-    this.mashSteps.push(new MashStep(this._config, options))
+    if (!options) options = {}
+    this.mashSteps.push(new MashStep(this._config, Object.assign(options, {mash: this})))
     this.mashSteps.sort(this.stepSort)
   }
 
   remove = (id) => {
     this.mashSteps.splice(id, 1)
     this.mashSteps.sort(this.stepSort)
+  }
+
+  getMashSteps = () => {
+    this.mashSteps.sort(this.stepSort)
+    return this.mashSteps
   }
 
   toJSON = () => {

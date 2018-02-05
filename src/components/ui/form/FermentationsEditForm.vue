@@ -1,142 +1,115 @@
 <template>
-  <form>
-    <div class="grid-4">
-      <div class="col is-1-6">
-        <label class="middle">Name</label>
+  <div class="columns is-multiline is-mobile">
+    <div class="column is-full">
+      <area-chart :chartData="chartData" :width="500" :height="150" :xLabel="'day'" :yLabel="'°' + $config.tempUnitie"></area-chart>
+    </div>
+    <div class="column is-6">
+      <v-input label="Name" v-model="data.name"></v-input>
+    </div>
+    <div class="column is-6">
+      <v-select label="Type" v-model="data.fermentationStages" :typeList="stagesList" :optionType="true"></v-select>
+    </div>
+    <template v-if="data.fermentationStages >= 1">
+      <div class="column is-4">
+        <v-input label="Primary Age" :align="'has-text-right'" v-model.number="data.primaryAge" :rules="'required|myNumeric'"></v-input>
       </div>
-      <div class="col is-1-3">
-        <input name="name" v-model="formData.name" v-validate="'required|myAlpha'" :class="{'is-alert': errors.has('name') }" type="text" placeholder="Name">
-        <span v-show="errors.has('name')" class="pure-form-message is-alert">{{ errors.first('name') }}</span>
+      <div class="column  is-2">
+        <div class="field-label is-normal has-text-weight-bold has-text-left">
+          {{ ageUnit | capitalize}}
+        </div>
       </div>
-      <div class="col is-1-6">
-        <label class="middle">Type</label>
+      <div class="column  is-4">
+        <v-input label="Primary Temp" :align="'has-text-right'" v-model.number="primaryTemp" :rules="'required|myNumeric'"></v-input>
       </div>
-      <div class="col is-1-3">
-        <select name="fermentationStages" v-model.number="formData.fermentationStages" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('fermentationStages') }">
-          <option disabled value="">Please select one</option>
-          <option v-for="(option, index) in stagesList" :value="option.value" selected="selected" :key="index">
-            {{ option.text }}
-          </option>
-        </select>
-        <span v-show="errors.has('fermentationStages')" class="pure-form-message is-alert">{{ errors.first('fermentationStages') }}</span>
+      <div class="column  is-2">
+        <div class="field-label is-normal has-text-weight-bold has-text-left">
+          {{ $config.tempUnitie | capitalize}}
+        </div>
+      </div>
+    </template>
+    <template v-if="data.fermentationStages >= 2">
+      <div class="column is-4">
+        <v-input label="Secondary Age" :align="'has-text-right'" v-model.number="data.secondaryAge" :rules="'required|myNumeric'"></v-input>
+      </div>
+      <div class="column  is-2">
+        <div class="field-label is-normal has-text-weight-bold has-text-left">
+          {{ ageUnit | capitalize}}
+        </div>
+      </div>
+      <div class="column  is-4">
+        <v-input label="Secondary Temp" :align="'has-text-right'" v-model.number="secondaryTemp" :rules="'required|myNumeric'"></v-input>
+      </div>
+      <div class="column  is-2">
+        <div class="field-label is-normal has-text-weight-bold has-text-left">
+          {{ $config.tempUnitie | capitalize}}
+        </div>
+      </div>
+    </template>
+    <template v-if="data.fermentationStages >= 3">
+      <div class="column is-4">
+        <v-input label="Tertiary Age" :align="'has-text-right'" v-model.number="data.tertiaryAge" :rules="'required|myNumeric'"></v-input>
+      </div>
+      <div class="column  is-2">
+        <div class="field-label is-normal has-text-weight-bold has-text-left">
+          {{ ageUnit | capitalize}}
+        </div>
+      </div>
+      <div class="column  is-4">
+        <v-input label="Tertiary Temp" :align="'has-text-right'" v-model.number="tertiaryTemp" :rules="'required|myNumeric'"></v-input>
+      </div>
+      <div class="column  is-2">
+        <div class="field-label is-normal has-text-weight-bold has-text-left">
+          {{ $config.tempUnitie | capitalize}}
+        </div>
+      </div>
+    </template>
+    <div class="column is-4">
+      <v-input label="Age" :align="'has-text-right'" v-model.number="data.age" :rules="'required|myNumeric'"></v-input>
+    </div>
+    <div class="column  is-2">
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ ageUnit | capitalize}}
       </div>
     </div>
-
-    <div class="grid middle">
-      <div class="col is-full middle">
-        <area-chart :chartData="chartData" :width="500" :height="150" :xLabel="'day'" :yLabel="'°' + $config.tempUnitie"></area-chart>
+    <div class="column  is-4">
+      <v-input label="Age Temp" :align="'has-text-right'" v-model.number="ageTemp" :rules="'required|myNumeric'"></v-input>
+    </div>
+    <div class="column  is-2">
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.tempUnitie | capitalize}}
       </div>
     </div>
-
-    <div v-if="formData.fermentationStages >= 1" class="grid-4">
-      <div class="col is-1-6">
-        <label class="middle">Primary Age</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="primaryAge" v-model.number="formData.primaryAge" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('primaryAge') }" type="text" placeholder="primary age">
-        <span v-show="errors.has('primaryAge')" class="pure-form-message is-alert">{{ errors.first('primaryAge') }}</span>
-      </div>
-      <div class="col is-1-6">
-        {{ ageUnit }}
-      </div>
-      <div class="col is-1-6">
-        <label class="middle">Primary Temp</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="primaryTemp" v-model.number="primaryTemp" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('primaryTemp') }" type="text">
-        <span v-show="errors.has('primaryTemp')" class="pure-form-message is-alert">{{ errors.first('primaryTemp') }}</span>
-      </div>
-      <div class="col is-1-6">
-        °{{ $config.tempUnitie }}
-      </div>
+    <div class="column">
+      <v-textarea label="Notes" v-model="data.notes" :rules="'myAlpha'"></v-textarea>
     </div>
-    <div v-if="formData.fermentationStages >= 2" class="grid-4">
-      <div class="col is-1-6">
-        <label class="middle">Secondary Age</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="secondaryAge" v-model.number="formData.secondaryAge" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('secondaryAge') }" type="text" placeholder="secondary age">
-        <span v-show="errors.has('secondaryAge')" class="pure-form-message is-alert">{{ errors.first('secondaryAge') }}</span>
-      </div>
-      <div class="col is-1-6">
-        {{ ageUnit }}
-      </div>
-      <div class="col is-1-6">
-        <label class="middle">Secondary Temp</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="secondaryTemp" v-model.number="secondaryTemp" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('secondaryTemp') }" type="text">
-        <span v-show="errors.has('secondaryTemp')" class="pure-form-message is-alert">{{ errors.first('secondaryTemp') }}</span>
-      </div>
-      <div class="col is-1-6">
-        °{{ $config.tempUnitie }}
-      </div>
-    </div>
-    <div v-if="formData.fermentationStages >= 3" class="grid-4">
-      <div class="col is-1-6">
-        <label class="middle">Tertiary Age</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="tertiaryAge" v-model.number="formData.tertiaryAge" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('tertiaryAge') }" type="text" placeholder="tertiary age">
-        <span v-show="errors.has('tertiaryAge')" class="pure-form-message is-alert">{{ errors.first('tertiaryAge') }}</span>
-      </div>
-      <div class="col is-1-6">
-        {{ ageUnit }}
-      </div>
-      <div class="col is-1-6">
-        <label class="middle">Tertiary Temp</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="tertiaryTemp" v-model.number="tertiaryTemp" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('tertiaryTemp') }" type="text">
-        <span v-show="errors.has('tertiaryTemp')" class="pure-form-message is-alert">{{ errors.first('tertiaryTemp') }}</span>
-      </div>
-      <div class="col is-1-6">
-        °{{ $config.tempUnitie }}
-      </div>
-    </div>
-    <div class="grid-4">
-      <div class="col is-1-6">
-        <label class="middle">Age</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="age" v-model.number="formData.age" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('age') }" type="text" placeholder="age">
-        <span v-show="errors.has('age')" class="pure-form-message is-alert">{{ errors.first('age') }}</span>
-      </div>
-      <div class="col is-1-6">
-        {{ ageUnit }}
-      </div>
-      <div class="col is-1-6">
-        <label class="middle">Age Temp</label>
-      </div>
-      <div class="col is-1-6">
-        <input name="ageTemp" v-model.number="ageTemp" v-validate="'required|myNumeric'" :class="{'is-alert': errors.has('ageTemp') }" type="text">
-        <span v-show="errors.has('ageTemp')" class="pure-form-message is-alert">{{ errors.first('ageTemp') }}</span>
-      </div>
-      <div class="col is-1-6">
-        °{{ $config.tempUnitie }}
-      </div>
-    </div>
-  </form>
+  </div>
 </template>
 
 <script>
 import Fermentation from 'api/recettes/Fermentation'
 // import Chart from 'components/ui/Chart'
 import AreaChart from 'components/ui/AreaChart'
+import VInput from 'components/ui/base/Input'
+import VTextarea from 'components/ui/base/Textarea'
+import VSelect from 'components/ui/base/Select'
 
 export default {
   name: 'FermentationEditForm',
 
   components: {
-    AreaChart
+    AreaChart,
+    VInput,
+    VSelect,
+    VTextarea
   },
 
   props: {
-    formData: Fermentation
+    formData: Object
   },
 
   data () {
     return {
+      data: new Fermentation(this.formData),
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
@@ -167,17 +140,17 @@ export default {
       let data = []
       let x = 0
       data.push({x: x, y: this.primaryTemp})
-      x += this.formData.primaryAge
+      x += this.data.primaryAge
       data.push({x: x, y: this.primaryTemp})
-      if (this.formData.fermentationStages >= 2) {
-        x += this.formData.secondaryAge
+      if (this.data.fermentationStages >= 2) {
+        x += this.data.secondaryAge
         data.push({x: x, y: this.secondaryTemp})
       }
-      if (this.formData.fermentationStages >= 3) {
-        x += this.formData.tertiaryAge
+      if (this.data.fermentationStages >= 3) {
+        x += this.data.tertiaryAge
         data.push({x: x, y: this.tertiaryTemp})
       }
-      x += this.formData.age
+      x += this.data.age
       data.push({x: x, y: this.ageTemp})
       return data
       // return [this.primaryTemp, this.secondaryTemp, this.tertiaryTemp, this.ageTemp]
@@ -197,49 +170,50 @@ export default {
       } */
     },
     stagesList () {
-      return this.formData.getStagesList()
+      return Fermentation.getStagesList()
     },
     primaryTemp: {
       get: function () {
-        return this.formData.getPrimaryTemp(this.$config.tempUnitie.toLowerCase())
+        return this.data.getPrimaryTemp(this.$config.tempUnitie.toLowerCase())
       },
       set: function (value) {
-        this.formData.setPrimaryTemp(value, this.$config.tempUnitie.toLowerCase())
+        this.data.setPrimaryTemp(value, this.$config.tempUnitie.toLowerCase())
       }
     },
     secondaryTemp: {
       get: function () {
-        return this.formData.getSecondaryTemp(this.$config.tempUnitie.toLowerCase())
+        return this.data.getSecondaryTemp(this.$config.tempUnitie.toLowerCase())
       },
       set: function (value) {
-        this.formData.setSecondaryTemp(value, this.$config.tempUnitie.toLowerCase())
+        this.data.setSecondaryTemp(value, this.$config.tempUnitie.toLowerCase())
       }
     },
     tertiaryTemp: {
       get: function () {
-        return this.formData.getTertiaryTemp(this.$config.tempUnitie.toLowerCase())
+        return this.data.getTertiaryTemp(this.$config.tempUnitie.toLowerCase())
       },
       set: function (value) {
-        this.formData.setTertiaryTemp(value, this.$config.tempUnitie.toLowerCase())
+        this.data.setTertiaryTemp(value, this.$config.tempUnitie.toLowerCase())
       }
     },
     ageTemp: {
       get: function () {
-        return this.formData.getAgeTemp(this.$config.tempUnitie.toLowerCase())
+        return this.data.getAgeTemp(this.$config.tempUnitie.toLowerCase())
       },
       set: function (value) {
-        this.formData.setAgeTemp(value, this.$config.tempUnitie.toLowerCase())
+        this.data.setAgeTemp(value, this.$config.tempUnitie.toLowerCase())
       }
     }
   },
 
   methods: {
     validateBeforeSubmit () {
-      // this.$validator.validateAll().then(() => {
-      this.$emit('validated', true, this.formData)
-      /* }).catch(() => {
-        this.$emit('validated', false, this.formData)
-      }) */
+      let send = {...this.data, ...{id: this.formData.id}}
+      this.$validator.validateAll().then(() => {
+        this.$emit('validated', true, send)
+      }).catch(() => {
+        this.$emit('validated', false, send)
+      })
     }
   },
 

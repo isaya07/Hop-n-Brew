@@ -17,16 +17,15 @@
       @close="hideModal()"
       @cancel="hideModal()"
       @ok="hideModal()">
-      <div slot="header" class="columns">
+      <div slot="header" class="columns is-multiline is-mobile is-centered">
         <div class="column is-6">
-          <my-search v-model="filterKey"></my-search>
+          <v-search-input v-model="filterKey"></v-search-input>
         </div>
-        <div class="column">
+        <div class="column is-6">
           <label>
             <input type="checkbox" v-model="instock">In stock
           </label>
         </div>
-        <loader :loading="loading"></loader>
         <div v-show="error.has" class="item-inline-error center">
           <span class="form-message is-alert">{{ error.mess }}</span>
         </div>
@@ -40,7 +39,7 @@
             <input class="input" type="text" v-model="ingredient.name" readonly>
           </div>
           <div class="control">
-            <input class="input" type="text" v-model="ingredient.amount">
+            <input class="input" type="text" v-model.number="ingredient.amount">
           </div>
           <div class="control" v-if="type !== 'yeast'">
             <span class="select">
@@ -61,7 +60,7 @@
             </span>
           </div>
           <div class="control" v-if="type === 'hop'">
-            <input class="input" type="text" v-model="ingredient.time">
+            <input class="input" type="text" v-model.number="ingredient.time">
           </div>
           <div class="control" v-if="type === 'hop'">
             <span class="select">
@@ -87,6 +86,11 @@
           <ingredient-detail :ingredient="ingredient" slot="content"></ingredient-detail>
         </item>
       </div>
+      <div class="columns is-mobile is-centered">
+        <div class="column is-narrow">
+          <loader :loading="loading"></loader>
+        </div>
+      </div>
     </modal>
   </div>
 </template>
@@ -97,7 +101,7 @@ import Loader from 'components/ui/Loader'
 import Item from 'components/ui//Item'
 import Hop from 'api/recettes/Hop'
 import VButton from 'components/ui/base/Button'
-import MySearch from 'components/ui/base/MySearch'
+import VSearchInput from 'components/ui/base/SearchInput'
 import VInput from 'components/ui/base/Input'
 import VTextarea from 'components/ui/base/Textarea'
 
@@ -109,7 +113,7 @@ export default {
     Item,
     Loader,
     VButton,
-    MySearch,
+    VSearchInput,
     VInput,
     VTextarea,
     IngredientDetail: () => import('components/ui/IngredientDetail')
@@ -128,19 +132,28 @@ export default {
       instock: false,
       database: this.type + 's',
       unitList: this.$config.getUnitiesList(),
+      useSelect: Hop.getUseList(),
       error: {
         has: false,
         mess: ''
-      }
+      }/* ,
+      lastVisible: '',
+      bottom: false */
     }
   },
+
+/*  firestore() {
+    return {
+        // Collection
+        modalIngredients: this.$db.collection(this.database)
+        // Doc
+        // ford: this.$db.collection('cars').doc('ford')
+    }
+  }, */
 
   computed: {
     modalTitle () {
       return 'Select a ' + this.type
-    },
-    useSelect () {
-      return Hop.getUseList()
     },
     filteredData () {
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
@@ -172,15 +185,30 @@ export default {
       }
     }, */
     showModal () {
-      this.$binding(this.database, this.$db.db.collection(this.database))
+      /* this.$binding(this.database, this.$db.db.collection(this.database))
       .then((data) => {
         this.modalIngredients = data
          this.loading = false
         // this.$bus.$emit('progress', 'stop')
       }).catch(err => {
         console.error(err)
-      })
+      }) */
+      this.loading = true
       this.modalVisible = true
+      this.$nextTick(function () {
+        this.$bind(this.modalIngredients, this.$db.collection(this.database).orderBy("name")/* .limit(25) */).then((result) => {
+          this.modalIngredients = result
+          // this.lastVisible = this.modalIngredients[this.modalIngredients.length-1].id
+          this.loading = false
+          /* document.querySelector('.modal-card-body').addEventListener('scroll', () => {
+            this.bottom = this.bottomVisible()
+          }) */
+        }).catch(err => {
+          console.log(err)
+          this.$store.commit('setMessage', {type: 'error', text: 'Fetch data failed: ' + error})
+          this.loading = false
+        })
+      })
       /* this.$db.gets(this.database).then(rows => {
         this.modalIngredients = rows
         this.loading = false
@@ -190,7 +218,8 @@ export default {
     },
     hideModal () {
       this.modalVisible = false
-      this.loading = true
+      // this.loading = true
+      this.modalIngredients = []
     },
     addIngredient (ingredient) {
       if (ingredient.amount === 0 || ingredient.amount === undefined) {
@@ -206,7 +235,39 @@ export default {
         }
         this.$emit('add', this.type, ingredient)
       }
+    }/* ,
+    bottomVisible() {
+      let element = document.querySelector('.modal-card-body');
+      const scrollY = element.scrollTop
+      const visible = element.clientHeight
+      const pageHeight = element.scrollHeight
+      const bottomOfPage = visible + scrollY >= pageHeight - 20
+      return bottomOfPage || pageHeight < visible
+    },
+    addData() {
+      this.loading = true
+      this.$bind(this.modalIngredients,  this.$db.collection(this.database).orderBy("name").startAfter(this.lastVisible).limit(25)).then( result => {
+      // this.$db.collection(this.database).orderBy("name").startAfter(this.lastVisible).limit(25).get().then( query => {
+        console.log(result)
+        this.modalIngredients = this.modalIngredients.concat(result)
+        this.lastVisible = this.modalIngredients[this.modalIngredients.length-1].id
+        console.log(this.lastVisible, this.modalIngredients[this.modalIngredients.length-1].name)
+        // if (this.bottomVisible()) { this.addData() }
+        this.loading = false
+      }).catch(err => {
+        console.log(err)
+        this.$store.commit('setMessage', {type: 'error', text: 'Fetch data failed: ' + error})
+        this.loading = false
+      })
+    } */
+  },
+
+  /* watch: {
+    bottom(bottom) {
+      if (bottom) {
+        this.addData()
+      }
     }
-  }
+  } */
 }
 </script>

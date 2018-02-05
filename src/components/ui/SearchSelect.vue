@@ -1,5 +1,5 @@
 <template>
-  <div class="search-select select" @click="openOptions">
+  <div class="search-select select  is-fullwidth" @click="openOptions">
     <input type="text"
            class="input search"
            autocomplete="off"

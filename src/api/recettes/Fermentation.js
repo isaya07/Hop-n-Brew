@@ -29,7 +29,7 @@ export default class Fermentation {
     }
   }
 
-  getStagesList () {
+  static getStagesList () {
     return stagesList
   }
 

@@ -3,8 +3,8 @@
 const Menu =
   [
     {
-      name: 'recette',
-      path: '/recette',
+      name: 'recettes',
+      path: '/recettes',
       component: () => import('components/modules/recettes/RecettesList'),
       meta: {
         // icon: 'home',

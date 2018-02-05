@@ -1,3 +1,5 @@
+import Event from './event'
+
 import Fermentable from './Fermentable'
 import Hop from './Hop'
 import Yeast from './Yeast'
@@ -15,16 +17,19 @@ const typeList = ['Extract', 'Partial Mash', 'All Grain']
 
 export default class Recipe {
   constructor (config, options) {
-    this.name = ''
+    // super()
+    // clear event system
+    // Event.removeAllListeners('mash_event')
+
+    this.name = 'New Recipe'
     this.notes = ''
-    this.brewer = ''
-    this.asstBrewer = null
-    this.type = ''
+    this.brewer = 'You'
+    this.asstBrewer = 'Hop\'n Brew'
+    this.type = 'All Grain'
     this.equipment = new Equipment()
     this.style = new Style()
     this.batchSize = 20
     this.boilSize = 23
-    this.calcBoilSize = true
     this.boilTime = 60
     this.efficiency = 75
     this.fermentables = []
@@ -39,7 +44,7 @@ export default class Recipe {
     this.fg = 0
     this.tasteNote = ''
     this.tasteRating = ''
-    this.date = ''
+    this.date = Utils.getDate()
     this.estOg = null
     this.estFg = null
     this.estColor = null
@@ -54,6 +59,7 @@ export default class Recipe {
     this.displayOg = null
     this.displayFg = null
     this._config = config
+    // this.event = Event
     if (options) {
       Object.assign(this, options)
       if (options.fermentables && options.fermentables.length !== 0) {
@@ -89,7 +95,23 @@ export default class Recipe {
       if (options.equipment) {
         this.equipment = new Equipment(options.equipment)
       }
+      if (options.mash) {
+        this.setMash(options.mash)
+        // this.mash = new Mash(config, Object.assign(options.mash, {recipe: this}))
+        // console.log(options.mash, this.mash)
+      }
     }
+
+    // subscribe event
+    // Event.on('event', this.test)
+  }
+
+  test = (test) => {
+    console.log('Recipe event', test, Event)
+  }
+
+  setMash = (mash) => {
+    this.mash = new Mash(this._config, Object.assign(mash, {recipe: this}))
   }
 
   getTypeList () {
@@ -112,21 +134,16 @@ export default class Recipe {
   }
 
   getBoilSize (unit) {
-    if (this.equipment.calcBoilVolume) {
-      return this.calculBoilSize()
+    if (this.equipment.calcBoilVolume) this.calculBoilSize()
+    if (this.displayBoilSize) {
+      return Utils.convertTo(this.displayBoilSize, unit)
     } else {
-      if (this.displayBoilSize) {
-        return Utils.convertTo(this.displayBoilSize, unit)
-      } else {
-        return this.boilSize
-      }
+      return this.boilSize
     }
   }
   setBoilSize (val, unit) {
-    if (!this.equipment.calcBoilVolume) {
-      this.boilSize = val
-      this.displayBoilSize = val + ' ' + unit
-    }
+    this.boilSize = val
+    this.displayBoilSize = val + ' ' + unit
   }
 
   getOg (unit) {
@@ -205,8 +222,18 @@ export default class Recipe {
     // console.log('ABV: ' + this.estAbv)
   }
 
+  getVolLost () {
+    return this.equipment.trubChillerLoss + this.equipment.lauterDeadspace
+  }
+
+  getVolEvap () {
+    // console.log('evap : ', ((this.batchSize / (1 - (this.equipment.evapRate / 100))) * this.boilTime / 60) - this.batchSize)
+    return this.batchSize * (this.equipment.evapRate / 100) * this.boilTime / 60
+  }
+
   calculBoilSize () {
-    return Utils.roundDecimal((this.batchSize / (1 - (this.equipment.evapRate / 100))) * this.boilTime / 60 + this.equipment.trubChillerLoss, 1)
+    let boil = Utils.roundDecimal((this.batchSize + this.getVolEvap() + this.getVolLost()) * 1.04, 1) // 1.04 coefficient de rétraction du moût entre 100°C et 20°C
+    this.setBoilSize(boil, 'l')
   }
 
   updateOg () {
@@ -266,16 +293,45 @@ export default class Recipe {
     // console.log('Calorie: ' + this.calories)
   }
 
+  fermentableSort = (a, b) => {
+    if (a.amount < b.amount) return 1
+    if (a.amount > b.amount) return -1
+    return 0
+  }
+
+  hopSort = (a, b) => {
+    if (a.time < b.time) return 1
+    if (a.time > b.time) return -1
+    return 0
+  }
+
+  getIngredientList (type) {
+    switch (type) {
+      case 'fermentable':
+        return this.fermentables.sort(this.ingredientSort)
+      case 'hop':
+        return this.hops.sort(this.hopSort)
+      case 'yeast':
+        return this.yeasts
+      case 'misc':
+        return this.miscs
+      case 'water':
+        return this.waters
+    }
+  }
+
   add (type, options) {
     let ret
     let updateFunc
     switch (type) {
       case 'fermentable':
         ret = this.fermentables.push(new Fermentable(options))
+        // this.fermentables.sort(this.ingredientSort)
         updateFunc = this.updateOg.bind(this)
         break
       case 'hop':
         ret = this.hops.push(new Hop(options))
+        // this.hops.sort(this.hopSort)
         updateFunc = this.updateIbu.bind(this)
         break
       case 'yeast':

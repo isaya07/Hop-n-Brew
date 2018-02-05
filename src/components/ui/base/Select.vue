@@ -7,15 +7,22 @@
       <div class="field">
         <div class="control is-expanded">
           <div class="select is-fullwidth" :class="{'is-danger': errors.has(label) }">
-            <select 
-              v-bind:value="value"
-              v-on:input="updateValue($event.target.value)"
+            <select
+              :value="value"
+              @input="updateValue($event.target.value)"
               :name="label"
               v-validate="rules">
               <option disabled value="">Please select one</option>
-              <option v-for="option in typeList" selected="value" :key="option">
-                {{ option }}
-              </option>
+              <template v-if="optionType">
+                <option v-for="option in typeList" :key="option.value" v-bind:value="option.value">
+                  {{ option.text }}
+                </option>
+              </template>
+              <template v-else>
+                <option v-for="option in typeList" :key="option">
+                  {{ option }}
+                </option>
+              </template>
             </select>
             <p v-show="errors.has(label)" class="help is-danger">{{ errors.first(label) }}</p>
           </div>
@@ -31,8 +38,12 @@ export default {
 
   props: {
     label: String,
-    value: String,
+    value: [String, Number],
     typeList: Array,
+    optionType: {
+      type: Boolean,
+      default: false
+    },
     rules: {
       type: String,
       default: 'required|myAlpha'
@@ -41,6 +52,7 @@ export default {
 
   methods: {
     updateValue: function(value) {
+      console.log(value)
       this.$emit('input', value)
     }
   }

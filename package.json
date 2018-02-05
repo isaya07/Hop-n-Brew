@@ -2,7 +2,7 @@
     "name": "hop-n-brew",
     "version": "0.1.0",
     "description": "A beer brew software",
-    "main": "app/index.js",
+    "main": "src/index.js",
     "scripts": {
         "browser": "cordova prepare browser && cordova run browser",
         "check": "cordova requirements",
@@ -11,7 +11,7 @@
         "build": "node build/build.js",
         "android": "cordova prepare android && cordova run android",
         "ios": "cordova prepare ios && cordova run ios",
-        "lint": "eslint --ext .js,.vue app"
+        "lint": "eslint --ext .js,.vue src"
     },
     "repository": {
         "type": "git",
@@ -27,6 +27,7 @@
         "@tweenjs/tween.js": "^17.2.0",
         "body-parser": "^1.18.2",
         "bulma": "^0.6.2",
+        "bulma-calendar": "^0.2.0",
         "bulma-checkradio": "^0.1.5",
         "bulma-tooltip": "^0.1.1",
         "cordova-android": "^7.0.0",

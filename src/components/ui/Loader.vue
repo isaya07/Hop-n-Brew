@@ -1,6 +1,6 @@
 <template>
   <div v-show="loading" class="txtcenter is-full">
-    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    <icon :icon="['fas', 'spinner']" class="fa-3x fa-spin" />
     <span class="sr-only">Loading...</span>
   </div>
 </template>

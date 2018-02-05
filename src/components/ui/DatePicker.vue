@@ -9,7 +9,7 @@
           <input 
             class="input"
             :type="type"
-            :id="id"
+            id="datepicker"
             ref="input"
             :name="label"
             :placeholder="label"
@@ -29,8 +29,10 @@
 </template>
 
 <script>
+import DatePicker from 'bulma-calendar/datepicker'
+
 export default {
-  name: "v-input",
+  name: "date-picker",
 
   props: {
     label: String,
@@ -58,6 +60,16 @@ export default {
     },
   },
 
+  data () {
+    return {
+      datepicker: null
+    }
+  },
+
+  mounted () {
+    this.datepicker = new DatePicker( document.getElementById( 'datepicker' ), {startDate: new Date(this.value), dataFormat: 'dd/mm/yy',} )
+  },
+
   methods: {
     updateValue: function(value) {
       this.$emit('input', value)
@@ -66,7 +78,3 @@ export default {
 
 }
 </script>
-
-<style>
-
-</style>

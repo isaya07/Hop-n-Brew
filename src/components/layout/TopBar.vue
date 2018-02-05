@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav id="topbar" class="navbar is-primary is-fixed-top">
+    <nav id="topbar" class="navbar is-fixed-top has-text-weight-bold">
       <div class="navbar-brand">
         <div class="navbar-item">
           <img src="~assets/img/icon.svg" alt="Logo" height="10">
@@ -24,7 +24,7 @@
               <a class="navbar-link">
                 {{ item.name }}
               </a>
-              <div class="navbar-dropdown is-boxed">
+              <div class="navbar-dropdown">
                 <router-link :to="subItem.path" class="navbar-item" :index="idx" v-for="(subItem, id) in item.children" :key="id">
                   {{ subItem.name }}
                 </router-link>

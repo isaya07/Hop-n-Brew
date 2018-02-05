@@ -1,5 +1,5 @@
 <template>
-  <div class="file">
+  <div class="file is-warning">
     <label class="file-label">
       <input @change="inputChange" class="file-input" type="file" name="file">
       <span class="file-cta">

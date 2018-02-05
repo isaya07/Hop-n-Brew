@@ -1,3 +1,5 @@
+import Utils from './recettes/Utils'
+
 const table = {}
 
 /* const prefixes = ['Y', 'Z', 'E', 'P', 'T', 'G', 'M', 'k', 'h', 'da', '', 'd', 'c', 'm', 'u', 'n', 'p', 'f', 'a', 'z', 'y']
@@ -60,6 +62,9 @@ export default class UnitConverter {
     UnitConverter.addUnit('bar', 'bar', 1)
     UnitConverter.addUnit('bar', 'psi', 0.0689476)
     UnitConverter.addUnit('bar', 'kpa', 0.01)
+
+    UnitConverter.addUnit('l/kg', 'qt/lb', ratio => ratio * 0.479305709)
+    UnitConverter.addUnit('qt/lb', 'l/kg', ratio => ratio / 0.479305709)
   }
 
   as (targetUnit) {

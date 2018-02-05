@@ -1,6 +1,6 @@
 <template>
   <div class="area-chart">
-    <svg :width="'100%'" :height="'100%'" :viewBox="'0 0 ' + this.width + ' ' + this.height" :preserveAspectRatio="'xMidYMin meet'">
+    <svg :width="'100%'" :height="'100%'" :viewBox="'0 0 ' + this.width + ' ' + this.height" :preserveAspectRatio="'xMidYMid meet'">
       <g class="chart" :style="{transform: `translate(${margin.left}px, ${margin.top}px)`}">
         <path class="area" :d="paths.area" />
         <path class="line" :d="paths.line" />
@@ -51,8 +51,8 @@ export default {
     createArea: d3.area().x(d => d.x).y0(d => d.y0).y1(d => d.y),
     createLine: d3.line().x(d => d.x).y(d => d.y),
     draw (width, height) {
-      this.scaled.x = d3.scaleLinear().rangeRound([0, width])
-      this.scaled.y = d3.scaleLinear().rangeRound([height, 0])
+      this.scaled.x = d3.scaleLinear().range([0, width])
+      this.scaled.y = d3.scaleLinear().range([height, 0])
       this.scaled.x.domain(d3.extent(this.chartData, d => d.x))
       this.scaled.y.domain([0, d3.max(this.chartData, d => d.y)])
       for (let coord of this.chartData) {
@@ -133,7 +133,7 @@ export default {
 
 .area-chart {
   margin: auto;
-  width: 80%;
+  width: 90%;
 
   .focus {
     .focus-point {
@@ -141,7 +141,7 @@ export default {
     }
 
     .focus-text {
-      font-size: 70%;
+      font-size: 80%;
     }
     // display: none;
   }
