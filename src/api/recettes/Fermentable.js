@@ -38,15 +38,15 @@ export default class Fermentable {
 
   getAmount (unit = 'kg') {
     if (this.displayAmount) {
-      return Utils.convertTo(this.displayAmount, unit)
+      return Utils.convertTo(this.displayAmount, unit, 3)
     } else {
-      return this.amount
+      return Utils.convertTo(this.amount + ' kg', unit, 3)
     }
   }
 
   setAmount (val, unit = 'kg') {
     if (val && val !== this.amount) {
-      this.amount = val
+      this.amount = Utils.convertTo(val + ' ' + unit, 'kg', 3)
       this.displayAmount = val + ' ' + unit
       if (this.parent) this.parent.updateOg()
     }

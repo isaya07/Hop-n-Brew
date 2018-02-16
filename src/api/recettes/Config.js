@@ -7,7 +7,7 @@ const unitiesList = {
   grav: ['sg', 'plato'],
   press: ['bar', 'psi', 'kpa'],
   ratio: ['qt/lb', 'l/kg'],
-  yeast: ['ml', 'g', 'pkg']
+  yeast: ['l', 'ml', 'g', 'pkg']
 }
 
 export default class Config {

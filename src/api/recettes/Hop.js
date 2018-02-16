@@ -33,17 +33,17 @@ export default class Hop {
     }
   }
 
-  getAmount (unit = 'g') {
+  getAmount (unit = 'kg') {
     if (this.displayAmount) {
       return Utils.convertTo(this.displayAmount, unit, 3)
     } else {
-      return this.amount
+      return Utils.convertTo(this.amount + ' kg', unit, 3)
     }
   }
 
-  setAmount (val, unit = 'g') {
+  setAmount (val, unit = 'kg') {
     if (val && val !== this.amount) {
-      this.amount = val
+      this.amount = Utils.convertTo(val + ' ' + unit, 'kg', 3)
       this.displayAmount = val + ' ' + unit
       if (this.parent) this.parent.updateIbu()
     }
@@ -53,13 +53,13 @@ export default class Hop {
     if (this.displayTime) {
       return Utils.convertTo(this.displayTime, unit, 3)
     } else {
-      return this.amount
+      return this.time
     }
   }
 
   setTime (val, unit = 'min') {
-    if (val && val !== this.amount) {
-      this.amount = val
+    if (val && val !== this.time) {
+      this.time = val
       this.displayTime = val + ' ' + unit
       if (this.parent) this.parent.updateIbu()
     }

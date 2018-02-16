@@ -21,15 +21,15 @@ export default class Water {
 
   getAmount (unit = 'l') {
     if (this.displayAmount) {
-      return Utils.convertTo(this.displayAmount, unit)
+      return Utils.convertTo(this.displayAmount, unit, 3)
     } else {
-      return this.amount
+      return Utils.convertTo(this.amount + ' l', unit, 3)
     }
   }
 
   setAmount (val, unit = 'l') {
     if (val && val !== this.amount) {
-      this.amount = val
+      this.amount = Utils.convertTo(val + ' ' + unit, 'l', 3)
       this.displayAmount = val + ' ' + unit
     }
   }

@@ -1,5 +1,6 @@
 <template>
   <section v-if="recipe" class="section">
+    <button class="button is-primary is-pulled-right" @click="saveRecipe">Save</button>
     <h3 class="title is-3 has-text-centered">{{recipe && recipe.name ? recipe.name : ''}}</h3>
     <div class="columns is-multiline is-mobile is-centered" v-if="recipe">
       <div class="column is-12-mobile is-6-tablet">
@@ -58,7 +59,7 @@
                 <v-checkbox label="Calc Boil Volume" v-model="recipe.equipment.calcBoilVolume" :rules="''"></v-checkbox>
               </div>
               <div class="column is-half">
-                <v-input label="Boil size" v-model.number.lazy="boilSize" :unitie="$config.timeUnitie" :readonly="recipe.equipment.calcBoilVolume" :rules="'myNumeric'"></v-input>
+                <v-input label="Boil size" v-model.number.lazy="boilSize" :unitie="$config.volUnitie | capitalize" :readonly="recipe.equipment.calcBoilVolume" :rules="'myNumeric'"></v-input>
               </div>
             </div>
           </div>
@@ -218,6 +219,9 @@ export default {
     },
     saveSelectProfile (test, profil) {
       this.$bus.$emit('save-profile', test, profil)
+    },
+    saveRecipe () {
+      console.log('test save')
     }
   }
 }
