@@ -1,18 +1,18 @@
 <template>
-  <div class="search-select select  is-fullwidth" @click="openOptions">
+  <div class="search-select select is-fullwidth" @click="openOptions">
     <input type="text"
-           class="input search"
-           autocomplete="off"
-           tabindex="0"
-           :value="searchText"
-           @input="updatevalue($event.target.value)"
-           ref="input"
-           :placeholder="placeholder"
-           @blur="blurInput"
-           @keydown.up="prevItem"
-           @keydown.down="nextItem"
-           @keyup.enter="enterItem"
-           @keydown.27="showMenu = false"/>
+      class="input search"
+      autocomplete="off"
+      tabindex="0"
+      :value="searchText"
+      @input="updateValue($event.target.value)"
+      ref="input"
+      :placeholder="placeholder"
+      @blur="blurInput"
+      @keydown.up="prevItem"
+      @keydown.down="nextItem"
+      @keyup.enter="enterItem"
+      @keydown.27="showMenu = false"/>
 
     <div class="menu"
       v-show="showMenu"
@@ -34,155 +34,141 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      options: {
-        type: Array
-      },
-      selectedOption: {
-        type: Object
-      },
-      isError: {
-        type: Boolean,
-        default: false
-      },
-      placeholder: {
-        type: String,
-        default: ''
-      }
+export default {
+  props: {
+    options: {
+      type: Array
     },
-    data () {
-      return {
-        showMenu: false,
-        searchText: this.selectedOption.name || '',
-        // mousedownState: false, // mousedown on option menu
-        pointer: 0
-      }
+    value: String,
+    selectedOption: {
+      type: Object
     },
-    watch: {
-      filteredOptions () {
-        this.pointerAdjust()
-      },
-      selectedOption (newName) {
-        if (newName) this.searchText = newName.name
-      }
+    isError: {
+      type: Boolean,
+      default: false
     },
-    computed: {
-      textClass () {
-        if (!this.selectedOption.name && this.placeholder) {
-          return 'default'
-        } else {
-          return ''
-        }
-      },
-      /* menuClass () {
-        return {
-          // visible: this.showMenu,
-          hidden: !this.showMenu
-        }
-      }, */
-      /* menuStyle () {
-        return {
-          display: this.showMenu ? 'block' : 'none'
-        }
-      }, */
-      filteredOptions () {
-        if (this.searchText) {
-          return this.options.filter(option => {
-            return option.name.match(new RegExp(this.searchText, 'i'))
-          })
-        } else {
-          return this.options
-        }
-      }
+    placeholder: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      showMenu: false,
+      searchText: this.value,
+      // mousedownState: false, // mousedown on option menu
+      pointer: 0
+    }
+  },
+  watch: {
+    filteredOptions () {
+      this.pointerAdjust()
     },
-    methods: {
-      updatevalue (value) {
-        this.openOptions()
-        this.searchText = value
-      },
-      deleteTextOrItem () {
-        if (!this.searchText && this.selectedOption) {
-          this.selectItem({})
-          this.openOptions()
-        }
-      },
-      openOptions () {
-        this.$refs.input.focus()
-        this.showMenu = true
-        this.mousedownState = false
-      },
-      blurInput () {
-        if (!this.mousedownState) {
-          this.searchText = ''
-          this.closeOptions()
-        }
-      },
-      closeOptions () {
-        this.showMenu = false
-      },
-      prevItem () {
-        // set pointer
-        const prevIndex = this.pointer - 1
-        const prevIndexScrollTop = this.$el.offsetHeight * prevIndex
-        console.log(this.$refs.menu.scrollTop)
-        console.log(prevIndexScrollTop)
-        if (prevIndex >= 0) {
-          this.pointer = prevIndex
-        }
-        // move scroll
-        // this.$refs.menu.scrollTop = prevIndexScrollTop
-        const currentMenuHeight = this.$refs.menu.offsetHeight
-        const currentPage = Math.ceil((this.$refs.menu.scrollTop + this.$el.offsetHeight) / currentMenuHeight)
-        const itemPage = Math.ceil(prevIndexScrollTop / currentMenuHeight)
+    value () {
+      this.searchText = this.value
+    }
+  },
 
-        if (currentPage !== itemPage) {
-          this.$refs.menu.scrollTop = (itemPage - 1) * this.$refs.menu.offsetHeight
-        }
-      },
-      nextItem () {
-        // set pointer
-        const nextIndex = this.pointer + 1
-        const nextIndexScrollTop = this.$el.offsetHeight * nextIndex
-        if (nextIndex <= (this.filteredOptions.length - 1)) {
-          this.pointer = nextIndex
-        }
-        // move scroll
-        // const totalHeight = self.filteredOptions.length * self.$el.offsetHeight
-        // const totalPage = Math.ceil(totalHeight / pageSizeHeight)
-        const currentMenuHeight = this.$refs.menu.offsetHeight
-        const currentPage = Math.ceil((this.$refs.menu.scrollTop + this.$el.offsetHeight) / currentMenuHeight)
-        const itemPage = Math.ceil(nextIndexScrollTop / currentMenuHeight)
-
-        if (currentPage !== itemPage) {
-          this.$refs.menu.scrollTop = (itemPage - 1) * this.$refs.menu.offsetHeight
-        }
-      },
-      enterItem () {
-        const currentItem = this.filteredOptions[this.pointer]
-        console.log(currentItem)
-        if (currentItem) {
-          this.selectItem(currentItem)
-        }
-      },
-      pointerSet (index) {
-        this.pointer = index
-      },
-      pointerAdjust () {
-        if (this.pointer >= this.filteredOptions.length - 1) {
-          this.pointer = this.filteredOptions.length ? this.filteredOptions.length - 1 : 0
-        }
-      },
-      mousedownItem () {
-        this.mousedownState = true
-      },
-      selectItem (option) {
-        this.$emit('select', option)
-        // this.searchText = option.name
-        this.closeOptions()
+  computed: {
+    filteredOptions () {
+      if (this.searchText) {
+        return this.options.filter(option => {
+          return option.name.match(new RegExp(this.searchText, 'i'))
+        })
+      } else {
+        return this.options
       }
     }
+  },
+
+  methods: {
+    updateValue (value) {
+      this.openOptions()
+      this.searchText = value
+    },
+    deleteTextOrItem () {
+      if (!this.searchText && this.selectedOption) {
+        this.selectItem({})
+        this.openOptions()
+      }
+    },
+    openOptions () {
+      // this.$refs.input.focus()
+      this.showMenu = true
+      this.mousedownState = false
+    },
+    blurInput () {
+      if (!this.mousedownState) {
+        // this.searchText = ''
+        this.closeOptions()
+      }
+    },
+    closeOptions () {
+      this.showMenu = false
+    },
+    prevItem () {
+      // set pointer
+      const prevIndex = this.pointer - 1
+      const prevIndexScrollTop = this.$el.offsetHeight * prevIndex
+      console.log(this.$refs.menu.scrollTop)
+      console.log(prevIndexScrollTop)
+      if (prevIndex >= 0) {
+        this.pointer = prevIndex
+      }
+      // move scroll
+      // this.$refs.menu.scrollTop = prevIndexScrollTop
+      const currentMenuHeight = this.$refs.menu.offsetHeight
+      const currentPage = Math.ceil((this.$refs.menu.scrollTop + this.$el.offsetHeight) / currentMenuHeight)
+      const itemPage = Math.ceil(prevIndexScrollTop / currentMenuHeight)
+
+      if (currentPage !== itemPage) {
+        this.$refs.menu.scrollTop = (itemPage - 1) * this.$refs.menu.offsetHeight
+      }
+    },
+    nextItem () {
+      // set pointer
+      const nextIndex = this.pointer + 1
+      const nextIndexScrollTop = this.$el.offsetHeight * nextIndex
+      if (nextIndex <= (this.filteredOptions.length - 1)) {
+        this.pointer = nextIndex
+      }
+      // move scroll
+      // const totalHeight = self.filteredOptions.length * self.$el.offsetHeight
+      // const totalPage = Math.ceil(totalHeight / pageSizeHeight)
+      const currentMenuHeight = this.$refs.menu.offsetHeight
+      const currentPage = Math.ceil((this.$refs.menu.scrollTop + this.$el.offsetHeight) / currentMenuHeight)
+      const itemPage = Math.ceil(nextIndexScrollTop / currentMenuHeight)
+
+      if (currentPage !== itemPage) {
+        this.$refs.menu.scrollTop = (itemPage - 1) * this.$refs.menu.offsetHeight
+      }
+    },
+    enterItem () {
+      const currentItem = this.filteredOptions[this.pointer]
+      console.log(currentItem)
+      if (currentItem) {
+        this.selectItem(currentItem)
+      }
+    },
+    pointerSet (index) {
+      this.pointer = index
+    },
+    pointerAdjust () {
+      if (this.pointer >= this.filteredOptions.length - 1) {
+        this.pointer = this.filteredOptions.length ? this.filteredOptions.length - 1 : 0
+      }
+    },
+    mousedownItem () {
+      this.mousedownState = true
+    },
+    selectItem (option) {
+      console.log('select item')
+      this.searchText = option.name
+      this.$emit('input', option)
+      this.closeOptions()
+    }
   }
+}
 </script>
 
 <style lang="scss">
@@ -197,13 +183,13 @@
     }
   }
 }
-    
 
 .search-select {
   .menu {
     background-color: $white;
     border-bottom-left-radius: $radius;
     border-bottom-right-radius: $radius;
+    padding: 0 1em;
     border: 1px solid $border;
     border-top: 0;
     overflow-y: scroll;
@@ -214,9 +200,9 @@
   }
 
   .menu:hover, .menu.active{
-    border: 1px solid $link;
+    border: 1px solid $primary;
     border-top: 0;
-    box-shadow: 0 0 0 0.125em rgba($link, 0.25)
+    box-shadow: 0 0 0 0.125em rgba($primary, 0.25)
   }
 
   .menu > .item:hover {

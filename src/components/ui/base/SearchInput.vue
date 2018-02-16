@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: "v-search-input",
+  name: 'v-search-input',
 
   props: {
     label: {
@@ -31,7 +31,7 @@ export default {
   },
 
   methods: {
-    updateValue: function(value) {
+    updateValue (value) {
       this.$emit('input', value)
     }
   }

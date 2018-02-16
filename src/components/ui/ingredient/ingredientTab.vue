@@ -1,10 +1,7 @@
 <template>
-<div class='columns is-multiline is-mobile'>
-  <div class="column"></div>
-  <div class="column is-narrow">
-    <add-ingredient class='' :type="type" @add="addIngredient"></add-ingredient>
-  </div>
+<div class='is-clearfix'>
   <ingredient-item v-for="data in lists" :key="data.id" :ingredient="data" :type="type" @delete="deleteIngredient"></ingredient-item>
+  <add-ingredient class='is-pulled-right' :type="type" @add="addIngredient"></add-ingredient>
 </div>
 </template>
 

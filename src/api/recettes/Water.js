@@ -4,7 +4,7 @@ import {importXML, exportXML} from './Import'
 export default class Water {
   constructor (options) {
     this.name = ''
-    this._amount = null
+    this.amount = null
     this.calcium = null
     this.bicarbonate = null
     this.sulfate = null
@@ -19,23 +19,25 @@ export default class Water {
     }
   }
 
-  get amount () {
+  getAmount (unit = 'l') {
     if (this.displayAmount) {
-      return Utils.convertVol(this.displayAmount).value
+      return Utils.convertTo(this.displayAmount, unit)
     } else {
-      return this._amount
+      return this.amount
     }
   }
 
-  set amount (val) {
-    this._amount = val
-    this.displayAmount = val + ' ' + this._config.weightUnitie
+  setAmount (val, unit = 'l') {
+    if (val && val !== this.amount) {
+      this.amount = val
+      this.displayAmount = val + ' ' + unit
+    }
   }
 
-  toJSON () {
+  /* toJSON () {
     return {
       name: this.name,
-      amount: this._amount,
+      amount: this.amount,
       calcium: this.calcium,
       bicarbonate: this.bicarbonate,
       sulfate: this.sulfate,
@@ -46,7 +48,7 @@ export default class Water {
       displayAmount: this.displayAmount,
       notes: this.notes
     }
-  }
+  } */
 
   static fromBeerXml (xml) {
     return importXML(xml, 'water')

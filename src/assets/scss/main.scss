@@ -5,25 +5,44 @@
 // @import "bulma_material/variables";
 
 @import "settings";
-@import "./node_modules/bulma/bulma";
-@import '~bulma-calendar';
+@import "myBulma";
+// @import '~bulma-calendar';
 @import '~bulma-checkradio';
 @import '~bulma-tooltip';
-@import 'divider';
+@import 'tables';
 // @import "bulma_material/overrides";
 // @import 'ext/myform';
 // @import "my";
 
-  .bottom-null {
+ /* .bottom-null {
     margin-bottom: 0 !important; 
     padding-bottom: 0 !important;
-  }
+  } */
 
-@include desktop {
+/* @include desktop {
   .field-label {
     flex-basis: auto;
     margin-right: 0.5em;
     flex-grow: 0;
+  }
+} */
+
+@include tablet {
+  .field-label {
+    flex-basis: auto;
+    margin-right: 0.5em;
+    flex-grow: 0;
+  }
+}
+html {
+  font-size: 14px;
+}
+@include desktop {
+  html {
+    font-size: 16px;
+  }
+  body {
+    // line-height: 1.4;
   }
 }
 
@@ -32,8 +51,16 @@
   box-shadow: none;
 }
 
+.card-content.is-small-padding {
+  padding: 0.75rem;
+}
+
 .modal-card-foot {
   justify-content: flex-end;
+}
+
+.box:not(:last-child) {
+  margin-bottom: 0.75rem;
 }
 
 .is-normal {
@@ -53,7 +80,23 @@
   background-color: darken($body-background-color, 10%);
 }
 
-
-.navbar {
-  box-shadow: 0 5px 10px rgba($black, 0.1)
+// for file input in buttons container
+.buttons {
+  .file:not(:last-child) {
+    margin-right: 0.5rem;
+  }
+  .file {
+    margin-bottom: 0.5rem;
+  }
+  &.has-addons {
+    .file:not(:last-child) {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      margin-right: -1px;
+    }
+    .file:not(:first-child) {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
 }

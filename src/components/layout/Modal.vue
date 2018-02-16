@@ -5,16 +5,16 @@
       <div class ="modal-card" :class="size">
         <header class="modal-card-head has-text-centered">
           <p class="modal-card-title">{{ title }}</p>
-          <button class="delete" aria-label="close" @click="close"></button>          
+          <button class="delete" aria-label="close" @click="close"></button>
         </header>
         <section class="modal-card-body" @keydown.27="close">
           <slot name="header">
           </slot>
           <slot></slot>
         </section>
-        <footer  class="modal-card-foot">
-          <button v-if="cancelText !== ''" type="button" class="button is-warning is-pulled-right" @click="cancel">{{ cancelText }}</button>
-          <button v-if="okText !== ''" type="button" class="button is-primary is-pulled-right" @click="ok">{{ okText }}</button>
+        <footer class="modal-card-foot">
+          <button v-if="cancelText !== ''" class="button is-warning is-pulled-right" @click="cancel">{{ cancelText }}</button>
+          <button v-if="okText !== ''" class="button is-primary is-pulled-right" @click="ok">{{ okText }}</button>
         </footer >
       </div>
     </div>
@@ -32,11 +32,11 @@ export default {
     },
     okText: {
       type: String,
-      default: 'Valider'
+      default: ''
     },
     cancelText: {
       type: String,
-      default: 'Cancel'
+      default: ''
     },
     size: {
       type: String,

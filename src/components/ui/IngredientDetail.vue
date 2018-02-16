@@ -1,9 +1,9 @@
 <template>
   <div class="columns is-multiline is-mobile" slot="content">
-    <div 
+    <div
       v-for="(value, key) in ingredient"
       :key="key"
-      v-if="keyTest(key)" 
+      v-if="keyTest(key)"
       class="column"
       :class="key === 'notes' ? 'item-last is-full' : 'is-4'">
       <v-textarea v-if="key === 'notes'" :label="key | capitalize" :value="value" readonly></v-textarea>
@@ -18,7 +18,7 @@ import VInput from 'components/ui/base/Input'
 import VTextarea from 'components/ui/base/Textarea'
 
 export default {
-  name: "IngredientDetail",
+  name: 'IngredientDetail',
 
   components: {
     VInput,
@@ -27,21 +27,21 @@ export default {
 
   props: {
     ingredient: Object,
-    notShow: Array,
+    notShow: Array
   },
 
   data () {
     return {
-      nshow: ['toBeerXml', 'version'].concat(this.notShow)
+      nshow: ['toBeerXml', 'version', 'parent'].concat(this.notShow)
     }
   },
 
   methods: {
     keyTest: function (key) {
       if (this.nshow.indexOf(key) > -1) {
-          return false
+        return false
       } else {
-          return true
+        return true
       }
     }
   }

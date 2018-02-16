@@ -1,0 +1,102 @@
+.item-container
+  margin-bottom: 1rem
+
+  .item
+    display: flex
+    justify-content: flex-start
+    align-items: stretch
+
+    .item-control
+      +control
+      flex: 0 1 auto
+      display: flex
+      vertical-align: center
+      height: auto
+      border-color: transparent
+      cursor: pointer
+      @each $name, $pair in $colors
+        $color: nth($pair, 1)
+        $color-invert: nth($pair, 2)
+        &.is-#{$name}
+          background-color: $color
+          border-color: transparent
+          color: $color-invert
+          &:hover,
+          &.is-hovered
+            background-color: darken($color, 2.5%)
+            border-color: transparent
+            color: $color-invert
+          &:focus,
+          &.is-focused
+            border-color: transparent
+            color: $color-invert
+            &:not(:active)
+              box-shadow: 0 0 0 0.125em rgba($color, 0.25)
+          &:active,
+          &.is-active
+            background-color: darken($color, 5%)
+            border-color: transparent
+            color: $color-invert
+          a
+            color: $color-invert
+
+      a
+        color: $text
+        align-items: center
+        // vertical-align: middle;
+        // justify-content: center;
+        display: flex
+
+    .item-control:first-of-type 
+      border-radius: $radius 0 0 $radius
+      margin-right: -1px
+    .item-control:last-of-type 
+      border-radius: 0 $radius $radius 0
+
+    .item-data
+      flex: 1 1 auto
+      display: flex
+      flex-direction: column
+      // align-items: stretch
+
+      .input,
+      .select select
+        border-radius: 0
+      .select
+        select
+          &:not([mutiple])
+            padding-right: 2em
+        &:not(.is-multiple)::after
+          right: 1em
+
+      .item-data-base,
+      .item-data-plus
+        display: flex
+        // align-items: stretch
+        &:not(:last-child)
+          margin-right: -1px
+      .item-data-base
+        flex: 2 1 auto
+      .item-data-plus
+        flex: 1 2 auto
+
+      .item-unit
+        flex-shrink: 0
+        flex-grow: 0
+
+      .item-value
+        flex-shrink: 2
+        flex-grow: 1
+        
+
+      .item-name
+        flex-shrink: 1
+        flex-grow: 2
+
+    +tablet
+      .item-data
+        flex-direction: row
+        .item-value
+          min-width: 46px
+        .item-name
+          min-width: 150px

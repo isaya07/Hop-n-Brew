@@ -3,7 +3,7 @@
 const Menu =
   [
     {
-      name: 'recettes',
+      name: 'Recettes',
       path: '/recettes',
       component: () => import('components/modules/recettes/RecettesList'),
       meta: {
@@ -13,7 +13,7 @@ const Menu =
       }
     },
     {
-      name: 'ingrédients',
+      name: 'Ingrédients',
       path: '',
       meta: {
         // icon: 'fa-bar-chart-o',
@@ -21,7 +21,7 @@ const Menu =
       },
       children: [
         {
-          name: 'fermentables',
+          name: 'Fermentables',
           path: '/fermentables',
           component: () => import('components/modules/ingredients/Fermentables'),
           meta: {
@@ -29,7 +29,7 @@ const Menu =
           }
         },
         {
-          name: 'yeasts',
+          name: 'Yeasts',
           path: '/yeasts',
           component: () => import('components/modules/ingredients/Yeasts'),
           meta: {
@@ -37,7 +37,7 @@ const Menu =
           }
         },
         {
-          name: 'hops',
+          name: 'Hops',
           path: '/hops',
           component: () => import('components/modules/ingredients/Hops'),
           meta: {
@@ -45,7 +45,7 @@ const Menu =
           }
         },
         {
-          name: 'miscs',
+          name: 'Miscs',
           path: '/miscs',
           component: () => import('components/modules/ingredients/Miscs'),
           meta: {
@@ -53,7 +53,7 @@ const Menu =
           }
         },
         {
-          name: 'waters',
+          name: 'Waters',
           path: '/waters',
           component: () => import('components/modules/ingredients/Waters'),
           meta: {
@@ -63,7 +63,7 @@ const Menu =
       ]
     },
     {
-      name: 'profils',
+      name: 'Profils',
       path: '',
       meta: {
         // icon: 'home',
@@ -71,7 +71,7 @@ const Menu =
       },
       children: [
         {
-          name: 'style',
+          name: 'Style',
           path: '/style',
           component: () => import('components/modules/profils/Style'),
           meta: {
@@ -79,7 +79,7 @@ const Menu =
           }
         },
         {
-          name: 'fermentation',
+          name: 'Fermentation',
           path: '/fermentation',
           component: () => import('components/modules/profils/Fermentation'),
           meta: {
@@ -87,7 +87,7 @@ const Menu =
           }
         },
         {
-          name: 'carbonation',
+          name: 'Carbonation',
           path: '/carbonation',
           component: () => import('components/modules/profils/Carbonation'),
           meta: {
@@ -95,7 +95,7 @@ const Menu =
           }
         },
         {
-          name: 'equipment',
+          name: 'Equipment',
           path: '/equipment',
           component: () => import('components/modules/profils/Equipment'),
           meta: {
@@ -103,7 +103,7 @@ const Menu =
           }
         },
         {
-          name: 'mash',
+          name: 'Mash',
           path: '/mash',
           component: () => import('components/modules/profils/MashList'),
           meta: {
@@ -113,7 +113,7 @@ const Menu =
       ]
     },
     {
-      name: 'test',
+      name: 'Test',
       path: '',
       meta: {
         icon: 'home',

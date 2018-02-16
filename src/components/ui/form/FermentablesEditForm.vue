@@ -13,19 +13,19 @@
         <v-input label="Origin" v-model="formData.origin"></v-input>
       </div>
       <div class="column  is-half">
-        <v-input label="Color" v-model="formData.color" :rules="'required|myNumeric'"></v-input>
+        <v-input label="Color" v-model.number="formData.color" :rules="'required|myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Yield" v-model="formData.yield" :rules="'required|myNumeric'"></v-input>
+        <v-input label="Yield" v-model.number="formData.yield" :rules="'required|myNumeric'"></v-input>
       </div>
       <div class="column  is-half">
-        <v-input label="% Max" v-model="formData.maxInBatch" :rules="'required|myNumeric'"></v-input>
+        <v-input label="% Max" v-model.number="formData.maxInBatch" :rules="'required|myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Inventory" v-model="formData.inventory" :rules="'myNumeric'"></v-input>
+        <v-input label="Inventory" v-model.number="formData.inventory" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Potential" v-model="formData.potential" :rules="'myNumeric'"></v-input>
+        <v-input label="Potential" v-model.number="formData.potential" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-one-quarter">
         <v-checkbox label="Recommend Mash" v-model="formData.recommendMash" :rules="''"></v-checkbox>
@@ -34,22 +34,22 @@
         <v-checkbox label="Add after Boil" v-model="formData.addAfterBoil" :rules="''"></v-checkbox>
       </div>
       <div class="column is-half">
-        <v-input label="Coarse Fine Diff" v-model="formData.coarseFineDiff" :rules="'myNumeric'"></v-input>
+        <v-input label="Coarse Fine Diff" v-model.number="formData.coarseFineDiff" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Moisture" v-model="formData.moisture" :rules="'myNumeric'"></v-input>
+        <v-input label="Moisture" v-model.number="formData.moisture" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Diastatic Power" v-model="formData.diastaticPower" :rules="'myNumeric'"></v-input>
+        <v-input label="Diastatic Power" v-model.number="formData.diastaticPower" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Protein" v-model="formData.protein" :rules="'myNumeric'"></v-input>
+        <v-input label="Protein" v-model.number="formData.protein" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Ibu Gal Per Lb" v-model="formData.ibuGalPerLb" :rules="'myNumeric'"></v-input>
+        <v-input label="Ibu Gal Per Lb" v-model.number="formData.ibuGalPerLb" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column is-half">
-        <v-input label="Price" v-model="formData.price" :rules="'myNumeric'"></v-input>
+        <v-input label="Price" v-model.number="formData.price" :rules="'myNumeric'"></v-input>
       </div>
       <div class="column">
         <v-textarea label="Notes" v-model="formData.notes" :rules="'myAlpha'"></v-textarea>
@@ -65,7 +65,7 @@ import VTextarea from 'components/ui/base/Textarea'
 import VCheckbox from 'components/ui/base/Checkbox'
 
 export default {
-  name: "FermentableEditForm",
+  name: 'FermentableEditForm',
 
   components: {
     VInput,

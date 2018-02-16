@@ -7,7 +7,7 @@
       <v-checkbox label="Calc Boil Volume" v-model="data.calcBoilVolume" :rules="''"></v-checkbox>
     </div>
     <div class="column is-4">
-      <v-input label="Batch Size" :align="'has-text-right'" v-model="batchSize" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Batch Size" :align="'has-text-right'" v-model.number="batchSize" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-2">
       <div class="field-label is-normal has-text-weight-bold has-text-left">
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="column is-4">
-      <v-input label="Boil Size" :align="'has-text-right'" v-model="boilSize" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Boil Size" :align="'has-text-right'" v-model.number="boilSize" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
       <div class="field-label is-normal has-text-weight-bold has-text-left">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Tun Volume" :align="'has-text-right'" v-model="tunVolume" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Tun Volume" :align="'has-text-right'" v-model.number="tunVolume" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
       <div class="field-label is-normal has-text-weight-bold has-text-left">
@@ -31,13 +31,15 @@
       </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Tun Weight" :align="'has-text-right'" v-model="tunWeight" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Tun Weight" :align="'has-text-right'" v-model.number="tunWeight" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
-      <div class="field-label is-normal has-text-weight-bold has-text-left">         {{ $config.weightUnitie | capitalize}}  </div>
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.weightUnitie | capitalize}}
+      </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Tun SpecificHeat" :align="'has-text-right'" v-model="data.tunSpecificHeat" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Tun SpecificHeat" :align="'has-text-right'" v-model.number="data.tunSpecificHeat" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
       <div class="field-label is-normal has-text-weight-bold has-text-left">
@@ -45,19 +47,23 @@
       </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Top Up Water" :align="'has-text-right'" v-model="topUpWater" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Top Up Water" :align="'has-text-right'" v-model.number="topUpWater" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
-      <div class="field-label is-normal has-text-weight-bold has-text-left">         {{ $config.volUnitie | capitalize}}  </div>
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.volUnitie | capitalize}}
+      </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Turb Chiller Loss" :align="'has-text-right'" v-model="turbChillerLoss" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Turb Chiller Loss" :align="'has-text-right'" v-model.number="turbChillerLoss" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
-      <div class="field-label is-normal has-text-weight-bold has-text-left">         {{ $config.volUnitie | capitalize}}  </div>
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.volUnitie | capitalize}}
+      </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Evap Rate" :align="'has-text-right'" v-model="data.evapRate" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Evap Rate" :align="'has-text-right'" v-model.number="data.evapRate" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
       <div class="field-label is-normal has-text-weight-bold has-text-left">
@@ -65,25 +71,31 @@
       </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Boil Time" :align="'has-text-right'" v-model="data.boilTime" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Boil Time" :align="'has-text-right'" v-model.number="data.boilTime" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
-      <div class="field-label is-normal has-text-weight-bold has-text-left">         {{ $config.timeUnitie | capitalize}}  </div>
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.timeUnitie | capitalize}}
+      </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Lauter Dead Space" :align="'has-text-right'" v-model="lauterDeadspace" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Lauter Dead Space" :align="'has-text-right'" v-model.number="lauterDeadspace" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
-      <div class="field-label is-normal has-text-weight-bold has-text-left">         {{ $config.volUnitie | capitalize}}  </div>
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.volUnitie | capitalize}}
+      </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Top Up Kettle" :align="'has-text-right'" v-model="topUpKettle" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Top Up Kettle" :align="'has-text-right'" v-model.number="topUpKettle" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
-      <div class="field-label is-normal has-text-weight-bold has-text-left">         {{ $config.volUnitie | capitalize}}  </div>
+      <div class="field-label is-normal has-text-weight-bold has-text-left">
+        {{ $config.volUnitie | capitalize}}
+      </div>
     </div>
     <div class="column  is-4">
-      <v-input label="Hop Utilization" :align="'has-text-right'" v-model="data.hopUtilization" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Hop Utilization" :align="'has-text-right'" v-model.number="data.hopUtilization" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column  is-2">
       <div class="field-label is-normal has-text-weight-bold has-text-left">

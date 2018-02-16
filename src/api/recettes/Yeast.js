@@ -1,3 +1,4 @@
+import Utils from './Utils'
 import {importXML, exportXML} from './Import'
 
 const typeList = ['Ale', 'Lager', 'Wheat', 'Wine', 'Champagne']
@@ -32,6 +33,21 @@ export default class Yeast {
     }
   }
 
+  getAmount (unit = 'pkg') {
+    if (this.displayAmount) {
+      return Utils.convertTo(this.displayAmount, unit)
+    } else {
+      return this.amount
+    }
+  }
+
+  setAmount (val, unit = 'pkg') {
+    if (val && val !== this.amount) {
+      this.amount = val
+      this.displayAmount = val + ' ' + unit
+    }
+  }
+
   static getFlocculationList () {
     return flocculationList
   }
@@ -47,8 +63,7 @@ export default class Yeast {
   getAttenuation () {
     return this.attenuation // * 0.9 // TODO viabilité...
   }
-  /* toJSON () {
-  } */
+
   static fromBeerXml (xml) {
     return importXML(xml, 'yeast')
   }
@@ -56,4 +71,7 @@ export default class Yeast {
   toBeerXml = (inRecipe = false) => {
     return exportXML(this.toJSON(), 'yeast', inRecipe)
   }
+
+  /* toJSON () {
+  } */
 }

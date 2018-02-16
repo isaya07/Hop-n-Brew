@@ -9,7 +9,7 @@
 // 1. Import the initial variables
 @import "./node_modules/bulma/sass/utilities/initial-variables";
 @import "./node_modules/bulma/sass/utilities/functions.sass";
-@import url('https://fonts.googleapis.com/css?family=PT+Sans|PT+Serif');
+// @import url('https://fonts.googleapis.com/css?family=PT+Sans|PT+Serif');
 // 2. Set your own initial variables
 // Update the blue shade, used for links
 // $blue: #06bcef;
@@ -17,9 +17,9 @@
 // $pink: #ff8080;
 // $pink-invert: #fff;
 // Update the sans-serif font family
-// $family-sans-serif: "Helvetica", "Arial", sans-serif;
-$family-sans-serif: 'PT Sans', "Helvetica", "Arial", sans-serif;
-$family-serif: 'PT Serif', "Merriweather", "Georgia", serif;
+$family-sans-serif: "Helvetica", "Arial", sans-serif;
+// $family-sans-serif: 'PT Sans', "Helvetica", "Arial", sans-serif;
+// $family-serif: 'PT Serif', "Merriweather", "Georgia", serif;
 $family-primary: $family-sans-serif;
 // font-family: 'PT Serif', serif;
 // 3. Set the derived variables
@@ -54,10 +54,21 @@ $addColors: (
 );
 $colors: map-merge($colors, $addColors); */
 
-// $gap: 24px;
+$gap: 24px;
+
+$column-gap: 0.5rem;
+
+$section-padding: 1.5rem 1rem;
+
+$hr-margin: 0.5rem 0;
+
+$navbar-fixed-z: 50;
+$navbar-dropdown-z: 50;
+
 $card-background-color: $white-bis;
 $card-header-background-color: $white-ter;
 
+$modal-z: 60;
 $modal-content-width: 720px;
 $modal-card-spacing: 40px;
 $modal-card-head-padding: 10px;
@@ -67,8 +78,13 @@ $modal-card-body-padding: 20px;
 
 $tooltip-background-color: $grey;
 
-$table-cell-border: 1px solid $grey-lighter;
-$table-background-color: $body-background-color;
-$table-row-hover-background-color: lighten($body-background-color, 5%);
-$table-striped-row-even-background-color: lighten($body-background-color, 5%);
-$table-striped-row-even-hover-background-color: darken($body-background-color, 5%);
+// $table-cell-border: 1px solid $grey-lighter;
+// $table-background-color: $body-background-color;
+// $table-row-hover-background-color: lighten($body-background-color, 5%);
+// $table-striped-row-even-background-color: lighten($body-background-color, 5%);
+// $table-striped-row-even-hover-background-color: darken($body-background-color, 5%);
+
+$calendar-header-nav-padding: .2em;
+
+$box-radius: $radius;
+$box-padding: 1rem;

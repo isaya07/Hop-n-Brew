@@ -1,10 +1,12 @@
 <template>
   <div class="txtcenter">
     <div class="columns is-multiline is-mobile">
-      <div class="column is-12-mobile is-6-tablet">
-        <v-search-input v-model="filterKey"></v-search-input>
+      <div v-if="search" class="column is-12-mobile is-6-tablet">
+        <v-search-input v-debounce="1000" v-model.lazy="filterKey"></v-search-input>
       </div>
-      <div class="column"></div>
+      <div class="column">
+        <v-checkbox v-if="inStock" label="In Stock" v-model="instock" :rules="''"></v-checkbox>
+      </div>
       <div  v-if="createImport" class="column is-narrow">
         <div class="field is-grouped is-grouped-right">
           <p class="control">
@@ -22,10 +24,10 @@
       </div>
     </div>
     <div class="center">
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <table class="tables is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th class="" v-for="key in columns" :key="key" @click="sortBy(key)" :class="{ 'is-active': sortKey == key }">
+            <th v-for="key in columns" :key="key" @click="sortBy(key)" :class="{ 'is-active': sortKey == key }">
               <div class="has-dropdown">
                 <div class="table-header">
                   {{ key | capitalize }}
@@ -33,38 +35,46 @@
                 <span :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
               </div>
             </th>
-            <th class="">Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(entry, index) in filteredData" :key="index">
-            <td v-for="key in columns" :key="key" @dblclick="editable($event,key,entry)" :data-th="key | capitalize">
+            <td v-for="key in columns" :key="key" @dblclick="editable($event,key,entry)" :data-title="key | capitalize">
               {{entry[key]}}
             </td>
-            <td data-th='Action'>
+            <td >
               <div class="field is-grouped">
                 <p class="control">
-                  <button type="button" v-if="editBut" class="button is-info is-small tooltip" data-tooltip="Edit item" @click="edit(entry)">
-                    <span class="icon is-small">
+                  <button type="button" v-if="butEdit" class="button is-info is-small tooltip" data-tooltip="Edit item" @click="edit(entry)">
+                    <span class="icon">
                       <icon :icon="['fas', 'edit']" />
                     </span>
-                    <!-- <span class="is-hidden-mobile">Edit</span> -->
+                    <span>Edit</span>
                   </button>
                 </p>
                 <p class="control">
-                  <button type="button" v-if="deleteBut" class="button is-danger is-small tooltip" data-tooltip="Delete item" @click="supress(entry)">
-                    <span class="icon is-small">
+                  <button type="button" v-if="butDelete" class="button is-danger is-small tooltip" data-tooltip="Delete item" @click="supress(entry)">
+                    <span class="icon">
                       <icon :icon="['fas', 'trash']" />
                     </span>
-                    <!-- <span class="is-hidden-mobile">Delete</span> -->
+                    <span>Delete</span>
                   </button>
                 </p>
                 <p class="control">
-                  <button type="button" v-if="addBut" class="button is-success is-small tooltip" data-tooltip="Add item" @click="add(entry)">
-                    <span class="icon is-small">
+                  <button type="button" v-if="butAdd" class="button is-success is-small tooltip" data-tooltip="Add item" @click="add(entry)">
+                    <span class="icon">
                       <icon :icon="['fas', 'plus']" />
                     </span>
-                    <!-- <span class="is-hidden-mobile">Add</span> -->
+                    <span>Add</span>
+                  </button>
+                </p>
+                <p class="control">
+                  <button type="button" v-if="butSelect" class="button is-success is-small tooltip" data-tooltip="Select item" @click="select(entry)">
+                    <span class="icon">
+                      <icon :icon="['fas', 'plus']" />
+                    </span>
+                    <span>Select</span>
                   </button>
                 </p>
               </div>
@@ -77,18 +87,18 @@
 </template>
 
 <script>
-import Import from 'components/ui/Import'
-import Checkbox from 'components/ui/base/Checkbox'
-import VSearchInput from 'components/ui/base/SearchInput'
+import debounce from 'components/directive/debounce'
 
 export default {
   name: 'tablelist',
 
   components: {
-    Import,
-    VSearchInput,
-    Checkbox
+    Import: () => import('components/ui/Import'),
+    VCheckbox: () => import('components/ui/base/Checkbox'),
+    VSearchInput: () => import('components/ui/base/SearchInput')
   },
+
+  directives: {debounce},
 
   props: {
     types: String,
@@ -101,6 +111,10 @@ export default {
       default: false
     },
     butDelete: {
+      type: Boolean,
+      default: false
+    },
+    butSelect: {
       type: Boolean,
       default: false
     },
@@ -127,10 +141,7 @@ export default {
       sortKey: '',
       filterKey: '',
       sortOrders: sortOrders,
-      instock: false,
-      addBut: this.butAdd,
-      editBut: this.butEdit,
-      deleteBut: this.butDelete
+      instock: false
     }
     data.columns.forEach(function (key) {
       sortOrders[key] = 1
@@ -196,6 +207,9 @@ export default {
     },
     supress (entry) {
       this.$emit('supress', entry)
+    },
+    select (entry) {
+      this.$emit('select', entry)
     }
   }
 }
@@ -208,7 +222,7 @@ export default {
 @import "./node_modules/bulma/sass/utilities/mixins";
 th {
   &.is-active {
-    color: $link !important; 
+    color: $link !important;
   }
   .has-dropdown {
     position: relative;
@@ -225,8 +239,7 @@ th {
         transform: rotate(-45deg);
       }
       &.asc {
-        transform: rotate(135deg);
-        margin-top: 0.5em;
+        transform: rotate(135deg) translate(0.25em, -0.25em)
       }
     }
   }

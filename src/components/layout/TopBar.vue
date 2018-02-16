@@ -1,21 +1,21 @@
 <template>
   <div>
-    <nav id="topbar" class="navbar is-fixed-top has-text-weight-bold">
+    <nav id="topbar" class="navbar has-shadow is-fixed-top has-text-weight-bold">
       <div class="navbar-brand">
-        <div class="navbar-item">
-          <img src="~assets/img/icon.svg" alt="Logo" height="10">
-        </div>
-        <router-link :to="{ name: 'acceuil'}" class="navbar-item">
-          <h5 class="title is-5">Hop'n Brew</h5>
-        </router-link>
         <div class="navbar-burger"  @click="showNav = !showNav" :class="{ 'is-active': showNav }">
           <span></span>
           <span></span>
           <span></span>
         </div>
+        <div class="navbar-item">
+          <img src="~assets/img/logo.svg" alt="Logo" height="10">
+        </div>
+        <router-link :to="{ name: 'acceuil'}" class="navbar-item">
+          <h5 class="title is-5">Hop'n Brew</h5>
+        </router-link>
       </div>
-      <div class="navbar-menu" :class="{ 'is-active': showNav }">
-        <div class="navbar-start">
+      <div class="navbar-start">
+        <div class="navbar-menu" :class="{ 'is-active': showNav }">
           <template v-for="(item, idx) in menus">
             <router-link :to="item.path" v-if="!item.children" class="navbar-item" :key="idx">
               {{ item.name }}
@@ -32,11 +32,11 @@
             </div>
           </template>
         </div>
+      </div>
         <div class="navbar-end">
           <div class="navbar-item" v-if="user">
             Hello {{user.name}}&nbsp;
-            <button class="delete" aria-label="delete" @click="logOut"></button>
-            <!-- <a @click="logOut">log out?</a> -->
+            <a class="has-text-primary" @click="logOut"><icon :icon="['fas', 'sign-out-alt']" /></a>
           </div>
           <div class="navbar-item" v-else>
             <router-link to="/signin" class="has-text-weight-bold has-text-dark">
@@ -48,7 +48,6 @@
             </router-link>
           </div>
         </div>
-      </div>
     </nav>
     <log-in v-if="showLogin"></log-in>
   </div>
@@ -84,7 +83,7 @@ export default {
     }
   },
 
-  created: function() {
+  created () {
     this.$parent.$on('show-nav', this.setShow)
   }
 }

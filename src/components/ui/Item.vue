@@ -1,14 +1,22 @@
 <template>
-<div>
-  <div class="field has-addons bottom-null">
-    <div class="control">
-      <button class="button is-success" @click="toggleContent">
+<div class="item-container">
+  <div class="item">
+    <div class="item-control is-primary" @click="contentVisible = !contentVisible">
+      <!-- <a class="is-primary" @click="contentVisible = !contentVisible"> -->
         <span class="icon is-small">
           <icon :icon="contentVisible ? ['fas', 'minus'] : ['fas', 'plus']" />
         </span>
-      </button>
+      <!-- </a> -->
     </div>
     <slot></slot>
+    <div class="item-control is-danger" @click="deleteItem">
+      <!-- <a class="is-danger" @click="deleteItem(type, ingredient)"> -->
+        <span class="icon is-small">
+          <icon :icon="['fas', 'trash']" />
+        </span>
+        <span class="is-hidden-touch">Remove</span>
+      <!-- </a> -->
+    </div>
   </div>
   <transition name="fade">
     <div v-if="contentVisible" class="card">
@@ -38,10 +46,17 @@ export default {
   },
 
   methods: {
-    toggleContent () {
-      this.contentVisible = !this.contentVisible
-      // if (this.contentVisible) this.$emit('content-visible', this)
+    deleteItem () {
+      this.$emit('delete')
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '~bulma/sass/utilities/mixins';
+@import 'src/assets/scss/settings';
+@import '~bulma/sass/utilities/derived-variables';
+@import '~bulma/sass/utilities/controls';
+@import 'src/assets/scss/item';
+</style>

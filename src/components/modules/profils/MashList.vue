@@ -1,6 +1,6 @@
 <template>
-  <div class='columns is-multiline is-mobile"'>
-    <div class='column is-6'>
+  <div class='columns is-multiline is-mobile'>
+    <div class='column is-12-mobile is-6-desktop'>
       <div class="field is-horizontal">
         <div class="field-label is-normal has-text-left">
           <label class="label">Profils :</label>
@@ -21,93 +21,44 @@
         </div>
       </div>
     </div>
-
-    <div class="column is-6">
-      <div class="field is-grouped is-grouped-right">
-        <div class="control">
+    <div class="column is-12-mobile is-narrow-tablet">
+      <!-- <div class="columns is-multiline is-mobile is-variable is-1"> -->
+        <!--  <div class="column is-narrow"> -->
+          <div class="buttons has-addons is-right">
           <import @import="importPress">Import</import>
-        </div>
-        <div class="control">
+        <!-- </div>
+        <div class="column is-narrow"> -->
           <button class="button is-info" @click="exportPress">
             <span class="icon is-small">
               <icon :icon="['fas', 'download']" />
             </span>
             <span>Export</span>
           </button>
-        </div>
-        <div class="control">
-          <button class="button is-success" @click="savePress">
+        <!-- </div>
+        <div class="column is-narrow"> -->
+          <button class="button is-primary" @click="savePress">
             <span class="icon is-small">
               <icon :icon="['fas', 'save']" />
             </span>
             <span>Save</span>
           </button>
-        </div>
-        <div class="control">
+        <!-- </div>
+        <div class="column is-narrow"> -->
           <button class="button is-danger" @click="deletePress">
             <span class="icon is-small">
               <icon :icon="['fas', 'trash']" />
             </span>
             <span>Delete</span>
           </button>
-        </div>
-      </div>
+          </div>
+        <!-- </div>
+      </div> -->
+    </div>
+    <div class='column is-full is-paddingless is-marginless'>
+      <hr class="is-marginless">
     </div>
     <div class='column is-full'>
-      <div class="is-divider"></div>
-    </div>
-    <div class='column is-full'>
-      <div class="columns is-multiline is-mobile">
-        <div class="column is-6">
-          <v-input label="Name" v-model="recepice.mash.name"></v-input>
-        </div>
-        <div class="column is-4">
-          <v-input label="Grain temp" v-model.number="recepice.mash.grainTemp"></v-input>
-        </div>
-        <div class="column is-2">
-          °{{$config.tempUnitie}}
-        </div>
-        <div class="column is-4">
-          <v-input label="Tun temp" v-model.number="recepice.mash.tunTemp"></v-input>
-        </div>
-        <div class="column is-2">
-          °{{$config.tempUnitie}}
-        </div>
-        <div class="column is-6">
-          <v-checkbox label="Adjust temp equipment" v-model="recepice.mash.equipAdjust" :rules="''"></v-checkbox>
-        </div>
-        <div class="column is-4">
-          <v-input label="Sparge temp" v-model.number="recepice.mash.spargeTemp"></v-input>
-        </div>
-        <div class="column is-2">
-          °{{$config.tempUnitie}}
-        </div>
-        <div class="column is-4">
-          <v-input label="Sparge vol" v-model.number="spargeVol" readonly></v-input>
-        </div>
-        <div class="column is-2">
-          {{$config.volUnitie.toUpperCase()}}
-        </div>
-      </div>
-    </div>
-    <div class='column is-full'>
-      <button class="button is-info" @click="addStep">
-        <span class="icon is-small">
-          <icon :icon="['fas', 'plus']" />
-        </span>
-        <span>Add Step</span>
-      </button>
-    </div>
-    <div class='column is-full'>
-      <div class="columns is-multiline is-mobile box">
-        <mash-step-item v-for="steps in mashSteps" :key="steps.name" :mashStep="steps"></mash-step-item>
-      </div>
-    </div>
-    <div class="column is-full">
-      <area-chart :chartData="chartData" :width="600" :height="240" :xLabel="'min'" :yLabel="'°' + $config.tempUnitie"></area-chart>
-    </div>
-    <div class="column is-full">
-      <v-textarea label="Mash Notes" v-model="recepice.mash.notes"></v-textarea>
+      <v-mash :mash="recepice.mash"></v-mash>
     </div>
   </div>
 </template>
@@ -116,16 +67,17 @@
 import Mash from 'api/recettes/Mash'
 import MashStep from 'api/recettes/MashStep'
 
-import MashStepItem from 'components/modules/mashs/MashStepItem'
-import Chart from 'components/ui/Chart'
+// import MashStepItem from 'components/modules/mashs/MashStepItem'
+// import Chart from 'components/ui/Chart'
 import Import from 'components/ui/Import'
 // import Config from 'api/recettes/Config'
 // import Utils from 'api/recettes/Utils'
-import AreaChart from 'components/ui/AreaChart'
-import VTextarea from 'components/ui/base/Textarea'
-import VInput from 'components/ui//base/Input'
-import VCheckbox from 'components/ui/base/Checkbox'
-import VSelect from 'components/ui/base/Select'
+// import AreaChart from 'components/ui/AreaChart'
+// import VTextarea from 'components/ui/base/Textarea'
+// import VInput from 'components/ui//base/Input'
+// import VCheckbox from 'components/ui/base/Checkbox'
+// import VSelect from 'components/ui/base/Select'
+import VMash from 'components/modules/mashs/Mash'
 
 export default {
   name: 'mash-list',
@@ -136,31 +88,31 @@ export default {
   },
 
   components: {
-    Chart,
-    MashStepItem,
+    // Chart,
+    // MashStepItem,
     Import,
-    AreaChart,
-    VTextarea,
-    VInput,
-    VCheckbox,
-    VSelect
+    // AreaChart,
+    // VTextarea,
+    // VInput,
+    // VCheckbox,
+    // VSelect,
+    VMash
   },
 
   data () {
     return {
       contentVisible: false,
       selectedMash: '',
-      mashs: [],
-      unitList: this.$config.getUnitiesList()
+      mashs: []
     }
   },
 
-  firestore() {
+  firestore () {
     return {
-        // Collection
-        mashs: this.$db.collection('mashs'),
-        // Doc
-        // ford: this.$db.collection('cars').doc('ford')
+      // Collection
+      mashs: this.$db.collection('mashs')
+      // Doc
+      // ford: this.$db.collection('cars').doc('ford')
     }
   },
 
@@ -174,38 +126,6 @@ export default {
     },
     typeSelect () {
       return MashStep.getTypeList()
-    },
-    chartData () {
-      let mashsteps = this.recepice.mash.mashSteps
-      let data = []
-      let time = 0
-      let temp = 0
-      if (mashsteps && mashsteps.length !== 0) {
-        for (let i = 0; i < mashsteps.length; i++) {
-          if (mashsteps[i].rampTime !== 0) {
-            data.push({x: time, y: temp})
-            time = time + mashsteps[i].rampTime
-          }
-          data.push({x: time, y: mashsteps[i].stepTemp})
-          // temp = mashsteps[i].stepTemp
-          time = time + mashsteps[i].stepTime
-          data.push({x: time, y: mashsteps[i].endTemp})
-          temp = mashsteps[i].endTemp
-        }
-        // data.push({x: time, y: temp})
-      }
-      return data
-    },
-    spargeVol: {
-      get: function () {
-        return this.recepice.mash.getSpargeVol(this.$config.volUnitie)
-      },
-      set: function (value) {
-        // this.recipe.setBatchSize(value, this.$config.volUnitie)
-      }
-    },
-    mashSteps () {
-      return this.recepice.mash.getMashSteps()
     }
   },
 
@@ -229,16 +149,6 @@ export default {
       this.recepice.mash.id = mash.id
       // console.log(test)
     },
-    // toggleContent (comp) {
-    // console.log(this.mashs)
-    // },
-    addStep () {
-      // console.log(this.selectedMash)
-      this.recepice.mash.add()
-    },
-    removeStep (id) {
-      this.recepice.mash.remove(id)
-    },
     importPress (xml) {
       // this.selectedMash = ''
       let item
@@ -258,7 +168,7 @@ export default {
         this.$store.commit('setMessage', {type: 'error', text: 'Import of ' + data.name + ' failed: ' + error})
         console.error('Import of ' + data.name + ' failed: ' + error)
       }
-      if ( !error && number > 1 ) {
+      if (!error && number > 1) {
         this.$store.commit('setMessage', {type: 'succes', text: number + ' mashs profile successfully imported'})
       } else if (!error) {
         this.$store.commit('setMessage', {type: 'succes', text: data.name + 'mash profile successfully imported'})

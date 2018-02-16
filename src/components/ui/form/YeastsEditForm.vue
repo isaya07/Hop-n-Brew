@@ -16,25 +16,25 @@
       <v-select label="Form" v-model="formData.form" :typeList="formList"></v-select>
     </div>
     <div class="column is-6">
-      <v-input label="Attenuation" v-model="formData.attenuation" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Attenuation" v-model.number="formData.attenuation" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-select label="Flocculation" v-model="formData.flocculation" :typeList="flocculationList"></v-select>
+      <v-select label="Flocculation" v-model.number="formData.flocculation" :typeList="flocculationList"></v-select>
     </div>
     <div class="column is-6">
-      <v-input label="Max Reuse" v-model="formData.maxReuse" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Max Reuse" v-model.number="formData.maxReuse" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
       <v-checkbox label="Add to Secondary" v-model="formData.addToSecondary" :rules="''"></v-checkbox>
     </div>
     <div class="column is-6">
-      <v-input label="Times Cultured" v-model="formData.timesCultured" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Times Cultured" v-model.number="formData.timesCultured" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Inventory" v-model="formData.inventory" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Inventory" v-model.number="formData.inventory" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Price" v-model="formData.price" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Price" v-model.number="formData.price" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column">
       <v-textarea label="Notes" v-model="formData.notes" :rules="'myAlpha'"></v-textarea>

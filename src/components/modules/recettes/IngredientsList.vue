@@ -1,6 +1,6 @@
 <template>
   <tabs>
-    <tab v-for="(lists, type) in ingredientList" class="box" :name="type | capitalize" :key="type">
+    <tab v-for="(lists, type) in ingredientList" :name="type | capitalize" :key="type">
       <ingredient-tab :type="type" :lists="lists" @add="addIngredient" @delete="deleteIngredient"></ingredient-tab>
     </tab>
   </tabs>
@@ -53,7 +53,7 @@ export default {
         hop: this.recepice.getIngredientList('hop'),
         yeast: this.recepice.getIngredientList('yeast'),
         misc: this.recepice.getIngredientList('misc'),
-        water: this.recepice.getIngredientList('water'),
+        water: this.recepice.getIngredientList('water')
       }
     }
   },

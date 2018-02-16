@@ -1,14 +1,15 @@
 <template>
   <div>
-    <h3 class="title is-3 has-text-centered">{{ type | capitalize}}</h3>
+    <h3 v-if="title" class="title is-3 has-text-centered">{{ type | capitalize}}</h3>
     <card-list
       v-if="card"
       :ingredientsData="data"
       :type="type"
-      :butEdit="editBut"
-      :butDelete="deleteBut"
-      :search="true"
-      :createImport="true"
+      :butEdit="forEdit"
+      :butDelete="forEdit"
+      :search="search"
+      :inStock="inStock"
+      :createImport="withAdd"
       @import="importList"
       @supress="deleteList"
       @create="createList"
@@ -18,18 +19,20 @@
       v-else
       :colName="columns"
       :ingredientsData="data"
-      :butEdit="editBut"
-      :butDelete="deleteBut"
-      :search="true"
-      :inStock="true"
-      :createImport="true"
+      :butEdit="forEdit"
+      :butDelete="forEdit"
+      :butSelect="forSelection"
+      :search="search"
+      :inStock="inStock"
+      :createImport="withAdd"
       @import="importList"
       @supress="deleteList"
       @create="createList"
-      @edit="editList">
+      @edit="editList"
+      @select="selectList">
     </table-list>
     <modal
-      v-if="editListeShow"
+      v-if="editListeShow && forEdit"
       :title="editListeTitle"
       :cancelText='"Cancel"'
       :okText='"Save"'
@@ -37,15 +40,12 @@
       @close="editListeShow = false"
       @cancel="editListeShow = false"
       @ok="$bus.$emit('validateForm')">
-      <slot></slot>
+      <slot v-if="forEdit"></slot>
     </modal>
   </div>
 </template>
 
 <script>
-import TableList from 'components/ui/list/TableList'
-import CardList from 'components/ui/list/CardList'
-import Modal from 'components/layout/Modal'
 
 export default {
   name: 'List',
@@ -53,15 +53,21 @@ export default {
   props: {
     card: false,
     type: String,
+    withAdd: false,
+    title: true,
+    forEdit: false,
+    forSelection: false,
+    search: false,
+    inStock: false,
     columns: Array,
     newFunc: Function,
     staticFunc: Function
   },
 
   components: {
-    TableList,
-    CardList,
-    Modal
+    TableList: () => import('components/ui/list/TableList'),
+    CardList: () => import('components/ui/list/CardList'),
+    Modal: () => import('components/layout/Modal')
   },
 
   data () {
@@ -70,18 +76,16 @@ export default {
       db: this.type + 's',
       object: null,
       editListeShow: false,
-      editListeTitle: '',
-      editBut: true,
-      deleteBut: true
+      editListeTitle: ''
     }
   },
 
-  firestore() {
+  firestore () {
     return {
-        // Collection
-        data: this.$db.collection(this.db)
-        // Doc
-        // ford: this.$db.collection('cars').doc('ford')
+      // Collection
+      data: this.$db.collection(this.db)
+      // Doc
+      // ford: this.$db.collection('cars').doc('ford')
     }
   },
 
@@ -110,7 +114,7 @@ export default {
         this.$store.commit('setMessage', {type: 'error', text: 'Import of ' + data.name + ' failed: ' + error})
         console.error('Import of ' + name + ' failed: ' + error)
       }
-      if ( !error && number > 1 ) {
+      if (!error && number > 1) {
         this.$store.commit('setMessage', {type: 'succes', text: number + ' ' + this.db + ' successfully imported'})
       } else if (!error) {
         this.$store.commit('setMessage', {type: 'succes', text: data.name + ' successfully imported'})
@@ -158,6 +162,9 @@ export default {
         })
       }
     },
+    selectList (entry) {
+      this.$emit('selected', entry)
+    },
     validEditList (status, liste) {
       if (status) {
         this.saveList(liste)
@@ -166,6 +173,6 @@ export default {
         console.log('Validation error')
       }
     }
-  },
+  }
 }
 </script>

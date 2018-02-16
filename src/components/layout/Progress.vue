@@ -1,5 +1,5 @@
 <template>
-  <div class="progress" :style="style"></div>
+  <div class="progres" :style="style"></div>
 </template>
 
 <script>
@@ -91,15 +91,15 @@ export default {
 @import "./node_modules/bulma/sass/utilities/initial-variables";
 @import "./node_modules/bulma/sass/utilities/derived-variables";
 
-.progress {
+.progres {
   // margin-top: -3px;
   z-index: 999999;
   background-color: $primary;
   height: 3px;
+  position: fixed;
   top: 0;
   left: 0;
   transition: width 0.3s, opacity 0.3s;
   box-shadow: 0px 3px 8px rgba($black, 0.4);
 }
 </style>
-

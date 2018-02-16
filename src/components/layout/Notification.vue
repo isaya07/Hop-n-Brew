@@ -1,6 +1,6 @@
 <template>
+<transition name="fade">
   <div v-if="message" class="message" :class="classes">
-    <!-- <transition-group name="fade"> -->
     <div class="message-header">
       <p class="is-capitalized">{{message.type}}</p>
       <button class="delete" aria-label="delete" @click="remove(message)"></button>
@@ -8,8 +8,8 @@
     <div class="message-body" >
       {{ message.text }}
     </div>
-    <!-- </transition-group> -->
   </div>
+</transition>
 </template>
 <script>
 export default {
@@ -24,7 +24,8 @@ export default {
 
   data () {
     return {
-      type: ''
+      // type: '',
+      // items: []
     }
   },
 
@@ -34,16 +35,12 @@ export default {
         switch (this.message.type) {
           case 'succes':
             return 'is-success'
-            break
           case 'info':
             return 'is-info'
-            break;
           case 'error':
             return 'is-danger'
-            break;
           default:
             return 'is-primary'
-            break
         }
       } else {
         return ''
@@ -78,16 +75,10 @@ export default {
   },
 
   watch: {
-    message: function(val) {
+    message (val) {
       if (val && val.type && val.type !== 'error') {
         setTimeout(() => this.remove(val), this.timeout)
       }
-    }
-  },
-
-  data () {
-    return {
-      items: []
     }
   }
 }
@@ -96,7 +87,7 @@ export default {
 <style lang="scss" scoped>
 
 .message {
-  position: absolute;
+  position: fixed;
   margin: 1em;
   right: 0;
   z-index: 100;

@@ -2,7 +2,7 @@ import Utils from './Utils'
 import {importXML, exportXML} from './Import'
 
 const tanh = number => (Math.exp(number) - Math.exp(-number)) / (Math.exp(number) + Math.exp(-number))
-const useList = ['Boil', 'Dry Hop', 'Mash', 'First Worst', 'Aroma']
+const useList = ['Boil', 'Dry Hop', 'Mash', 'First Wort', 'Aroma']
 const typeList = ['Bittering', 'Aroma', 'Both']
 const formList = ['Pellet', 'Plug', 'Leaf']
 
@@ -27,8 +27,41 @@ export default class Hop {
     this.displayAmount = null
     this.inventory = null
     this.displayTime = null
+    this.parent = null
     if (options) {
       Object.assign(this, options)
+    }
+  }
+
+  getAmount (unit = 'g') {
+    if (this.displayAmount) {
+      return Utils.convertTo(this.displayAmount, unit, 3)
+    } else {
+      return this.amount
+    }
+  }
+
+  setAmount (val, unit = 'g') {
+    if (val && val !== this.amount) {
+      this.amount = val
+      this.displayAmount = val + ' ' + unit
+      if (this.parent) this.parent.updateIbu()
+    }
+  }
+
+  getTime (unit = 'min') {
+    if (this.displayTime) {
+      return Utils.convertTo(this.displayTime, unit, 3)
+    } else {
+      return this.amount
+    }
+  }
+
+  setTime (val, unit = 'min') {
+    if (val && val !== this.amount) {
+      this.amount = val
+      this.displayTime = val + ' ' + unit
+      if (this.parent) this.parent.updateIbu()
     }
   }
 
@@ -54,17 +87,40 @@ export default class Hop {
     }
   }
 
-  bitterness (ibuMethod, og, batchSize) {
+  getBoilUtil (time, og) {
+    return (1.65 * Math.pow(0.000125, (og - 1.0))) * ((1 - Math.exp(-0.04 * time)) / 4.15)
+  }
+
+  getPostBoilUtil (time, og, coolTime) {
+    let util = 0
+    if (coolTime) {
+      let intTime = 0.001
+      for (let i = time; i < time + coolTime; i += intTime) {
+        let dU = -1.65 * Math.pow(0.000125, (og - 1.0)) * -0.04 * Math.exp(-0.04 * i) / 4.15
+        let tempF = (-1.344 * (i - time)) + 210.64
+        let tempK = (tempF + 459.67) * (5.0 / 9.0)
+        let degreeOfUtilization = 2.39 * Math.pow(10.0, 11.0) * Math.exp(-9773.0 / tempK)
+        if (i < 5.0) degreeOfUtilization = 1.0 // account for nonIAA components
+        let combinedValue = dU * degreeOfUtilization
+        util += combinedValue * intTime
+      }
+    }
+    return util
+  }
+
+  getBitterness (ibuMethod, og, batchSize, coolTime = null) {
     let adjustment
     let bitterness
     let utilization
     let weight
     let time
 
-    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'kg', 4) : weight = this.amount
+    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'g', 1) : weight = this.amount
     this.displayTime ? time = Utils.convertTo(this.displayTime, 'min') : time = this.time
+    if (this.use === 'First Wort') time = time * 1.1
+    else if (this.use === 'Aroma' && this.use === 'Dry Hop') time = 0
     if (ibuMethod === 'tinseth') {
-      bitterness = 1.65 * (0.000125 ** (og - 1.0)) * ((1 - Math.E ** (-0.04 * time)) / 4.15) * ((this.alpha / 100.0 * weight * 1000000) / batchSize) * this.utilizationFactor()
+      bitterness = (this.getBoilUtil(time, og) + this.getPostBoilUtil(time, og, coolTime)) * (((this.alpha / 100 * this.utilizationFactor()) * weight * 1000) / batchSize)
     } else if (ibuMethod === 'rager') {
       utilization = 18.11 + 13.86 * tanh((time - 31.32) / 18.27)
       adjustment = Math.max(0, (og - 1.050) / 0.2)
@@ -72,6 +128,7 @@ export default class Hop {
     } else {
       throw new Error("Unknown IBU method '" + ibuMethod + "'!")
     }
+    console.log(bitterness)
     return bitterness
   }
 

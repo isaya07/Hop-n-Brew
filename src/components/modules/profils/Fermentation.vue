@@ -1,8 +1,12 @@
 <template>
-  <div>
+  <section class="section">
     <list
       :columns="columns"
       :type="type"
+      :forEdit="true"
+      :withAdd="true"
+      :search="true"
+      :title="true"
       :newFunc="getNew"
       :staticFunc="getStatic"
       @dataForm="updateFormData">
@@ -11,7 +15,7 @@
         @validated="validated">
       </fermentations-edit-form>
     </list>
-  </div>
+  </section>
 </template>
 
 <script>

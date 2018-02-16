@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <section class="section">
     <list
       :card="true"
       :type="type"
+      :forEdit="true"
+      :withAdd="true"
+      :title="true"
       :newFunc="getNew"
       :staticFunc="getStatic"
       @dataForm="updateFormData">
@@ -11,12 +14,12 @@
         @validated="validated">
       </equipments-edit-form>
     </list>
-  </div>
+  </section>
 </template>
 
 <script>
-import EquipmentsEditForm from 'components/ui/form/EquipmentsEditForm'
 import Equipment from 'api/recettes/Equipment'
+import EquipmentsEditForm from 'components/ui/form/EquipmentsEditForm'
 import List from 'components/ui/list/List'
 
 export default {

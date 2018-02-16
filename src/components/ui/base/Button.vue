@@ -1,16 +1,16 @@
 <template>
-  <button 
+  <button
     class="button"
     :class="classe"
     @click="sendClick">
     <slot>Button</slot>
   </button>
 </template>
-​
+
 <script>
 export default {
-  name: "v-button",
-  
+  name: 'v-button',
+
   props: {
     classe: {
       type: String,

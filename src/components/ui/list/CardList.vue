@@ -2,9 +2,11 @@
   <section class="txtcenter">
     <div class="columns is-multiline is-mobile">
       <div class="column is-12-mobile is-6-tablet">
-        <v-search-input v-model="filterKey"></v-search-input>
+        <v-search-input v-if="search" v-model="filterKey"></v-search-input>
       </div>
-      <div class="column"></div>
+      <div class="column">
+        <v-checkbox v-if="inStock" label="In Stock" v-model="instock" :rules="''"></v-checkbox>
+      </div>
       <div  v-if="createImport" class="column is-narrow">
         <div class="field is-grouped is-grouped-right">
           <p class="control">
@@ -22,7 +24,7 @@
       </div>
     </div>
     <div class="columns is-multiline is-mobile" v-if="filteredData">
-      <div class="column is-6-mobile is-4-tablet is-3-desktop is-2-widescreen" v-for="(entry, index) in filteredData" :key="index">
+      <div class="column is-6-mobile is-4-tablet is-3-desktop" v-for="(entry, index) in filteredData" :key="index">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title has-text-info" @click="edit(entry)">
@@ -36,8 +38,10 @@
             </a>
           </header>
           <div class="card-content">
+            <figure class="image">
               <img v-if="type === 'equipment'" src="~assets/img/marmite.svg" @click="edit(entry)" alt="Equipment">
               <img v-else-if="type === 'recipes'" src="~assets/img/bottle-longneck.svg" @click="edit(entry)" alt="bottle">
+            </figure>
           </div>
           <footer class="card-footer">
             <div class="card-footer-item" v-if="type === 'equipment' || type === 'recipes'">Batch : {{ entry.batchSize + ' '}}{{$config.volUnitie | capitalize}}</div>
@@ -81,6 +85,7 @@ export default {
       type: Boolean,
       default: false
     },
+    inStock: false,
     createImport: {
       type: Boolean,
       default: false
@@ -95,6 +100,7 @@ export default {
       sortKey: '',
       filterKey: '',
       sortOrders: sortOrders,
+      instock: false,
       addBut: this.butAdd,
       editBut: this.butEdit,
       deleteBut: this.butDelete
@@ -117,6 +123,11 @@ export default {
             return Object.keys(row).some((key) => {
               return String(row[key]).toLowerCase().indexOf(filterKey) > -1
             })
+          })
+        }
+        if (this.instock) {
+          data = data.filter((row) => {
+            return row.inventory > 0
           })
         }
         if (sortKey) {
@@ -169,6 +180,7 @@ export default {
 
   .card-content {
     flex-grow: 2;
+    padding: 0;
     img {
       max-height: 10em;
       cursor: pointer;
@@ -179,6 +191,13 @@ export default {
   }
   .card-footer {
     flex-direction: column;
+    .card-footer-item {
+      flex-basis: auto;
+      padding: 0;
+      &:not(:last-child) {
+        border-right: 0
+      }
+    }
   }
 }
 

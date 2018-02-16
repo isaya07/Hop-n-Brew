@@ -49,7 +49,7 @@ export default class Recipe {
     this.estFg = null
     this.estColor = null
     this.ibu = null
-    this.ibuMethod = 'tinseth'
+    this.ibuMethod = 'rager'
     this.estAbv = null
     this.abv = null
     this.actualEfficiency = null
@@ -61,47 +61,53 @@ export default class Recipe {
     this._config = config
     // this.event = Event
     if (options) {
-      Object.assign(this, options)
       if (options.fermentables && options.fermentables.length !== 0) {
-        this.fermentables = []
+        let temp = []
         for (let i = 0; i < options.fermentables.length; i++) {
-          this.add('fermentable', options.fermentables[i])
+          temp.push(new Fermentable(Object.assign(options.fermentables[i], {parent: this})))
         }
+        options.fermentables = temp
       }
       if (options.hops && options.hops.length !== 0) {
-        this.hops = []
+        let temp = []
         for (let i = 0; i < options.hops.length; i++) {
-          this.add('hop', options.hops[i])
+          temp.push(new Hop(Object.assign(options.hops[i], {parent: this})))
         }
+        options.hops = temp
       }
       if (options.yeasts && options.yeasts.length !== 0) {
-        this.yeasts = []
+        let temp = []
         for (let i = 0; i < options.yeasts.length; i++) {
-          this.add('yeast', options.yeasts[i])
+          temp.push(new Yeast(options.yeasts[i]))
         }
+        options.yeasts = temp
       }
       if (options.miscs && options.miscs.length !== 0) {
-        this.miscs = []
+        let temp = []
         for (let i = 0; i < options.miscs.length; i++) {
-          this.add('misc', options.miscs[i])
+          temp.push(new Misc(options.miscs[i]))
         }
+        options.miscs = temp
       }
       if (options.waters && options.waters.length !== 0) {
-        this.waters = []
+        let temp = []
         for (let i = 0; i < options.waters.length; i++) {
-          this.add('water', options.waters[i])
+          temp.push(new Water(options.waters[i]))
         }
+        options.waters = temp
       }
       if (options.equipment) {
-        this.equipment = new Equipment(options.equipment)
+        options.equipment = new Equipment(options.equipment)
       }
       if (options.mash) {
-        this.setMash(options.mash)
+        options.mash = new Mash(this._config, Object.assign(options.mash, {recipe: this}))
+        // this.setMash(options.mash)
         // this.mash = new Mash(config, Object.assign(options.mash, {recipe: this}))
         // console.log(options.mash, this.mash)
       }
+      Object.assign(this, options)
     }
-
+    this.updateOg()
     // subscribe event
     // Event.on('event', this.test)
   }
@@ -121,19 +127,19 @@ export default class Recipe {
   /**
    * Getter/Setter
    */
-  getBatchSize (unit) {
+  getBatchSize (unit = 'l') {
     if (this.displayBatchSize) {
       return Utils.convertTo(this.displayBatchSize, unit)
     } else {
       return this.batchSize
     }
   }
-  setBatchSize (val, unit) {
+  setBatchSize (val, unit = 'l') {
     this.batchSize = val
     this.displayBatchSize = val + ' ' + unit
   }
 
-  getBoilSize (unit) {
+  getBoilSize (unit = 'l') {
     if (this.equipment.calcBoilVolume) this.calculBoilSize()
     if (this.displayBoilSize) {
       return Utils.convertTo(this.displayBoilSize, unit)
@@ -141,7 +147,7 @@ export default class Recipe {
       return this.boilSize
     }
   }
-  setBoilSize (val, unit) {
+  setBoilSize (val, unit = 'l') {
     this.boilSize = val
     this.displayBoilSize = val + ' ' + unit
   }
@@ -170,12 +176,12 @@ export default class Recipe {
     this.displayFg = val + ' ' + unit
   }
 
-  getEstOg (unit) {
+  getEstOg (unit = 'sg') {
     if (!this.estOg) this.updateOg()
     // console.log(this.estOg, unit)
     return Utils.convertTo(this.estOg, unit, 3)
   }
-  setEstOg (val, unit) {
+  setEstOg (val, unit = 'sg') {
     this.estOg = val + ' ' + unit
   }
 
@@ -204,6 +210,17 @@ export default class Recipe {
     this.estAbv = val + ' %'
   }
 
+  getIbu () {
+    if (this.ibu && Utils.isType('string', this.ibu)) {
+      return Utils.roundDecimal(this.ibu.split(' ')[0], 1)
+    } else {
+      return this.ibu
+    }
+  }
+
+  setIbu (value) {
+    this.ibu = value + ' IBUs'
+  }
   /**
    * Calculate
    */
@@ -237,28 +254,33 @@ export default class Recipe {
   }
 
   updateOg () {
-    if (this.fermentables) {
+    if (this.fermentables.length !== 0) {
       let i
       let sugar = 0
       let color = 0
       // console.log(this.fermentables)
       for (i = 0; i < this.fermentables.length; i++) {
-        sugar += this.fermentables[i].getSugar(this.efficiency)
-        color += this.fermentables[i].getColor(this.batchSize)
+        sugar += this.fermentables[i].calcSugar(this.efficiency)
+        color += this.fermentables[i].calcColor(this.batchSize)
       }
       // console.log(sugar)
       this.estOg = Utils.roundDecimal(((this.batchSize - (sugar / 1.59) + sugar) / this.batchSize), 3)
       this.estColor = Utils.roundDecimal(color, 1)
       // console.log('OG: ' + this.estOg)
       // console.log('EBC: ' + this.estColor)
+      this.updateFg()
     }
   }
 
   updateFg () {
     let i
     let attenuation = 0
-    for (i = 0; i < this.yeasts.length; i++) {
-      if (this.yeasts[i].getAttenuation() > attenuation) attenuation = this.yeasts[i].getAttenuation()
+    if (this.yeasts.length !== 0) {
+      for (i = 0; i < this.yeasts.length; i++) {
+        if (this.yeasts[i].getAttenuation() > attenuation) attenuation = this.yeasts[i].getAttenuation()
+      }
+    } else {
+      attenuation = 75
     }
     this.estFg = Utils.roundDecimal((((this.estOg - 1) * (1 - (attenuation / 100))) + 1), 3)
     // console.log('FG: ' + this.estFg)
@@ -270,10 +292,10 @@ export default class Recipe {
     let i
     let bitterness = 0
     for (i = 0; i < this.hops.length; i++) {
-      bitterness += this.hops[i].bitterness(this.ibuMethod.toLowerCase(), this.estOg, this.batchSize)
+      bitterness += this.hops[i].getBitterness(this.ibuMethod.toLowerCase(), this.estOg, this.getBatchSize()/* , 10 */) // TODO whirpool
       // console.log(bitterness)
     }
-    this.ibu = Utils.roundDecimal(bitterness, 1)
+    this.setIbu(Utils.roundDecimal(bitterness, 1))
     // console.log('IBU: ' + this.ibu)
   }
 
@@ -325,12 +347,12 @@ export default class Recipe {
     let updateFunc
     switch (type) {
       case 'fermentable':
-        ret = this.fermentables.push(new Fermentable(options))
+        ret = this.fermentables.push(new Fermentable(Object.assign(options, {parent: this})))
         // this.fermentables.sort(this.ingredientSort)
         updateFunc = this.updateOg.bind(this)
         break
       case 'hop':
-        ret = this.hops.push(new Hop(options))
+        ret = this.hops.push(new Hop(Object.assign(options, {parent: this})))
         // this.hops.sort(this.hopSort)
         updateFunc = this.updateIbu.bind(this)
         break

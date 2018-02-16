@@ -10,19 +10,19 @@
       <v-select label="Use" v-model="formData.use" :typeList="useList"></v-select>
     </div>
     <div class="column is-6">
-      <v-input label="Time" v-model="formData.time" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Time" v-model.number="formData.time" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Amount" v-model="formData.amount" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Amount" v-model.number="formData.amount" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
       <v-input label="Use For" v-model="formData.useFor"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Inventory" v-model="formData.inventory" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Inventory" v-model.number="formData.inventory" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Price" v-model="formData.price" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Price" v-model.number="formData.price" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column">
       <v-textarea label="Notes" v-model="formData.notes" :rules="'myAlpha'"></v-textarea>

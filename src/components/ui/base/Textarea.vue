@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: "v-textarea",
+  name: 'v-textarea',
 
   props: {
     label: String,
@@ -48,7 +48,7 @@ export default {
   },
 
   methods: {
-    updateValue: function(value) {
+    updateValue (value) {
       this.$emit('input', value)
     }
   }
@@ -56,7 +56,3 @@ export default {
 }
 
 </script>
-
-<style>
-
-</style>

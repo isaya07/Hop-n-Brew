@@ -136,13 +136,13 @@ export default {
       error: {
         has: false,
         mess: ''
-      }/* ,
+      } /* ,
       lastVisible: '',
       bottom: false */
     }
   },
 
-/*  firestore() {
+  /* firestore() {
     return {
         // Collection
         modalIngredients: this.$db.collection(this.database)
@@ -160,12 +160,16 @@ export default {
       if (this.modalIngredients !== undefined) {
         var data = this.modalIngredients
         if (filterKey) {
-          data = data.filter((row) => {
-            return String(row.name).toLowerCase().indexOf(filterKey) > -1
+          data = data.filter(row => {
+            return (
+              String(row.name)
+                .toLowerCase()
+                .indexOf(filterKey) > -1
+            )
           })
         }
         if (this.instock) {
-          data = data.filter((row) => {
+          data = data.filter(row => {
             return row.inventory > 0
           })
         }
@@ -196,18 +200,20 @@ export default {
       this.loading = true
       this.modalVisible = true
       this.$nextTick(function () {
-        this.$bind(this.modalIngredients, this.$db.collection(this.database).orderBy("name")/* .limit(25) */).then((result) => {
-          this.modalIngredients = result
-          // this.lastVisible = this.modalIngredients[this.modalIngredients.length-1].id
-          this.loading = false
-          /* document.querySelector('.modal-card-body').addEventListener('scroll', () => {
+        this.$bind(this.modalIngredients, this.$db.collection(this.database).orderBy('name') /* .limit(25) */)
+          .then(result => {
+            this.modalIngredients = result
+            // this.lastVisible = this.modalIngredients[this.modalIngredients.length-1].id
+            this.loading = false
+            /* document.querySelector('.modal-card-body').addEventListener('scroll', () => {
             this.bottom = this.bottomVisible()
           }) */
-        }).catch(err => {
-          console.log(err)
-          this.$store.commit('setMessage', {type: 'error', text: 'Fetch data failed: ' + error})
-          this.loading = false
-        })
+          })
+          .catch(err => {
+            console.log(err)
+            this.$store.commit('setMessage', { type: 'error', text: 'Fetch data failed: ' + err })
+            this.loading = false
+          })
       })
       /* this.$db.gets(this.database).then(rows => {
         this.modalIngredients = rows
@@ -235,7 +241,7 @@ export default {
         }
         this.$emit('add', this.type, ingredient)
       }
-    }/* ,
+    } /* ,
     bottomVisible() {
       let element = document.querySelector('.modal-card-body');
       const scrollY = element.scrollTop
@@ -260,7 +266,7 @@ export default {
         this.loading = false
       })
     } */
-  },
+  }
 
   /* watch: {
     bottom(bottom) {

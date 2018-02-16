@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "v-checkbox",
+  name: 'v-checkbox',
 
   props: {
     label: String,
@@ -41,7 +41,7 @@ export default {
   },
 
   methods: {
-    updateValue: function(value) {
+    updateValue (value) {
       this.$emit('input', value)
     }
   }

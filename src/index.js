@@ -11,8 +11,12 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import VueFire from 'components/plugins/vuefire'
+import debounce from 'components/directive/debounce'
+
 // Style
 import './assets/scss/main.scss'
+
+Vue.directive('debounce', debounce)
 
 Vue.use(VueFire)
 
@@ -46,8 +50,17 @@ Vue.component('icon', FontAwesomeIcon) // Use the icon component anywhere in the
 
 // Vue.use(VueFirestore)
 
-Vue.use(VeeValidate)
-// Vue.use(Notif, {timeout: 5000})
+Vue.use(VeeValidate, {
+  delay: 1000,
+  locale: 'en',
+  dictionary: {
+    en: {
+      messages: {
+        is: (field, [confirmedField]) => `Le champ ${field} ne correspond pas à ${confirmedField}.`
+      }
+    }
+  }
+})
 
 Vue.filter('capitalize', str => str.charAt(0).toUpperCase() + str.slice(1).replace(/([A-Z])/g, ' $1'))
 

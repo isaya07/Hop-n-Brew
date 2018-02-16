@@ -5,8 +5,8 @@
     </div>
     <div class="field-body">
       <div class="field">
-        <div class="control is-expanded">
-          <input 
+        <div class="control is-expanded" :class="unitie ? 'has-icons-right' : ''">
+          <input
             class="input"
             :type="type"
             :id="id"
@@ -19,6 +19,7 @@
             :disabled="disabled"
             :readonly="readonly"
             :class="errors.has(label) ? 'is-danger ' + this.align : this.align ">
+            <span v-if="unitie" class="icon is-right">{{ unitie }}</span>
           <p v-show="errors.has(label)" class="help is-danger">
             {{ errors.first(label) }}
           </p>
@@ -30,14 +31,14 @@
 
 <script>
 export default {
-  name: "v-input",
+  name: 'v-input',
 
   props: {
     label: String,
     value: [String, Number],
     type: {
       type: String,
-      default: "text"
+      default: 'text'
     },
     id: '',
     disabled: {
@@ -49,17 +50,18 @@ export default {
       default: false
     },
     rules: {
-      type: String,
+      type: [String, Object],
       default: 'required|myAlpha'
     },
     align: {
       type: String,
       default: ''
     },
+    unitie: String
   },
 
   methods: {
-    updateValue: function(value) {
+    updateValue (value) {
       this.$emit('input', value)
     }
   }

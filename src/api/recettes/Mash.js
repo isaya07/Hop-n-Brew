@@ -1,4 +1,4 @@
-import Event from './event'
+// import Event from './event'
 
 import MashStep from './MashStep'
 import {importXML, exportXML} from './Import' // importXml, camelize, htmlEncode, underscorize

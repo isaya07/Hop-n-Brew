@@ -1,6 +1,6 @@
 <template>
-  <div class="area-chart">
-    <svg :width="'100%'" :height="'100%'" :viewBox="'0 0 ' + this.width + ' ' + this.height" :preserveAspectRatio="'xMidYMid meet'">
+  <div class="area-chart" ref="chart">
+    <svg :width="'100%'" :height="'100%'" :viewBox="'0 0 ' + this.width + ' ' + this.height">
       <g class="chart" :style="{transform: `translate(${margin.left}px, ${margin.top}px)`}">
         <path class="area" :d="paths.area" />
         <path class="line" :d="paths.line" />
@@ -21,8 +21,8 @@ export default {
 
   props: {
     chartData: Array,
-    width: Number,
-    height: Number,
+    // width: Number,
+    // height: Number,
     xLabel: String,
     yLabel: String
   },
@@ -38,13 +38,23 @@ export default {
         x: null,
         y: null
       },
-      points: []
+      points: [],
+      width: 0,
+      height: 0
     }
   },
 
   mounted () {
     d3.select('.focus').style('display', 'none')
-    this.draw(this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom)
+    // this.width = this.$refs.chart.offsetWidth
+    // this.height = this.$refs.chart.offsetHeight
+    // this.height = this.width * 0.33
+    this.handleResize()
+    window.addEventListener('resize', this.handleResize)
+    // this.draw(this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom)
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
   },
 
   methods: {
@@ -113,15 +123,24 @@ export default {
         d3.select('.focus-text').attr('transform', `translate(${pos.x + this.margin.left + 5},${pos.y + this.margin.top - 5})`)
           .text(this.scaled.y.invert(pos.y).toFixed(1))
       }
+    },
+    redraw () {
+      this.points = []
+      d3.selectAll('.area-chart svg g > g').remove()
+      this.draw(this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom)
+    },
+    handleResize (event) {
+      this.width = this.$refs.chart.offsetWidth
+      // this.height = this.$refs.chart.offsetHeight
+      this.height = this.width * 0.33
+      this.redraw()
     }
   },
 
   watch: {
     chartData: {
       handler: function (newData, oldData) {
-        this.points = []
-        d3.selectAll('.area-chart svg g > g').remove()
-        this.draw(this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom)
+        this.redraw()
       }
     }
   }
@@ -130,20 +149,14 @@ export default {
 
 <style lang="scss" scopped>
 @import './../../assets/scss/settings';
+@import "~bulma/sass/utilities/derived-variables";
 
 .area-chart {
-  margin: auto;
-  width: 90%;
-
+  margin-bottom: 0.75rem;
   .focus {
     .focus-point {
       fill: $warning;
     }
-
-    .focus-text {
-      font-size: 80%;
-    }
-    // display: none;
   }
 
   path.domain {
@@ -153,7 +166,7 @@ export default {
 
   text {
     font-family: $family-primary;
-    // font-size: 100%;
+    font-size: 0.875rem;
   }
 
   g.tick {

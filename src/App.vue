@@ -1,15 +1,15 @@
 <template>
-	<div id="app">
+  <div id="app">
     <v-notif></v-notif>
     <top-bar></top-bar>
     <progress-bar></progress-bar>
-    <div class="container has-text-left">
+    <div class="container is-widescreen has-text-left">
       <div v-if="error">{{error}}</div>
       <transition name="fade">
         <router-view class="animated"></router-view>
       </transition>
     </div>
-	</div>
+  </div>
 </template>
 
 <script>
@@ -32,7 +32,7 @@ export default {
       // index: '',
       // menus: Menu,
       // user: this.$auth.currentUser,
-      error: null,
+      error: null
       // showNav: false
     }
   },

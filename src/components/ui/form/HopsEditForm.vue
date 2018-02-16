@@ -16,19 +16,19 @@
       <v-select label="Form" v-model="formData.form" :typeList="formList"></v-select>
     </div>
     <div class="column is-6">
-      <v-input label="Alpha" v-model="formData.alpha" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Alpha" v-model.number="formData.alpha" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Beta" v-model="formData.beta" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
+      <v-input label="Beta" v-model.number="formData.beta" :align="'has-text-right'" :rules="'required|myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Stability" v-model="formData.hsi" :align="'has-text-right'" :rules="'myNumeric'"></v-input>
+      <v-input label="Stability" v-model.number="formData.hsi" :align="'has-text-right'" :rules="'myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Inventory" v-model="formData.inventory" :align="'has-text-right'" :rules="'myNumeric'"></v-input>
+      <v-input label="Inventory" v-model.number="formData.inventory" :align="'has-text-right'" :rules="'myNumeric'"></v-input>
     </div>
     <div class="column is-6">
-      <v-input label="Price" v-model="formData.price" :align="'has-text-right'" :rules="'myNumeric'"></v-input>
+      <v-input label="Price" v-model.number="formData.price" :align="'has-text-right'" :rules="'myNumeric'"></v-input>
     </div>
     <div class="column">
       <v-textarea label="Notes" v-model="formData.notes" :rules="'myAlpha'"></v-textarea>
@@ -48,7 +48,7 @@ export default {
   components: {
     VInput,
     VTextarea,
-    VCheckbox
+    VSelect
   },
 
   props: {

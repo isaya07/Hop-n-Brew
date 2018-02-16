@@ -1,7 +1,7 @@
 <template>
 <div>
-  <div class="tabs is-boxed is-fullwidth columns is-multiline is-mobile ">
-    <ul role="tablist" class="column is-full is-paddingless">
+  <div class="tabs is-boxed is-fullwidth">
+    <ul role="tablist">
       <li v-for="(tab, index) in tabs" :key="index"
         role="tab"
         :class="{ 'is-active': tab.isActive, 'is-disabled': tab.disabled}"
@@ -18,13 +18,12 @@
         </a>
       </li>
     </ul>
-  <div class="column is-full tab-content is-paddingless">
+  </div>
+  <!-- <div class="tab-content"> -->
     <!-- <transition name="flip"> -->
       <slot></slot>
     <!-- </transition> -->
-  </div>
-  </div>
-
+  <!-- </div> -->
 </div>
 </template>
 
@@ -47,38 +46,40 @@ export default {
   },
 
   methods: {
-    selectTab(index) {
+    selectTab (index) {
       let selectedTab = this.tabs[index]
-      if (! selectedTab) {
-        return;
+      if (!selectedTab) {
+        return
       }
       if (selectedTab.isDisabled) {
-        return;
+        return
       }
       this.activeIndex = index
       this.tabs.forEach(tab => {
-        tab.isActive = (tab.name === selectedTab.name);
+        tab.isActive = (tab.name === selectedTab.name)
       })
-
-      this.$emit('changed', { tab: selectedTab });
-
+      this.$emit('changed', { tab: selectedTab })
     }
   },
 
-  created() {
-    this.tabs = this.$children;
+  created () {
+    this.tabs = this.$children
   },
 
-  mounted() {
+  mounted () {
     this.selectTab(this.activeIndex)
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.tabs {
+  margin-bottom: 0;
+}
+
 /* appear at / disappear to */
 .tabs-enter,
-.tabs-leave-to { 
+.tabs-leave-to {
   opacity: 0;
  }
 
@@ -86,7 +87,6 @@ export default {
 .tabs-move {
   transition: all 600ms ease-in-out 50ms;
 }
-
 
 /* .tabs-leave,
 .tabs-enter-to { opacity: 1; height: 100%; } */

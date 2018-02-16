@@ -1,0 +1,114 @@
+table {
+  border-spacing: 0;
+  font-size: $size-6;
+
+  thead {
+    display: none;
+  }
+
+  tbody td {
+    display: block;
+    padding: .5rem;
+    text-align: left;
+    background-color: $white;
+  }
+
+  tbody tr td:first-child {
+    background: $grey-lighter;
+  }
+
+  tbody td:before {
+    content: attr(data-title)': ';
+    font-weight: bold;
+    display: inline-block;
+    width: 11rem;
+  }
+
+  th {
+    padding: 0.5rem;
+  }
+}
+
+@include desktop {
+  table {
+    thead {
+      display: table-header-group;
+      // background-color: $grey-lighter;
+      background-image: linear-gradient($whitesmoke, $grey-light);
+    }
+
+    tbody td {
+      display: table-cell;
+      padding: 0.5rem;
+      text-align: center;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    tbody tr td:first-child {
+      background-color: $white;
+    }
+
+    tbody tr:nth-child(2n-1) td {
+      background-color: $grey-lighter; // $whitesmoke;
+    }
+  }
+}
+
+table {
+
+  th span {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 6px solid $grey-darker;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    transition: 0.5s;
+  }
+
+  th.active span.dsc {
+    border-top: 6px solid $primary;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
+
+  th.active span.asc {
+    border-top: 6px solid $primary;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    transform: rotate(180deg);
+  }
+
+  &.rounded {
+    border-collapse: separate;
+    border: 1px solid $grey-lighter;
+    border-radius: $radius;
+    box-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1);
+
+    thead th:first-child {
+      border-radius: $radius 0 0 0;
+    }
+
+    thead th:last-child {
+      border-radius: 0 $radius 0 0;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-radius: 0 0 0 $radius;
+    }
+    tbody tr:last-child td:last-child {
+      border-radius: 0 0 $radius 0;
+    }
+  }
+
+  &.borderless {
+    border: none;
+
+    tr td {
+      border-left: 0;
+    }
+  }
+}

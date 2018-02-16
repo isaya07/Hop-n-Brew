@@ -42,6 +42,7 @@ export default class Equipment {
 
   calculBoilSize () {
     let boil = Utils.roundDecimal((this.batchSize + this.getVolEvap() + this.getVolLost()) * 1.04, 1) // 1.04 coefficient de rétraction du moût entre 100°C et 20°C
+    console.log(this.batchSize, this.getVolEvap(), this.getVolLost(), boil)
     this.setBoilSize(boil, 'l')
   }
 

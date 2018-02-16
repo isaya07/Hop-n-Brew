@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <section class="section">
     <list
       :columns="columns"
       :type="type"
+      :forEdit="true"
+      :withAdd="true"
+      :title="true"
       :newFunc="getNew"
       :staticFunc="getStatic"
       @dataForm="updateFormData">
@@ -11,7 +14,7 @@
         @validated="validated">
       </carbonations-edit-form>
     </list>
-  </div>
+  </section>
 </template>
 
 <script>

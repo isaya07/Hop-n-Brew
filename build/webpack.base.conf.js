@@ -12,7 +12,7 @@ const createLintingRule = () => ({
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
   enforce: 'pre',
-  include: [resolve('src'), resolve('server')],
+  include: [resolve('src'), resolve('test')],
   options: {
     formatter: require('eslint-friendly-formatter'),
     emitWarning: !config.dev.showEslintErrorsInOverlay
@@ -22,19 +22,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/index.js'/* ,
-    vendor: [
-      'vue',
-      'vue-router',
-      'vuex',
-      'firebase',
-      'vee-validate',
-      'd3',
-      '@fortawesome/fontawesome',
-      '@fortawesome/fontawesome-free-regular',
-      '@fortawesome/fontawesome-free-solid',
-      '@fortawesome/vue-fontawesome'
-    ] */
+    app: './src/index.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -60,14 +48,14 @@ module.exports = {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [resolve('src')]
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('server')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

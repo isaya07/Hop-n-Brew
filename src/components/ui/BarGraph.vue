@@ -1,30 +1,38 @@
 <template>
   <!-- <div class="card"> -->
       <div class="columns is-multiline is-mobile">
-        <div class="column is-2">OG:</div>
-        <div class="column is-2">{{ ogData.value }}</div>
-        <div class="column is-8">
-          <svg-bar :width="200" :height="15" :data="ogData" :max="0.150"></svg-bar>
+        <div class="column is-12-mobile is-6-tablet">
+          <div class="columns is-multiline is-mobile">
+            <div class="column is-1 has-text-weight-bold">OG:</div>
+            <div class="column is-2 has-text-right">{{ ogData.value }}</div>
+            <div class="column is-9">
+              <svg-bar :data="ogData" :max="0.150"></svg-bar>
+            </div>
+            <div class="column is-1 has-text-weight-bold">FG:</div>
+            <div class="column is-2 has-text-right">{{ fgData.value }}</div>
+            <div class="column is-9">
+              <svg-bar :data="fgData" :max="0.150"></svg-bar>
+            </div>
+            <div class="column is-1 has-text-weight-bold">IBU:</div>
+            <div class="column is-2 has-text-right">{{ ibuData.value }}</div>
+            <div class="column is-9">
+              <svg-bar :data="ibuData" :max="200"></svg-bar>
+            </div>
+          </div>
         </div>
-        <div class="column is-2">FG:</div>
-        <div class="column is-2">{{ fgData.value }}</div>
-        <div class="column is-8">
-          <svg-bar :width="200" :height="15" :data="fgData" :max="0.150"></svg-bar>
-        </div>
-        <div class="column is-2">IBU:</div>
-        <div class="column is-2">{{ ibuData.value }}</div>
-        <div class="column is-8">
-          <svg-bar :width="200" :height="15" :data="ibuData" :max="200"></svg-bar>
-        </div>
-        <div class="column is-2">ABV:</div>
-        <div class="column is-2">{{ abvData.value }}</div>
-        <div class="column is-8">
-          <svg-bar :width="200" :height="15" :data="abvData" :max="20"></svg-bar>
-        </div>
-        <div class="column is-2">Color:</div>
-        <div class="column is-2">{{ colorData.value }}</div>
-        <div class="column is-8">
-            <svg-bar :width="200" :height="15" :data="colorData" :max="200"></svg-bar>
+        <div class="column is-12-mobile is-6-tablet">
+          <div class="columns is-multiline is-mobile">
+            <div class="column is-1 has-text-weight-bold">ABV:</div>
+            <div class="column is-2 has-text-right">{{ abvData.value }}</div>
+            <div class="column is-9">
+              <svg-bar :data="abvData" :max="20"></svg-bar>
+            </div>
+            <div class="column is-1 has-text-weight-bold">Color:</div>
+            <div class="column is-2 has-text-right">{{ colorData.value }}</div>
+            <div class="column is-9">
+                <svg-bar :data="colorData" :max="200"></svg-bar>
+            </div>
+          </div>
         </div>
       </div>
   <!-- </div> -->

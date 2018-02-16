@@ -1,32 +1,5 @@
 <template>
-<section class="section">
-  <!-- <div class="field is-horizontal">
-    <div class="field-body">
-      <p class="control field has-icons-right">
-        <input class="input" type="text" placeholder="Search" name="query" v-model="filterKey">
-        <span class="icon is-small is-right">
-          <icon :icon="['fas', 'search']" />
-        </span>
-      </p>
-    </div>
-    <div class="field-body">
-      <div class="field is-grouped">
-        <import @import="importPress">Import</import>
-        <button type="button" class="button is-info" @click="add">
-          <span class="icon is-small">
-            <icon :icon="['fas', 'plus']" />
-          </span>
-          <span>Create</span>
-        </button>
-      </div>
-    </div>
-  </div>
-  <ul id="example-1">
-    <li v-for="(item, index) in filteredData" :key="index">
-      <router-link :to="{ name: 'edit', params: { name: item.id }}">{{ item.name }}</router-link>
-    </li>
-  </ul>
-  <router-view></router-view> -->
+  <section class="section">
     <card-list
       :ingredientsData="data"
       :butEdit="true"
@@ -39,8 +12,7 @@
       @create="add"
       @edit="edit">
     </card-list>
-
-</section>
+  </section>
 </template>
 
 <script>
@@ -59,12 +31,12 @@ export default {
   mounted () {
   },
 
-  firestore() {
+  firestore () {
     return {
-        // Collection
-        data: this.$db.collection(this.db).orderBy('name').limit(20),
-        // Doc
-        // ford: this.$db.collection('cars').doc('ford')
+      // Collection
+      data: this.$db.collection(this.db).orderBy('name').limit(20)
+      // Doc
+      // ford: this.$db.collection('cars').doc('ford')
     }
   },
 
@@ -78,7 +50,7 @@ export default {
       sortOrders: sortOrders,
       modalTitle: '',
       modalData: null,
-      db: 'recipes' ,
+      db: 'recipes',
       data: []
     }
     data.columns.forEach(function (key) {
