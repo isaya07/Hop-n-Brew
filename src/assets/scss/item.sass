@@ -1,5 +1,6 @@
 .item-container
   margin-bottom: 1rem
+  width: 100%
 
   .item
     display: flex
@@ -39,13 +40,22 @@
             color: $color-invert
           a
             color: $color-invert
-
-      a
-        color: $text
-        align-items: center
-        // vertical-align: middle;
-        // justify-content: center;
-        display: flex
+          .icon
+            &,
+            &.is-small,
+            &.is-medium,
+            &.is-large
+              height: 1.5em
+              width: 1.5em
+            &:first-child:not(:last-child)
+              margin-left: calc(-0.375em - 1px)
+              margin-right: 0.1875em
+            &:last-child:not(:first-child)
+              margin-left: 0.1875em
+              margin-right: calc(-0.375em - 1px)
+            &:first-child:last-child
+              margin-left: calc(-0.375em - 1px)
+              margin-right: calc(-0.375em - 1px)
 
     .item-control:first-of-type 
       border-radius: $radius 0 0 $radius

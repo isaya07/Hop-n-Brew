@@ -49,7 +49,7 @@ export default class Recipe {
     this.estFg = null
     this.estColor = null
     this.ibu = null
-    this.ibuMethod = 'rager'
+    this.ibuMethod = 'Tinseth' // Rager'
     this.estAbv = null
     this.abv = null
     this.actualEfficiency = null
@@ -108,6 +108,7 @@ export default class Recipe {
       Object.assign(this, options)
     }
     this.updateOg()
+    this.updateIbu()
     // subscribe event
     // Event.on('event', this.test)
   }
@@ -254,6 +255,7 @@ export default class Recipe {
   }
 
   updateOg () {
+    // this.fermentables.sort(this.fermentableSort)
     if (this.fermentables.length !== 0) {
       let i
       let sugar = 0
@@ -276,6 +278,7 @@ export default class Recipe {
     let i
     let attenuation = 0
     if (this.yeasts.length !== 0) {
+      // this.yeasts.sort(this.yeastSort)
       for (i = 0; i < this.yeasts.length; i++) {
         if (this.yeasts[i].getAttenuation() > attenuation) attenuation = this.yeasts[i].getAttenuation()
       }
@@ -289,14 +292,15 @@ export default class Recipe {
   }
 
   updateIbu () {
-    let i
-    let bitterness = 0
-    for (i = 0; i < this.hops.length; i++) {
-      bitterness += this.hops[i].getBitterness(this.ibuMethod.toLowerCase(), this.estOg, this.getBatchSize()/* , 10 */) // TODO whirpool
-      // console.log(bitterness)
+    if (this.hops.length !== 0) {
+      // this.hops.sort(this.hopSort)
+      let i
+      let bitterness = 0
+      for (i = 0; i < this.hops.length; i++) {
+        bitterness += this.hops[i].getBitterness(this.ibuMethod.toLowerCase(), this.estOg, this.getBatchSize()/* , 10 */) // TODO whirpool
+      }
+      this.setIbu(Utils.roundDecimal(bitterness, 1))
     }
-    this.setIbu(Utils.roundDecimal(bitterness, 1))
-    // console.log('IBU: ' + this.ibu)
   }
 
   setCalories () {
@@ -322,25 +326,37 @@ export default class Recipe {
   }
 
   hopSort = (a, b) => {
-    if (a.time < b.time) return 1
-    if (a.time > b.time) return -1
+    if (a.time === b.time) {
+      if (a.use === b.use) {
+        return (a.amount > b.amount) ? -1 : (a.amount < b.amount) ? 1 : 0
+      } else {
+        return (a.use > b.use) ? -1 : 1
+      }
+    } else {
+      return (a.time > b.time) ? -1 : 1
+    }
+  }
+
+  yeastSort = (a, b) => {
+    if (a.attenuation < b.attenuation) return 1
+    if (a.attenuation > b.attenuation) return -1
     return 0
   }
 
-  getIngredientList (type) {
+  /* getIngredientList (type) {
     switch (type) {
       case 'fermentable':
-        return this.fermentables.sort(this.ingredientSort)
+        return this.fermentables.sort(this.fermentableSort)
       case 'hop':
         return this.hops.sort(this.hopSort)
       case 'yeast':
-        return this.yeasts
+        return this.yeasts.sort(this.yeastSort)
       case 'misc':
         return this.miscs
       case 'water':
         return this.waters
     }
-  }
+  } */
 
   add (type, options) {
     let ret

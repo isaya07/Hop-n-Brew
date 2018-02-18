@@ -23,11 +23,11 @@ function importChildren (ref, propName, round = 3) {
             if (!isNaN(childItem.textContent)) {
               // options[itemName] = +childItem.textContent
               options[itemName] = Utils.roundDecimal(childItem.textContent, round)
-            } else /* if (childItem.textContent === 'TRUE') */{
-              /* options[itemName] = (childItem.textContent === 'TRUE')
+            } else if (childItem.textContent === 'TRUE') {
+              options[itemName] = true
             } else if (childItem.textContent === 'FALSE') {
-              options[itemName] = (childItem.textContent === 'FALSE')
-            } else { */
+              options[itemName] = false
+            } else {
               options[itemName] = childItem.textContent
             }
           }
@@ -48,11 +48,11 @@ function importChildren (ref, propName, round = 3) {
           if (!isNaN(child.textContent)) {
             // obj[propNames] = +child.textContent
             obj[propNames] = Utils.roundDecimal(child.textContent, round)
-          } else /* if (child.textContent === 'TRUE') */{
-            /* obj[propName] = (child.textContent === 'TRUE')
+          } else if (child.textContent === 'TRUE') {
+            obj[propName] = true
           } else if (child.textContent === 'FALSE') {
-            obj[propName] = (child.textContent === 'FALSE')
-          } else { */
+            obj[propName] = false
+          } else {
             obj[propNames] = child.textContent
           }
         }
@@ -80,11 +80,11 @@ export function importXML (xml, type, round = 3) {
           } else {
             if (!isNaN(prop.textContent)) {
               obj[propName] = Utils.roundDecimal(prop.textContent, round)
-            } else /* if (prop.textContent === 'TRUE') */{
-              /* obj[propName] = (prop.textContent === 'TRUE')
+            } else if (prop.textContent === 'TRUE') {
+              obj[propName] = true
             } else if (prop.textContent === 'FALSE') {
-              obj[propName] = (prop.textContent === 'FALSE')
-            } else { */
+              obj[propName] = false
+            } else {
               obj[propName] = prop.textContent
             }
           }

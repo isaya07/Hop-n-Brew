@@ -19,72 +19,19 @@
       @ok="hideModal()">
       <div slot="header" class="columns is-multiline is-mobile is-centered">
         <div class="column is-6">
-          <v-search-input v-model="filterKey"></v-search-input>
+          <v-search-input :value="filterKey" @input="searchPress"></v-search-input>
         </div>
         <div class="column is-6">
           <label>
             <input type="checkbox" v-model="instock">In stock
           </label>
         </div>
-        <div v-show="error.has" class="item-inline-error center">
-          <span class="form-message is-alert">{{ error.mess }}</span>
+        <div v-show="error.has" class="center">
+          <p class="help is-danger">{{ error.mess }}</p>
         </div>
       </div>
       <div v-if="modalIngredients" class="columns is-multiline is-mobile">
-        <item v-for="(ingredient, key) in filteredData"
-          :key="key"
-          :id="key"
-          class="column is-full">
-          <div class="control is-expanded">
-            <input class="input" type="text" v-model="ingredient.name" readonly>
-          </div>
-          <div class="control">
-            <input class="input" type="text" v-model.number="ingredient.amount">
-          </div>
-          <div class="control" v-if="type !== 'yeast'">
-            <span class="select">
-              <select v-model="$config.weightUnitie">
-                <option v-for="option in unitList.weight" selected="selectedWeight" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </span>
-          </div>
-          <div class="control" v-else>
-            <span class="select">
-              <select v-model="$config.yeastUnitie">
-                <option v-for="option in unitList.yeast" selected="selectedWeight" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </span>
-          </div>
-          <div class="control" v-if="type === 'hop'">
-            <input class="input" type="text" v-model.number="ingredient.time">
-          </div>
-          <div class="control" v-if="type === 'hop'">
-            <span class="select">
-              <select v-model="$config.timeUnitie">
-                <option v-for="option in unitList.time" selected="selectedTime" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </span>
-          </div>
-          <div class="control" v-if="type === 'hop'">
-            <span class="select">
-              <select v-model="ingredient.use">
-                <option v-for="option in useSelect" selected="selectedUse" :key="option">
-                  {{ option }}
-                </option>
-              </select>
-            </span>
-          </div>
-          <div class="control">
-           <button class="button" @click="addIngredient(ingredient)">Add</button>
-          </div>
-          <ingredient-detail :ingredient="ingredient" slot="content"></ingredient-detail>
-        </item>
+        <ingredient-item v-for="data in filteredData" :key="data.id" :ingredient="data" :type="type" :add="true" @press="addIngredient"></ingredient-item>
       </div>
       <div class="columns is-mobile is-centered">
         <div class="column is-narrow">
@@ -96,6 +43,7 @@
 </template>
 
 <script>
+import _debounce from 'lodash/debounce'
 import Modal from 'components/layout/Modal'
 import Loader from 'components/ui/Loader'
 import Item from 'components/ui//Item'
@@ -104,6 +52,8 @@ import VButton from 'components/ui/base/Button'
 import VSearchInput from 'components/ui/base/SearchInput'
 import VInput from 'components/ui/base/Input'
 import VTextarea from 'components/ui/base/Textarea'
+import IngredientItem from 'components/ui/ingredient/ingredientItem'
+import Utils from 'api/recettes/Utils'
 
 export default {
   name: 'add-ingredient',
@@ -116,6 +66,7 @@ export default {
     VSearchInput,
     VInput,
     VTextarea,
+    IngredientItem,
     IngredientDetail: () => import('components/ui/IngredientDetail')
   },
 
@@ -136,20 +87,9 @@ export default {
       error: {
         has: false,
         mess: ''
-      } /* ,
-      lastVisible: '',
-      bottom: false */
+      }
     }
   },
-
-  /* firestore() {
-    return {
-        // Collection
-        modalIngredients: this.$db.collection(this.database)
-        // Doc
-        // ford: this.$db.collection('cars').doc('ford')
-    }
-  }, */
 
   computed: {
     modalTitle () {
@@ -160,12 +100,14 @@ export default {
       if (this.modalIngredients !== undefined) {
         var data = this.modalIngredients
         if (filterKey) {
+          let rowParam = ['name', 'laboratory', 'productId']
           data = data.filter(row => {
-            return (
-              String(row.name)
-                .toLowerCase()
-                .indexOf(filterKey) > -1
-            )
+            let ret = false
+            for (let i = 0; i < rowParam.length; i++) {
+              ret = String(row[rowParam[i]]).toLowerCase().indexOf(filterKey) > -1
+              if (ret) return ret
+            }
+            return ret
           })
         }
         if (this.instock) {
@@ -181,22 +123,10 @@ export default {
   },
 
   methods: {
-    /* toggleContent (comp) {
-      let items = this.$refs.modalIngredients
-      for (let i = 0; i < items.length; i++) {
-        let tempItem = items[i]
-        if (tempItem !== comp && tempItem.contentVisible) tempItem.contentVisible = false
-      }
-    }, */
+    searchPress: _debounce(function (value) {
+      this.filterKey = value
+    }, 1000),
     showModal () {
-      /* this.$binding(this.database, this.$db.db.collection(this.database))
-      .then((data) => {
-        this.modalIngredients = data
-         this.loading = false
-        // this.$bus.$emit('progress', 'stop')
-      }).catch(err => {
-        console.error(err)
-      }) */
       this.loading = true
       this.modalVisible = true
       this.$nextTick(function () {
@@ -215,65 +145,31 @@ export default {
             this.loading = false
           })
       })
-      /* this.$db.gets(this.database).then(rows => {
-        this.modalIngredients = rows
-        this.loading = false
-      }).catch(err => {
-        console.log(err)
-      }) */
     },
     hideModal () {
       this.modalVisible = false
-      // this.loading = true
       this.modalIngredients = []
     },
-    addIngredient (ingredient) {
+    addIngredient (type, ingredient, amountUnitie, timeUnitie) {
       if (ingredient.amount === 0 || ingredient.amount === undefined) {
         this.error.has = true
         this.error.mess = 'Please enter weight value'
-      } else if (this.type === 'hop' && (ingredient.time === 0 || ingredient.time === undefined)) {
+      } else if (type === 'hop' && ingredient.time === undefined) {
         this.error.has = true
         this.error.mess = 'Please enter time value'
       } else {
-        ingredient.displayAmount = ingredient.amount + ' ' + this.$config.weightUnitie
-        if (this.type === 'hop') {
-          ingredient.displayTime = ingredient.time + ' ' + this.$config.timeUnitie
+        if (((type === 'yeast' || type === 'misc') && ingredient.amountIsWeight === 'FALSE') || type === 'water') {
+          ingredient.displayAmount = Utils.convertTo(ingredient.amount + ' l', amountUnitie, 3) + ' ' + amountUnitie
+        } else {
+          ingredient.displayAmount = Utils.convertTo(ingredient.amount + ' kg', amountUnitie, 3) + ' ' + amountUnitie
         }
-        this.$emit('add', this.type, ingredient)
-      }
-    } /* ,
-    bottomVisible() {
-      let element = document.querySelector('.modal-card-body');
-      const scrollY = element.scrollTop
-      const visible = element.clientHeight
-      const pageHeight = element.scrollHeight
-      const bottomOfPage = visible + scrollY >= pageHeight - 20
-      return bottomOfPage || pageHeight < visible
-    },
-    addData() {
-      this.loading = true
-      this.$bind(this.modalIngredients,  this.$db.collection(this.database).orderBy("name").startAfter(this.lastVisible).limit(25)).then( result => {
-      // this.$db.collection(this.database).orderBy("name").startAfter(this.lastVisible).limit(25).get().then( query => {
-        console.log(result)
-        this.modalIngredients = this.modalIngredients.concat(result)
-        this.lastVisible = this.modalIngredients[this.modalIngredients.length-1].id
-        console.log(this.lastVisible, this.modalIngredients[this.modalIngredients.length-1].name)
-        // if (this.bottomVisible()) { this.addData() }
-        this.loading = false
-      }).catch(err => {
-        console.log(err)
-        this.$store.commit('setMessage', {type: 'error', text: 'Fetch data failed: ' + error})
-        this.loading = false
-      })
-    } */
-  }
-
-  /* watch: {
-    bottom(bottom) {
-      if (bottom) {
-        this.addData()
+        if (type === 'hop' || type === 'misc') {
+          ingredient.displayTime = ingredient.time + ' ' + timeUnitie
+          ingredient.time = Utils.convertTo(ingredient.time + ' ' + timeUnitie, 'min', 3)
+        }
+        this.$emit('add', type, ingredient)
       }
     }
-  } */
+  }
 }
 </script>

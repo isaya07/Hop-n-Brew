@@ -115,7 +115,7 @@ export default class Hop {
     let weight
     let time
 
-    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'g', 1) : weight = this.amount
+    this.displayAmount ? weight = Utils.convertTo(this.displayAmount, 'g', 1) : weight = Utils.convertTo(this.amount + ' kg', 'g', 1)
     this.displayTime ? time = Utils.convertTo(this.displayTime, 'min') : time = this.time
     if (this.use === 'First Wort') time = time * 1.1
     else if (this.use === 'Aroma' && this.use === 'Dry Hop') time = 0
@@ -124,16 +124,36 @@ export default class Hop {
     } else if (ibuMethod === 'rager') {
       utilization = 18.11 + 13.86 * tanh((time - 31.32) / 18.27)
       adjustment = Math.max(0, (og - 1.050) / 0.2)
-      bitterness = weight * 100 * utilization * this.utilizationFactor() * this.aa / (batchSize * (1 + adjustment))
+      bitterness = weight * 100 * utilization * this.utilizationFactor() * this.alpha / (batchSize * (1 + adjustment))
     } else {
       throw new Error("Unknown IBU method '" + ibuMethod + "'!")
     }
-    console.log(bitterness)
     return bitterness
   }
 
-  /* toJSON () {
-  } */
+  toJSON () {
+    return {
+      name: this.name,
+      alpha: this.alpha,
+      amount: this.amount,
+      use: this.use,
+      time: this.time,
+      notes: this.notes,
+      type: this.type,
+      form: this.form,
+      beta: this.beta,
+      hsi: this.hsi,
+      origin: this.origin,
+      substitutes: this.substitutes,
+      humulene: this.humulene,
+      caryophyllene: this.caryophyllene,
+      cohumulone: this.cohumulone,
+      myrcene: this.myrcene,
+      displayAmount: this.displayAmount,
+      inventory: this.inventory,
+      displayTime: this.displayTime
+    }
+  }
 
   static fromBeerXml (xml) {
     return importXML(xml, 'hop')

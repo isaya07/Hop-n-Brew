@@ -28,32 +28,25 @@ export default {
   },
 
   props: {
-    recepice: {},
+    recipe: {},
     ingredientsData: Array
   },
 
   data () {
     return {
       unitList: this.$config.getUnitiesList(),
-      useSelect: Hop.getUseList()/* ,
-      ingredientList: {
-        fermentable: this.recepice.getIngredientList('fermentable'),
-        hop: this.recepice.getIngredientList('hop'),
-        yeast: this.recepice.getIngredientList('yeast'),
-        misc: this.recepice.getIngredientList('misc'),
-        water: this.recepice.getIngredientList('water')
-      } */
+      useSelect: Hop.getUseList()
     }
   },
 
   computed: {
     ingredientList () {
       return {
-        fermentable: this.recepice.getIngredientList('fermentable'),
-        hop: this.recepice.getIngredientList('hop'),
-        yeast: this.recepice.getIngredientList('yeast'),
-        misc: this.recepice.getIngredientList('misc'),
-        water: this.recepice.getIngredientList('water')
+        fermentable: this.recipe.fermentables, // this.recipe.getIngredientList('fermentable')
+        hop: this.recipe.hops, // this.recipe.getIngredientList('hop')
+        yeast: this.recipe.yeasts, // this.recipe.getIngredientList('yeast')
+        misc: this.recipe.miscs, // this.recipe.getIngredientList('misc')
+        water: this.recipe.waters // this.recipe.getIngredientList('water')
       }
     }
   },

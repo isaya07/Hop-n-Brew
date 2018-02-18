@@ -143,7 +143,7 @@ export default {
       sortOrders: sortOrders,
       instock: false
     }
-    data.columns.forEach(function (key) {
+    data.columns.forEach(key => {
       sortOrders[key] = 1
     })
     return data

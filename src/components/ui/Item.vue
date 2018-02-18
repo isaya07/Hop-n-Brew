@@ -2,20 +2,18 @@
 <div class="item-container">
   <div class="item">
     <div class="item-control is-primary" @click="contentVisible = !contentVisible">
-      <!-- <a class="is-primary" @click="contentVisible = !contentVisible"> -->
-        <span class="icon is-small">
-          <icon :icon="contentVisible ? ['fas', 'minus'] : ['fas', 'plus']" />
-        </span>
-      <!-- </a> -->
+      <span class="icon is-small">
+        <icon :icon="contentVisible ? ['fas', 'minus'] : ['fas', 'plus']" />
+      </span>
     </div>
+
     <slot></slot>
-    <div class="item-control is-danger" @click="deleteItem">
-      <!-- <a class="is-danger" @click="deleteItem(type, ingredient)"> -->
-        <span class="icon is-small">
-          <icon :icon="['fas', 'trash']" />
-        </span>
-        <span class="is-hidden-touch">Remove</span>
-      <!-- </a> -->
+
+    <div class="item-control" :class="add ? 'is-info' : 'is-danger'" @click="pressItem">
+      <span class="icon is-small">
+        <icon :icon="['fas', 'trash']" />
+      </span>
+      <span class="is-hidden-touch">{{ add ? 'Add' : 'Remove' }}</span>
     </div>
   </div>
   <transition name="fade">
@@ -33,8 +31,10 @@ export default {
   name: 'item',
 
   props: {
-    itemData: Object,
-    id: Number
+    add: {
+      type: Boolean,
+      default: false
+    }
   },
 
   data () {
@@ -46,8 +46,8 @@ export default {
   },
 
   methods: {
-    deleteItem () {
-      this.$emit('delete')
+    pressItem () {
+      this.$emit('press')
     }
   }
 }

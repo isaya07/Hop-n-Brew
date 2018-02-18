@@ -86,7 +86,7 @@
           </header> -->
           <div class="card-content is-small-padding">
             <ingredients-list
-              :recepice="recipe"
+              :recipe="recipe"
               :ingredientsData="ingredients"
               @add="addIngredient"
               @delete="deleteIngredient">

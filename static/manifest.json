@@ -1,7 +1,7 @@
 {
   "name": "Hop'n Brew",
   "short_name": "Hop'n Brew",
-  "icons": [
+  /* "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",
       "sizes": "192x192",
@@ -12,7 +12,7 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
+  ], */
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
