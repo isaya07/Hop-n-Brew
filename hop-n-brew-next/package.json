@@ -1,0 +1,87 @@
+{
+  "name": "hop-n-brew-next",
+  "version": "1.0.0",
+  "description": "A modern beer brewing software with Vue 3, TypeScript and offline-first approach",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
+    "lint": "eslint . --ext .ts,.vue --fix",
+    "type-check": "vue-tsc --noEmit",
+    "docs": "typedoc",
+    "docs:serve": "typedoc --serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:isaya07/Hop-n-Brew-Next.git"
+  },
+  "keywords": [
+    "vue",
+    "typescript",
+    "brewing",
+    "beer",
+    "mongodb",
+    "dexie",
+    "offline-first"
+  ],
+  "author": "Lilian Monchalin",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@vueuse/core": "^14.0.0",
+    "bulma": "^1.0.4",
+    "chart.js": "^4.5.1",
+    "dexie": "^4.2.1",
+    "mongodb": "^6.20.0",
+    "pinia": "^3.0.3",
+    "uuid": "^13.0.0",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.22",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@tsconfig/node24": "^24.0.3",
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^24.9.2",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "@vitest/ui": "^4.0.14",
+    "@vitest/eslint-plugin": "^1.5.0",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/tsconfig": "^0.8.1",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.39.0",
+    "eslint-plugin-playwright": "^2.3.0",
+    "eslint-plugin-vue": "^10.6.2",
+    "jiti": "^2.6.1",
+    "jsdom": "^27.1.0",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "3.7.1",
+    "sass": "^1.93.3",
+    "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vite-plugin-vue-devtools": "^8.0.5",
+    "vite-plugin-pwa": "^1.1.0",
+    "vitest": "^4.0.6",
+    "vue-tsc": "^3.1.2"
+  },
+  "engines": {
+    "node": ">= 22.0",
+    "npm": ">= 9.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

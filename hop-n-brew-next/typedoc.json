@@ -1,0 +1,35 @@
+{
+  "entryPoints": [
+    "./src/lib/brew-calculator.ts",
+    "./src/lib/utils.ts",
+    "./src/lib/database.ts",
+    "./src/lib/auth.ts",
+    "./src/lib/sync-manager.ts",
+    "./src/lib/api.ts",
+    "./src/components/base/Button.vue",
+    "./src/components/base/Card.vue",
+    "./src/components/base/Input.vue",
+    "./src/components/base/Select.vue",
+    "./src/components/base/Textarea.vue",
+    "./src/components/base/Checkbox.vue",
+    "./src/components/ui/BrewCalculator.vue",
+    "./src/components/ui/ChartComponent.vue",
+    "./src/components/ui/RecipeChart.vue",
+    "./src/views/HomeView.vue",
+    "./src/views/RecipesView.vue",
+    "./src/views/IngredientsView.vue",
+    "./src/views/ProfilesView.vue"
+  ],
+  "out": "./docs",
+  "name": "Hop-n-Brew Next",
+  "includeVersion": true,
+  "readme": "./README.md",
+  "theme": "default",
+  "excludeNotDocumented": false,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "tsconfig": "./tsconfig.json",
+  "plugin": [
+    "typedoc-plugin-markdown"
+  ]
+}
